@@ -1,0 +1,37 @@
+# vim: ft=gitconfig
+[user]
+	useConfigOnly = true
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	line-numbers = true
+	theme = Monokai Extended Origin
+	diff-so-fancy = true
+[color]
+	ui = true
+[pull]
+	ff = only
+[fetch]
+	prune = true
+	pruneTags = true
+[rebase]
+	autoSquash = true
+	missingCommitsCheck = error
+
+[alias]
+	fixup=!git merge-base --fork-point origin/master | xargs -I{} git log {}..HEAD --oneline | fzf --height=50% | awk {'print $1'} | xargs git commit --fixup
+	fetch-pr  = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
+	delete-prs = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
+	repo-root = !git rev-parse --show-toplevel
+
+[diff "hcl"]
+	xfuncname = "^(.*=.*[{|[].*)$"
+[init]
+	defaultBranch = master
+[merge]
+	conflictstyle = diff3
+	tool = vimdiff3
+[log]
+	date = iso-local

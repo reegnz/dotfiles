@@ -1,0 +1,4 @@
+# vim: ft=gitconfig
+[user]
+	name = Zoltán Reegn
+	email = zoltan.reegn@gmail.com
