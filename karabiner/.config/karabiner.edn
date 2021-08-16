@@ -1,0 +1,97 @@
+{:profiles {:Default {:default true
+                      :sim 100
+                      :delay 500
+                      :alone 500
+                      :held 500}}
+
+ :layers {:caps-mode {:key :caps_lock :alone {:key :escape}}}
+
+ :simlayers {:t-mode {:key :t}
+             :w-mode {:key :w}
+             :e-mode {:key :e}
+             :s-mode {:key :s}
+             :f-mode {:key :f}
+             :j-mode {:key :j}
+             :d-mode {:key :d}}
+
+
+ :main [{:des "Caps Mode"
+         :rules [:caps-mode
+                 ;; remap accent and tilde keys
+                 [:##period :!Sgrave_accent_and_tilde] ; caps + . => ~
+                 [:##quote :grave_accent_and_tilde]]}  ; caps + ' => `
+
+        {:des "window and tab navigation" ;
+         :rules [:w-mode
+                 [:##n :!Cn] ; w + n => new window
+                 [:##q :!Cw] ; w + q => close window
+
+                 ;; switch windows
+                 [:##j :!CStab] ; w + j => switch to previous window
+                 [:##k :!Ctab]  ; w + k => switch to next window
+
+                 :t-mode
+                 [:##n :!Ct] ; t + n =>  new tab
+                 [:##q :!Cw] ; t + q => close tab
+
+                 ;; switch tabs in most apps
+                 [:##j :!CSopen_bracket]  ; t + j => previous tab
+                 [:##k :!CSclose_bracket] ; t + k => next tab
+
+                 :e-mode
+                 [:##j :!CSgrave_accent_and_tilde]  ; e + j => previous window of same app
+                 [:##k :!Cgrave_accent_and_tilde]]} ; e + k => next window of same app
+
+        {:des "Delete mode"
+         :rules [:d-mode
+                 [:##h :delete_or_backspace] ; d + h => backspace (delete backwards)
+                 [:##l :delete_forward]]}    ; d + l => delete (delete forwards)
+                 ; alt + d + h => delete backwards word
+                 ; alt + d + l => delete forwards word
+
+        {:des "Use s + hjkl for scrolling"
+         :rules [:s-mode
+                 [:##h :home]
+                 [:##l :end]
+                 [:##j :page_down]
+                 [:##k :page_up]]}
+
+        {:des "f + hjkl as arrow keys"
+         :rules [:f-mode
+                 [:##h :left_arrow]
+                 [:##j :down_arrow]
+                 [:##k :up_arrow]
+                 [:##l :right_arrow]]}
+
+
+
+        {:des "use f and j as shift for symbols"
+         :rules [
+                 ;; when f is pressed, act as shift for symbols
+                 :f-mode
+                 [:##hyphen :!Shyphen]               ; f + - => _
+                 [:##equal_sign :!Sequal_sign]       ; f + = => +
+                 [:##open_bracket :!Sopen_bracket]   ; f + [ => {
+                 [:##close_bracket :!Sclose_bracket] ; f + ] => }
+                 [:##semicolon :!Ssemicolon]         ; f + ; => :
+                 [:##quote :!Squote]                 ; f + ' => "
+                 [:##comma :!Scomma]                 ; f + , => <
+                 [:##period :!Speriod]               ; f + . => >
+                 [:##slash :!Sslash]                 ; f + / => ?
+                 [:backslash :!Sbackslash]           ; f + \ => |
+
+                 ; when f is pressed, act as SHIFT for numbers 1 through 5
+                 :f-mode
+                 [:##6 :!S6] ; f + 6 => ^
+                 [:##7 :!S7] ; f + 7 => &
+                 [:##8 :!S8] ; f + 8 => *
+                 [:##9 :!S9] ; f + 9 => (
+                 [:##0 :!S0] ; f + 0 => )
+
+                 ;; when j is pressed, act as shift for numbers 1 through 5
+                 :j-mode
+                 [:##1 :!S1]     ; j + 1 => !
+                 [:##2 :!S2]     ; j + 2 => @
+                 [:##3 :!S3]     ; j + 3 => #
+                 [:##4 :!S4]     ; j + 4 => $
+                 [:##5 :!S5]]}]} ; j + 5 => %
