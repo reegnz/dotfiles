@@ -1,0 +1,63 @@
+snippet resource "Terraform resource" b
+resource "${1:type}" "${2:name}" {
+  $0
+}
+endsnippet
+
+snippet data "Terraform data source" b
+data "${1:type}" "${2:name}" {
+  $0
+}
+endsnippet
+
+snippet module "Terraform module" b
+module "${1:name}" {
+  source = "${2:source}"
+
+  $0
+}
+endsnippet
+
+snippet provider "Terraform provider" b
+provider "${1:name}" {
+  $0
+}
+endsnippet
+
+snippet output "Terraform output" b
+output "${1:name}" {
+  value = ${2:value}
+}
+endsnippet
+
+snippet variable "Terraform variable" b
+variable "${1:name}" {
+  type = ${2:string}
+  description = "$3"
+}
+endsnippet
+
+snippet locals "Terraform locals" b
+locals {
+  $0
+}
+endsnippet
+
+snippet for-l "Terraform for expression (list)"
+for ${1:item} in ${2:local.the_list}:
+${0:$1}
+endsnippet
+
+snippet for-m "Terraform for expression (map)"
+for ${1:key}, ${2:value} in ${3:local.the_map}:
+${0:$1 => $2}
+endsnippet
+
+snippet dynamic "Terraform dynamic block"
+dynamic "${1:label}" {
+  for_each = ${2:var.dynamic}
+  content {
+    $0
+  }
+}
+endsnippet
