@@ -1,12 +1,10 @@
 snippet resource "Terraform resource" b
-resource "${1:type}" "${2:name}" {
-  $0
+resource "${1:type}" "${2:name}" {$0
 }
 endsnippet
 
 snippet data "Terraform data source" b
-data "${1:type}" "${2:name}" {
-  $0
+data "${1:type}" "${2:name}" {$0
 }
 endsnippet
 
@@ -19,8 +17,7 @@ module "${1:name}" {
 endsnippet
 
 snippet provider "Terraform provider" b
-provider "${1:name}" {
-  $0
+provider "${1:name}" {$0
 }
 endsnippet
 
@@ -39,25 +36,59 @@ endsnippet
 
 snippet locals "Terraform locals" b
 locals {
-  $0
+  ${0:${VISUAL}}
 }
 endsnippet
 
-snippet for-l "Terraform for expression (list)"
+
+
+snippet dynamic "Terraform dynamic block" b
+dynamic "${1:label}" {
+  for_each = ${2:var.dynamic}
+  content {$0
+  }
+}
+endsnippet
+
+
+snippet versions "Versions" b
+terraform {
+  required_version = "${2:>= ${1:1.0}}"
+
+  required_providers {$0
+  }
+}
+endsnippet
+
+snippet backend "Terraform backend" b
+terraform {
+  backend "$1" {
+  }
+}$0
+endsnippet
+
+snippet default "Terraform default"
+${1:${VISUAL}} = length(var.$1) > 0 ? var.$1 : ${0:default_value}
+endsnippet
+
+
+snippet forl "Terraform for expression (list)"
 for ${1:item} in ${2:local.the_list}:
 ${0:$1}
 endsnippet
 
-snippet for-m "Terraform for expression (map)"
+snippet form "Terraform for expression (map)"
 for ${1:key}, ${2:value} in ${3:local.the_map}:
 ${0:$1 => $2}
 endsnippet
 
-snippet dynamic "Terraform dynamic block"
-dynamic "${1:label}" {
-  for_each = ${2:var.dynamic}
-  content {
-    $0
-  }
-}
+
+snippet rp "Required Provider"
+"${1:aws}" = {
+  version = "${2:>=} ${3:3.0}"
+  source  = "${5:hashicorp/${4:aws}}"
+}$0
 endsnippet
+
+
+

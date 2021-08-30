@@ -12,6 +12,10 @@ call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dadbod'
+
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
@@ -55,19 +59,10 @@ Plug 'chr4/nginx.vim'
 Plug 'bhurlow/vim-parinfer'
 
 " Deoplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  if has('python3')
-    Plug 'roxma/nvim-yarp', { 'do': 'pip3 install --user --upgrade pynvim'}
-    Plug 'roxma/vim-hug-neovim-rpc'
-  else
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-endif
-let g:deoplete#enable_at_startup = 1
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+"Plug '~/github/reegnz/vimernetes'
 
 call plug#end()
 
@@ -137,28 +132,6 @@ augroup restore
     \ | endif
 augroup END
 
-
-" Daily note taking
-" =================
-function! s:open_daily_notes()
-  let l:daily_note_template = $HOME . '/notes/daily/template.md'
-  let l:daily_note = $HOME . '/notes/daily/' . strftime("%Y-%m-%d") . '.md'
-  let l:new = 0
-  if empty(expand(glob(l:daily_note)))
-    let l:new = 1
-  endif
-  execute "edit " . l:daily_note
-  if l:new
-    execute "read " . l:daily_note_template
-    execute "normal! ggddA " . strftime("%Y-%m-%d")
-    execute "normal! o"
-    execute "normal! G"
-  endif
-endfunction
-
-command! Notes call s:open_daily_notes()
-
-
 " Plugin configs
 " ==============
 
@@ -219,14 +192,18 @@ let g:vim_markdown_edit_url_in               = 'tab'
 let g:vim_markdown_new_list_item_indent      = 0
 
 
+
+" Shougo/deoplete.nvim
+" --------------------
+let g:deoplete#enable_at_startup = 1
+
+
 " SirVer/UltiSnips
 " ----------------
-let g:UltiSnipsExpandTrigger       = "<tab>"
-let g:UltiSnipsJumpForwardTrigger  = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<esc>[Z"
-let g:UltiSnipsListSnippets        = "<esc>`"
+let g:UltiSnipsExpandTrigger       = "<Tab>"
+let g:UltiSnipsJumpForwardTrigger = "<Tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
 
-"
 " alok/notational-fzf-vim
 " -----------------------
 let g:nv_search_paths = [ '~/notes', '~/notes/daily' ]

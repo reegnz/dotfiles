@@ -4,50 +4,63 @@
                       :alone 500
                       :held 500}}
 
+; getting app id's with: osascript -e 'id of app "Slack"'}
+ :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap"]
+                :Zoom ["^us\\.zoom\\.xos"]
+                :iTerm ["^com\\.googlecode\\.iterm2"]}
+
  :layers {:caps-mode {:key :caps_lock :alone {:key :escape}}}
 
- :simlayers {:t-mode {:key :t}
-             :w-mode {:key :w}
+ :simlayers {:w-mode {:key :w}
              :e-mode {:key :e}
+             :t-mode {:key :t}
+             :r-mode {:key :r}
+             :a-mode {:key :a}
              :s-mode {:key :s}
+             :d-mode {:key :d}
              :f-mode {:key :f}
+             :g-mode {:key :g}
+             :h-mode {:key :h}
              :j-mode {:key :j}
-             :d-mode {:key :d}}
+             :k-mode {:key :k}
+             :l-mode {:key :l}}
 
 
  :main [{:des "Caps Mode"
          :rules [:caps-mode
                  ;; remap accent and tilde keys
-                 [:##period :!Sgrave_accent_and_tilde] ; caps + . => ~
-                 [:##quote :grave_accent_and_tilde]]}  ; caps + ' => `
+                 [:##period :!Sgrave_accent_and_tilde]
+                 [:##quote :grave_accent_and_tilde]]}
 
         {:des "window and tab navigation" ;
          :rules [:w-mode
-                 [:##n :!Cn] ; w + n => new window
-                 [:##q :!Cw] ; w + q => close window
-
+                 ;; new window
+                 [:##n :!Cn] ; new window
+                 [:##q :!Cw] ; close window
                  ;; switch windows
-                 [:##j :!CStab] ; w + j => switch to previous window
-                 [:##k :!Ctab]  ; w + k => switch to next window
+                 [:##j :!CStab] ; previous window
+                 [:##k :!Ctab]  ; next window
 
                  :t-mode
-                 [:##n :!Ct] ; t + n =>  new tab
-                 [:##q :!Cw] ; t + q => close tab
-
+                 [:##n :!Ct] ; new tab
+                 [:##q :!Cw] ; close tab
                  ;; switch tabs in most apps
-                 [:##j :!CSopen_bracket]  ; t + j => previous tab
-                 [:##k :!CSclose_bracket] ; t + k => next tab
+                 [:##j :!CSopen_bracket] ; prev tab
+                 [:##k :!CSclose_bracket] ; next tab
 
                  :e-mode
-                 [:##j :!CSgrave_accent_and_tilde]  ; e + j => previous window of same app
-                 [:##k :!Cgrave_accent_and_tilde]]} ; e + k => next window of same app
+                 [:##j :!CSgrave_accent_and_tilde]
+                 [:##k :!Cgrave_accent_and_tilde]
+
+                 ; history navigation
+                 :h-mode
+                 [:##j :!Cleft_arrow]
+                 [:##k :!Cright_arrow]]}
 
         {:des "Delete mode"
          :rules [:d-mode
-                 [:##h :delete_or_backspace] ; d + h => backspace (delete backwards)
-                 [:##l :delete_forward]]}    ; d + l => delete (delete forwards)
-                 ; alt + d + h => delete backwards word
-                 ; alt + d + l => delete forwards word
+                 [:##h :delete_or_backspace]
+                 [:##l :delete_forward]]}
 
         {:des "Use s + hjkl for scrolling"
          :rules [:s-mode
@@ -63,35 +76,65 @@
                  [:##k :up_arrow]
                  [:##l :right_arrow]]}
 
-
-
         {:des "use f and j as shift for symbols"
          :rules [
                  ;; when f is pressed, act as shift for symbols
                  :f-mode
-                 [:##hyphen :!Shyphen]               ; f + - => _
-                 [:##equal_sign :!Sequal_sign]       ; f + = => +
-                 [:##open_bracket :!Sopen_bracket]   ; f + [ => {
-                 [:##close_bracket :!Sclose_bracket] ; f + ] => }
-                 [:##semicolon :!Ssemicolon]         ; f + ; => :
-                 [:##quote :!Squote]                 ; f + ' => "
-                 [:##comma :!Scomma]                 ; f + , => <
-                 [:##period :!Speriod]               ; f + . => >
-                 [:##slash :!Sslash]                 ; f + / => ?
-                 [:backslash :!Sbackslash]           ; f + \ => |
+                 [:##hyphen :!Shyphen]
+                 [:##equal_sign :!Sequal_sign]
+                 [:##open_bracket :!Sopen_bracket]
+                 [:##close_bracket :!Sclose_bracket]
+                 [:##semicolon :!Ssemicolon]
+                 [:##quote :!Squote]
+                 [:##comma :!Scomma]
+                 [:##period :!Speriod]
+                 [:##slash :!Sslash]
+                 [:backslash :!Sbackslash]
 
                  ; when f is pressed, act as SHIFT for numbers 1 through 5
                  :f-mode
-                 [:##6 :!S6] ; f + 6 => ^
-                 [:##7 :!S7] ; f + 7 => &
-                 [:##8 :!S8] ; f + 8 => *
-                 [:##9 :!S9] ; f + 9 => (
-                 [:##0 :!S0] ; f + 0 => )
+                 [:##6 :!S6]
+                 [:##7 :!S7]
+                 [:##8 :!S8]
+                 [:##9 :!S9]
+                 [:##0 :!S0]
 
                  ;; when j is pressed, act as shift for numbers 1 through 5
                  :j-mode
-                 [:##1 :!S1]     ; j + 1 => !
-                 [:##2 :!S2]     ; j + 2 => @
-                 [:##3 :!S3]     ; j + 3 => #
-                 [:##4 :!S4]     ; j + 4 => $
-                 [:##5 :!S5]]}]} ; j + 5 => %
+                 [:##1 :!S1]
+                 [:##2 :!S2]
+                 [:##3 :!S3]
+                 [:##4 :!S4]
+                 [:##5 :!S5]]}
+
+        {:des "Rectancle window management"
+         :rules [
+                 :j-mode
+                 [:r ["rectangle-mode" 1]]
+                 :rectangle-mode
+                 [:escape ["rectangle-mode" 0]]
+                 [:##h :!TOleft_arrow]
+                 [:##j :!TOdown_arrow]
+                 [:##k :!TOup_arrow]
+                 [:##l :!TOright_arrow]
+                 [:##u :!TOu]
+                 [:##i :!TOi]
+                 [:##n :!TOj]
+                 [:##m :!TOk]
+                 [:##o :!TOd]
+                 [:##p :!TOe]]}
+
+        {:des "iTerm bindings"
+         :rules [[:condi :iTerm :j-mode]
+                 [:##r :!Tr]
+                 [:##t :!Tt]
+                 [:##c :!Oc]]}
+
+        ; some modal
+        {:des "Zoom bindings"
+         :rules [
+                 :Zoom
+                 ; typing j+s enters settings mode
+                 [:condi :Zoom :j-mode]
+                 [:a :!CSa]
+                 [:v :!CSv]]}]}

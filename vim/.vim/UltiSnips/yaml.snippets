@@ -1,4 +1,4 @@
-snippet k8s-resource "Kubernetes Resource"
+snippet k8s_resource "Kubernetes Resource" b
 ---
 apiVersion: ${1:apiVersion}
 kind: ${2:kind}
@@ -7,7 +7,7 @@ metadata:
 $0
 endsnippet
 
-snippet k8s-configmap "Kubernetes ConfigMap"
+snippet k8s_configmap "Kubernetes ConfigMap" b
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -17,7 +17,7 @@ data:
   $0
 endsnippet
 
-snippet k8s-secret "Kubernetes Secret"
+snippet k8s_secret "Kubernetes Secret" b
 ---
 apiVersion: v1
 kind: Secret
@@ -27,7 +27,7 @@ stringData:
   $0
 endsnippet
 
-snippet k8s-service "Kubernetes Service"
+snippet k8s_service "Kubernetes Service" b
 ---
 apiVersion: v1
 kind: Service
@@ -38,9 +38,10 @@ spec:
     app: ${2:appname}
   ports:
   - port: ${3:port}
+$0
 endsnippet
 
-snippet k8s-ingress "Kubernetes Ingress"
+snippet k8s_ingress "Kubernetes Ingress" b
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -60,9 +61,10 @@ spec:
 	        name: ${4:service}
 		port:
 		  number: ${5:80}
+$0
 endsnippet
 
-snippet k8s-deploy "Kubernetes Deployment"
+snippet k8s_deploy "Kubernetes Deployment" b
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -82,9 +84,10 @@ spec:
       containers:
       - name: $1
         image: ${3:image}
+$0
 endsnippet
 
-snippet k8s-statefulset "Kubernetes ReplicaSet"
+snippet k8s_statefulset "Kubernetes ReplicaSet" b
 ---
 apiVersion: v1
 kind: Service
@@ -133,4 +136,62 @@ spec:
 	  resources:
 	    requests:
 	      storage: 1Gi
+$0
+endsnippet
+
+snippet k8s_job "Kubernetes Job" b
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ${1:name}
+  labels:
+    app: ${2:$1}
+spec:
+  template:
+    spec:
+      containers:
+      - name: ${3:$1}
+        image: ${4:alpine:latest}
+    restartPolicy: Never
+$0
+endsnippet
+
+snippet k8s_serviceaccount "Kubernetes ServiceAccount" b
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ${1:name}
+endsnippet
+
+snippet k8s_clusterrole "Kubernetes ClusterRole" b
+---
+apiVersion: rbac.authorization.k8s.io
+kind: ClusterRole
+metadata:
+  name: ${1:name}
+rules:
+- apiGroups:
+  - ${2:""}
+  resources:
+  - ${3:configmap}
+  verbs:
+  - ${3:get}
+endsnippet
+
+snippet k8s_clusterrolebinding "Kubernetes ClusterRole Binding" b
+---
+apiVersion: v1
+kind: ClusterRoleBinding
+metadata:
+  name: ${1:name}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ${2:cluster_role_name}
+subjects:
+- kind: ${3:ServiceAccount}
+  name: ${4:subject_name}
+  namespace: "${5:default}"
 endsnippet
