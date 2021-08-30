@@ -9,12 +9,13 @@
                 :Zoom ["^us\\.zoom\\.xos"]
                 :iTerm ["^com\\.googlecode\\.iterm2"]}
 
- :layers {:caps-mode {:key :caps_lock :alone {:key :escape}}}
+ :layers {:caps-mode {:key :caps_lock
+                      :alone {:key :escape}}}
 
  :simlayers {:w-mode {:key :w}
              :e-mode {:key :e}
-             :t-mode {:key :t}
              :r-mode {:key :r}
+             :t-mode {:key :t}
              :a-mode {:key :a}
              :s-mode {:key :s}
              :d-mode {:key :d}
@@ -34,7 +35,6 @@
 
         {:des "window and tab navigation" ;
          :rules [:w-mode
-                 ;; new window
                  [:##n :!Cn] ; new window
                  [:##q :!Cw] ; close window
                  ;; switch windows
@@ -48,7 +48,7 @@
                  [:##j :!CSopen_bracket] ; prev tab
                  [:##k :!CSclose_bracket] ; next tab
 
-                 :e-mode
+                 :e-mode ; switch windows of same app
                  [:##j :!CSgrave_accent_and_tilde]
                  [:##k :!Cgrave_accent_and_tilde]
 
@@ -110,9 +110,9 @@
         {:des "Rectancle window management"
          :rules [
                  :j-mode
-                 [:r ["rectangle-mode" 1]]
+                 [:r ["rectangle-mode" 1]] ; j + r activates rectangle mode
                  :rectangle-mode
-                 [:escape ["rectangle-mode" 0]]
+                 [:escape ["rectangle-mode" 0]] ; escape quits rectangle mode
                  [:##h :!TOleft_arrow]
                  [:##j :!TOdown_arrow]
                  [:##k :!TOup_arrow]
@@ -134,7 +134,7 @@
         {:des "Zoom bindings"
          :rules [
                  :Zoom
-                 ; typing j+s enters settings mode
+                 ; j + a toggles audio, j + v toggles video
                  [:condi :Zoom :j-mode]
                  [:a :!CSa]
                  [:v :!CSv]]}]}
