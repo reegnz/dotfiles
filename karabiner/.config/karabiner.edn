@@ -1,8 +1,10 @@
 {:profiles {:Default {:default true
                       :sim 100
-                      :delay 500
-                      :alone 500
-                      :held 500}}
+                      :delay 200
+                      :alone 200
+                      :held 200}}
+ :devices {:macbook-internal [{:vendor_id 1452 :product_id 832}]
+           :anne-pro-2 [{:vendor_id 1241 :product_id 41619}]}
 
 ; getting app id's with: osascript -e 'id of app "Slack"'}
  :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap"]
@@ -100,7 +102,8 @@
                  [:##comma :!Scomma]
                  [:##period :!Speriod]
                  [:##slash :!Sslash]
-                 [:backslash :!Sbackslash]
+                 [:##backslash :!Sbackslash]
+                 [:delete_or_backspace :delete_forward]
 
                  ; when f is pressed, act as SHIFT for numbers 1 through 5
                  :f-mode
@@ -142,9 +145,7 @@
 
         ; some modal
         {:des "Zoom bindings"
-         :rules [
-                 :Zoom
-                 ; j + a toggles audio, j + v toggles video
+         :rules [ ; j + a toggles audio, j + v toggles video
                  [:condi :Zoom :j-mode]
                  [:a :!CSa]
                  [:v :!CSv]]}
