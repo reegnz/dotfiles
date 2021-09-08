@@ -147,4 +147,12 @@
                  ; j + a toggles audio, j + v toggles video
                  [:condi :Zoom :j-mode]
                  [:a :!CSa]
-                 [:v :!CSv]]}]}
+                 [:v :!CSv]]}
+
+        {:des "Slack bindings"
+         :rules [[:condi :Slack :j-mode]
+                 [:f :!Ck]
+                 [:q :!Cperiod]
+                 [:s ["slack-mode" 1]]
+                 :slack-mode
+                 [:escape ["slack-mode" 0]]]}]}
