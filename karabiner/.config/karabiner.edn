@@ -120,10 +120,9 @@
 
         {:des "Rectancle window management"
          :rules [
-                 :j-mode
-                 [:r ["rectangle-mode" 1]] ; j + r activates rectangle mode
+                 [:w [["rectangle-mode" 1] [:noti :rmode "Hit ESC to quit rectangle-mode"]] :j-mode] ; j + w activates rectangle mode
                  :rectangle-mode
-                 [:escape ["rectangle-mode" 0]] ; escape quits rectangle mode
+                 [:escape [["rectangle-mode" 0] [:noti :rmode]]] ; escape quits rectangle mode
                  [:##h :!TOleft_arrow]
                  [:##j :!TOdown_arrow]
                  [:##k :!TOup_arrow]
