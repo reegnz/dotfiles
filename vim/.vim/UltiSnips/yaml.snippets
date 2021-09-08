@@ -37,7 +37,7 @@ spec:
   selector:
     app: ${2:appname}
   ports:
-  - port: ${3:port}
+    - port: ${3:port}
 $0
 endsnippet
 
@@ -51,16 +51,16 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: ${2:host}
-      http:
-        paths:
-	- path: ${3:/}
-	    pathType: Prefix
-	    backend:
-	      service:
-	        name: ${4:service}
-		port:
-		  number: ${5:80}
+    - host: ${2:host}
+        http:
+          paths:
+            - path: ${3:/}
+                pathType: Prefix
+                backend:
+                  service:
+                    name: ${4:service}
+                    port:
+                      number: ${5:80}
 $0
 endsnippet
 
@@ -82,8 +82,8 @@ spec:
         app: $2
     spec:
       containers:
-      - name: $1
-        image: ${3:image}
+        - name: $1
+          image: ${3:image}
 $0
 endsnippet
 
@@ -97,8 +97,8 @@ metadata:
     app: ${2:$1}
 spec:
   ports:
-  - port: ${3:port}
-    name: web
+    - port: ${3:port}
+      name: web
   clusterIP: "none"
   selector:
     app: $2
@@ -120,22 +120,22 @@ spec:
         app: $2
     spec:
       containers:
-      - name: $1
-        image: ${3:image}
-        ports:
-	- containerPort: $2
-	  name: web
-	volumeMounts:
-	- name: data
-	  mountPath: ${4:/usr/local/var/$1}
+        - name: $1
+          image: ${3:image}
+          ports:
+            - containerPort: $2
+              name: web
+            volumeMounts:
+            - name: data
+              mountPath: ${4:/usr/local/var/$1}
       volumeClaimTemplates:
-      - metadata:
-          name: data
-	spec:
-	  accessModes: [ "ReadWriteOnce" ]
-	  resources:
-	    requests:
-	      storage: 1Gi
+        - metadata:
+            name: data
+          spec:
+            accessModes: [ "ReadWriteOnce" ]
+            resources:
+              requests:
+                storage: 1Gi
 $0
 endsnippet
 
@@ -151,8 +151,8 @@ spec:
   template:
     spec:
       containers:
-      - name: ${3:$1}
-        image: ${4:alpine:latest}
+        - name: ${3:$1}
+          image: ${4:alpine:latest}
     restartPolicy: Never
 $0
 endsnippet
@@ -172,12 +172,12 @@ kind: ClusterRole
 metadata:
   name: ${1:name}
 rules:
-- apiGroups:
-  - ${2:""}
-  resources:
-  - ${3:configmap}
-  verbs:
-  - ${3:get}
+  - apiGroups:
+      - ${2:""}
+    resources:
+      - ${3:configmap}
+    verbs:
+      - ${3:get}
 endsnippet
 
 snippet k8s_clusterrolebinding "Kubernetes ClusterRole Binding" b
@@ -191,7 +191,7 @@ roleRef:
   kind: ClusterRole
   name: ${2:cluster_role_name}
 subjects:
-- kind: ${3:ServiceAccount}
-  name: ${4:subject_name}
-  namespace: "${5:default}"
+  - kind: ${3:ServiceAccount}
+    name: ${4:subject_name}
+    namespace: "${5:default}"
 endsnippet
