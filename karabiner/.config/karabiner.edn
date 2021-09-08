@@ -26,12 +26,23 @@
              :k-mode {:key :k}
              :l-mode {:key :l}}
 
-
  :main [{:des "Caps Mode"
          :rules [:caps-mode
                  ;; remap accent and tilde keys
                  [:##period :!Sgrave_accent_and_tilde]
                  [:##quote :grave_accent_and_tilde]]}
+
+        {:des "Mouse mode"
+         :rules [
+                 [:m [["mouse-mode" 1] [:noti :mmode "Hit ESC to quit Mouse Mode"]] :f-mode]
+                 :mouse-mode
+                 [:escape [["mouse-mode" 0] [:noti :mmode]]] ; escape quits mouse mode
+                 [:h {:mkey {:x -1536}}]
+                 [:j {:mkey {:y 1536}}]
+                 [:k {:mkey {:y -1536}}]
+                 [:l {:mkey {:x 1536}}]
+                 [:u {:pkey :button1}]
+                 [:i {:pkey :button2}]]}
 
         {:des "window and tab navigation" ;
          :rules [:w-mode
