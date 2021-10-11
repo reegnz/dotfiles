@@ -91,4 +91,20 @@ snippet rp "Required Provider"
 endsnippet
 
 
+### AWS specific snippets
+snippet aws_iam_role "IAM Role" b
+resource "aws_iam_role" "${1:role}" {
+  name               = "${2:MyRole}"
+  assume_role_policy = data.aws_iam_policy_document.${3:policy}.json
+}
 
+data "aws_iam_policy_document" "$3" {
+  statement {
+    actions = ["${4:sts:AssumeRole}"]
+    principals {
+      type        = "${5:Service}"
+      identifiers = ["${6:ec2.amazonaws.com}"]
+    }
+  }
+}$0
+endsnippet

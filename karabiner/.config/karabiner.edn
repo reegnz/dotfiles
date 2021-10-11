@@ -131,11 +131,11 @@
                  [:##k :!TOup_arrow]
                  [:##l :!TOright_arrow]
                  [:##u :!TOu]
-                 [:##i :!TOi]
-                 [:##n :!TOj]
-                 [:##m :!TOk]
+                 [:##p :!TOi]
+                 [:##m :!TOj]
+                 [:##slash :!TOk]
                  [:##o :!TOd]
-                 [:##p :!TOe]]}
+                 [:##i :!TOe]]}
 
         {:des "iTerm bindings"
          :rules [[:condi :iTerm :j-mode]
@@ -156,4 +156,13 @@
                  [:q :!Cperiod]
                  [:s ["slack-mode" 1]]
                  :slack-mode
-                 [:escape ["slack-mode" 0]]]}]}
+                 [:escape ["slack-mode" 0]]]}
+
+        {:des "Media buttons (Audio mode)"
+         :rules [:a-mode
+                 [:j :volume_decrement]
+                 [:k :volume_increment]
+                 [:h :rewind]
+                 [:l :fastforward]
+                 [:p :play_or_pause]
+                 [:m :mute]]}]}

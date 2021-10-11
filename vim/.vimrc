@@ -10,11 +10,13 @@ call plug#begin('~/.vim/plugged')
 
 " core: my must-have plugins
 Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dadbod'
+" Plug 'tpope/vim-vinegar'
 
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
@@ -44,6 +46,7 @@ Plug 'cespare/vim-toml'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'bfrg/vim-jq'
 Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'bhurlow/vim-parinfer'
 
 " experimental: trying out new stuff
 Plug 'AndrewRadev/splitjoin.vim'
@@ -56,7 +59,6 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'chrisbra/NrrwRgn'
 Plug 'RRethy/vim-illuminate'
 Plug 'chr4/nginx.vim'
-Plug 'bhurlow/vim-parinfer'
 
 " Deoplete
 Plug 'Shougo/deoplete.nvim'
@@ -65,8 +67,6 @@ Plug 'roxma/vim-hug-neovim-rpc'
 "Plug '~/github/reegnz/vimernetes'
 
 call plug#end()
-
-
 
 let g:jq_highlight_builtin_functions = 1
 let g:jq_highlight_module_prefix     = 1
@@ -86,9 +86,6 @@ set clipboard=unnamed
 
 " for incrementing alphabetic numbers with  <C-A> and <C-X>
 set nrformats+=alpha
-
-" convenience
-nnoremap ; :
 
 " split navigation
 nnoremap <Leader>o       <c-w>o
@@ -139,7 +136,6 @@ augroup END
 " ------------------
 nnoremap <Leader><Tab> :NERDTreeToggle<CR>
 
-
 " airblade/vim-gitgutter
 " ----------------------
 set updatetime=250
@@ -159,20 +155,16 @@ highlight GitGutterChangeDelete ctermfg=4
 " ------------------
 let g:ale_completion_enabled = 1
 let b:ale_fix_on_save        = 1
-let g:ale_fixers = {
-	\ '*': ['remove_trailing_lines', 'trim_whitespace'],
-	\ 'js': ['prettier'],
-	\ 'json': ['prettier', 'jq'],
-	\ 'python': ['black', 'isort'],
-	\ 'terraform': ['terraform'],
-	\ 'md': ['remark_lint', 'markdownlint'],
-	\ 'go': ['goimports', 'gofmt']
-	\ }
-
-  "\   'sh':        [ 'shfmt'],
-  "\   'bash':      ['shfmt'],
-
-
+let g:ale_fixers = {}
+let g:ale_fixers['*'] = ['remove_trailing_lines', 'trim_whitespace']
+let g:ale_fixers['js'] = ['prettier']
+let g:ale_fixers['json'] = ['prettier', 'jq']
+let g:ale_fixers['python'] = ['black', 'isort']
+let g:ale_fixers['go'] = ['goimports', 'gofmt']
+let g:ale_fixers['terraform'] = ['terraform']
+let g:ale_fixers['md'] = ['remark_lint', 'markdownlint']
+"let g:ale_fixers['sh'] = ['shfmt']
+"let g:ale_fixers['bash'] = ['shfmt']
 
 
 " hashivim/vim-terraform
