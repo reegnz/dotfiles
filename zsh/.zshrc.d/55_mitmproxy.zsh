@@ -1,5 +1,6 @@
 mitmproxy_env_enable() {
     # TODO: make OS agnostic, right now only works on MacOS
+    echo "Looking for openssl cert bundle..." >&2
     local cert_file="$($(brew ls openssl@1.1 | grep bin/openssl) version -d | cut -d'"' -f2)/cert.pem"
     export HTTP_PROXY="http://127.0.0.1:8080"
     export HTTPS_PROXY="http://127.0.0.1:8080"
@@ -16,6 +17,10 @@ mitmproxy_env_enable() {
     export REQUESTS_CA_BUNDLE="$cert_file"
     # AWS CLI also doesn't use the keychain so have it use openssl certs.pem instead.
     export AWS_CA_BUNDLE="$cert_file"
+
+
+    echo "Using openssl cert bundle: $cert_file"
+    echo "Using proxy: $HTTP_PROXY"
 }
 
 mitmproxy_env_disable() {
