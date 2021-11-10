@@ -35,9 +35,10 @@ metadata:
   name: ${1:name}
 spec:
   selector:
-    app: ${2:appname}
+    app: ${2:$1}
   ports:
-    - port: ${3:port}
+    - port: ${3:80}
+      targetPort: ${4:$3}$0
 endsnippet
 
 snippet "kind: Ingress" "Kubernetes Ingress" b
@@ -59,7 +60,7 @@ spec:
               service:
                 name: ${6:service}
                 port:
-                  number: ${7:80}
+                  number: ${7:80}$0
 endsnippet
 
 snippet "kind: Deployment" "Kubernetes Deployment" b
@@ -81,7 +82,7 @@ spec:
     spec:
       containers:
         - name: ${5:$1}
-          image: ${6:image}
+          image: ${6:image}$0
 endsnippet
 
 snippet "kind: StatefulSet" "Kubernetes ReplicaSet" b
@@ -132,7 +133,7 @@ spec:
             accessModes: [ "ReadWriteOnce" ]
             resources:
               requests:
-                storage: 1Gi
+                storage: 1Gi$0
 endsnippet
 
 snippet "kind: Job" "Kubernetes Job" b
@@ -149,7 +150,7 @@ spec:
       containers:
         - name: ${3:$1}
           image: ${4:alpine:latest}
-    restartPolicy: Never
+    restartPolicy: Never$0
 endsnippet
 
 snippet "kind: ServiceAccount" "Kubernetes ServiceAccount" b
@@ -157,7 +158,7 @@ snippet "kind: ServiceAccount" "Kubernetes ServiceAccount" b
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ${1:name}
+  name: ${1:name}$0
 endsnippet
 
 snippet "kind: ClusterRole" "Kubernetes ClusterRole" b
@@ -172,7 +173,7 @@ rules:
     resources:
       - ${3:configmap}
     verbs:
-      - ${3:get}
+      - ${3:get}$0
 endsnippet
 
 snippet "kind: ClusterRoleBinding" "Kubernetes ClusterRoleBinding" b
@@ -188,5 +189,12 @@ roleRef:
 subjects:
   - kind: ${3:ServiceAccount}
     name: ${4:subject_name}
-    namespace: "${5:default}"
+    namespace: "${5:default}"$0
+endsnippet
+
+snippet "kind: Cluster" "kind cluster definition" b
+---
+apiVersion: "kind.x-k8s.io/v1alpha4"
+kind: Cluster
+name: ${1:kind}
 endsnippet
