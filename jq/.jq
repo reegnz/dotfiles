@@ -85,3 +85,9 @@ def map_keys(mapper):
 
 def map_files:
   reduce inputs as $line ({}; .[input_filename] += [$line]);
+
+# usage: jq -r 'tsv_with_header' | column -t
+def tsv_with_header:
+  (.[0]|keys_unsorted|map(ascii_upcase)) as $keys |
+  $keys,(.[]|to_entries|map(.value)) |
+  @tsv;
