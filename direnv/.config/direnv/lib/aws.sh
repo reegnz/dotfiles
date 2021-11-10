@@ -2,6 +2,10 @@ use_aws_profile() {
 	export AWS_PROFILE=$1
 }
 
+use_aws_region() {
+	export AWS_DEFAULT_REGION=$1
+}
+
 use_eks_cluster() {
 	KUBECONFIG="$(direnv_layout_dir)/k8s/kubeconfig.yaml"
 	export KUBECONFIG
