@@ -7,6 +7,14 @@ metadata:
 $0
 endsnippet
 
+snippet "kind: Namespace" "Kubernetes namespace" b
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${1:name}
+endsnippet
+
 snippet "kind: ConfigMap" "Kubernetes ConfigMap" b
 ---
 apiVersion: v1
