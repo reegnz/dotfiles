@@ -162,11 +162,9 @@
 
         {:des "Slack bindings"
          :rules [[:condi :Slack :j-mode]
-                 [:f :!Ck]
-                 [:q :!Cperiod]
-                 [:s ["slack-mode" 1]]
-                 :slack-mode
-                 [:escape ["slack-mode" 0]]]}
+                 [:s :!CSd]
+                 [:f :!Ck] ; search / jump to
+                 [:q :!Cperiod]]}
 
         {:des "Media buttons (Audio mode)"
          :rules [:a-mode
