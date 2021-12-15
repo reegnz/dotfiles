@@ -26,7 +26,8 @@
              :h-mode {:key :h}
              :j-mode {:key :j}
              :k-mode {:key :k}
-             :l-mode {:key :l}}
+             :l-mode {:key :l}
+             :b-mode {:key :b}}
 
  :main [{:des "Caps Mode"
          :rules [:caps-mode
@@ -165,4 +166,8 @@
                  [:h :rewind]
                  [:l :fastforward]
                  [:p :play_or_pause]
-                 [:m :mute]]}]}
+                 [:m :mute]]}
+        {:des "Brightnetss control"
+         :rules [:b-mode
+                 [:j :display_brightness_decrement]
+                 [:k :display_brightness_increment]]}]}
