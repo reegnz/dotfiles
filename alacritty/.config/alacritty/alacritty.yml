@@ -740,8 +740,17 @@ alt_send_esc: true
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
 key_bindings:
-  - {key: J, mods: Alt, chars: "\x1bj"}
-  - {key: C, mods: Alt, chars: "\x1bc"}
+  - { key: J,     mods: Alt,     chars: "\x1bj" } # launch jq-zsh-plugin
+  - { key: C,     mods: Alt,     chars: "\x1bc" } # launch fzf dir search
+
+  # Line movements
+  - { key: Left,  mods: Alt,     chars: "\x1bb"                    } # skip word left
+  - { key: Right, mods: Alt,     chars: "\x1bf"                    } # skip word right
+  - { key: Left,  mods: Command, chars: "\x1bOH",  mode: AppCursor } # home
+  - { key: Right, mods: Command, chars: "\x1bOF",  mode: AppCursor } # end
+  - { key: Back,  mods: Alt,     chars: "\x1b\x7f"                 } # delete word
+  - { key: Back,  mods: Command, chars: "\x15"                     } # delete line
+
   #- { key: Paste,                                       action: Paste          }
   #- { key: Copy,                                        action: Copy           }
   #- { key: L,         mods: Control,                    action: ClearLogNotice }
