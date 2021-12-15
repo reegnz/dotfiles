@@ -7,9 +7,12 @@
            :anne-pro-2 [{:vendor_id 1241 :product_id 41619}]}
 
 ; getting app id's with: osascript -e 'id of app "Slack"'}
- :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap"]
-                :Zoom ["^us\\.zoom\\.xos"]
-                :iTerm ["^com\\.googlecode\\.iterm2"]}
+ :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap$"]
+                :Zoom ["^us\\.zoom\\.xos$"]
+                :iTerm ["^com\\.googlecode\\.iterm2$"]
+                :Chrome ["^com\\.google\\.Chrome$"]
+                :Firefox ["^org\\.mozilla\\.firefox$"]
+                :Browsers ["^com\\.google\\.Chrome$" "^org\\.mozilla\\.firefox$"]}
 
  :layers {:caps-mode {:key :caps_lock
                       :alone {:key :escape}}}
@@ -51,6 +54,7 @@
          :rules [:w-mode
                  [:##n :!Cn] ; new window
                  [:##q :!Cw] ; close window
+                 [:##m :!Cm] ; minimize window
                  ;; switch windows
                  [:##j :!CStab] ; previous window
                  [:##k :!Ctab]  ; next window
@@ -143,6 +147,11 @@
                  [:##r :!Tr]
                  [:##t :!Tt]
                  [:##c :!Oc]]}
+
+        {:des "Browser bindings"
+         :rules [[:condi :Browsers :j-mode]
+                 ;; toggle dark mode for a single site
+                 [:d :!OSa]]}
 
         ; some modal
         {:des "Zoom bindings"
