@@ -6,10 +6,12 @@
  :devices {:macbook-internal [{:vendor_id 1452 :product_id 832}]
            :anne-pro-2 [{:vendor_id 1241 :product_id 41619}]}
 
-; getting app id's with: osascript -e 'id of app "Slack"'}
+; getting app id's with: osascript -e 'id of app "Slack"'
  :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap$"]
                 :Zoom ["^us\\.zoom\\.xos$"]
                 :iTerm ["^com\\.googlecode\\.iterm2$"]
+                :Alacritty ["^io\\.alacritty$"]
+                :Terminals["^com\\.googlecode\\.iterm2$" "^io\\.alacritty$"]
                 :Chrome ["^com\\.google\\.Chrome$"]
                 :Firefox ["^org\\.mozilla\\.firefox$"]
                 :Browsers ["^com\\.google\\.Chrome$" "^org\\.mozilla\\.firefox$"]}
@@ -142,8 +144,8 @@
                  [:##o :!TOd]
                  [:##i :!TOe]]}
 
-        {:des "iTerm bindings"
-         :rules [[:condi :iTerm :j-mode]
+        {:des "terminal bindings"
+         :rules [[:condi :Terminals :j-mode]
                  [:##r :!Tr]
                  [:##t :!Tt]
                  [:##c :!Oc]]}
