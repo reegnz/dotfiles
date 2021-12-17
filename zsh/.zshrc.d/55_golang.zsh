@@ -3,5 +3,4 @@ pathmunge "$PATH:$GOPATH/bin" after
 export PATH
 
 
-GOPROXY="https://proxy.golang.org"
-
+GOPROXY="https://proxy.golang.org,direct"

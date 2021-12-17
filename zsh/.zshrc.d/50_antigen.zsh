@@ -15,15 +15,14 @@ if [ -f "$antigen" ]; then
 	antigen bundle sudo
 	antigen bundle copybuffer
 	antigen bundle fzf
-	#antigen bundle colored-man-pages
 	antigen bundle asdf
-	#antigen bundle aws
+	# use own implementation of asp utilizing fzf
+	# antigen bundle aws
 	antigen bundle docker
 	antigen bundle kubectl
 
-	antigen bundle zdharma/fast-syntax-highlighting
 	antigen theme romkatv/powerlevel10k
+	antigen bundle zdharma-continuum/fast-syntax-highlighting
 	antigen bundle reegnz/jq-zsh-plugin
-
 	antigen apply
 fi

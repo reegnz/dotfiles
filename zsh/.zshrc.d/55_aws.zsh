@@ -1,6 +1,6 @@
 #shellcheck disable=SC2148
 
-alias aws-edit-config='vim -c "cd ~/.aws" -c "Rg"'
+export AWS_STS_REGIONAL_ENDPOINTS=regional
 
 aws-switch-profile() {
   if [[ $# -eq 0 ]]; then
@@ -54,8 +54,6 @@ _aws-switch-profile() {
     esac
 }
 complete -F _aws-switch-profile aws-switch-profile
-
-alias asp=aws-switch-profile
 complete -F _aws-switch-profile asp
 
 __aws_select_profile() (
@@ -92,3 +90,8 @@ aws-profiles() (
     '/\[profile .*]/{print $3;next}; /\[.*]/{print $2;next}' \
     "${file}"
 )
+
+alias gimme-aws-creds="AWS_DEFAULT_REGION=eu-central-1 gimme-aws-creds"
+alias asp="aws-switch-profile"
+alias aws-edit-config='vim -c "cd ~/.aws" -c "Rg"'
+alias ac='aws-edit-config'
