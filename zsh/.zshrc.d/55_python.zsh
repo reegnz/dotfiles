@@ -3,7 +3,7 @@ export PYTHONUSERBASE=$HOME/.local
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
-pathmunge "$PYENV_ROOT/bin" after
+pathmunge "$PYENV_ROOT/shims" before
 export PATH
 if command -v pyenv 1>/dev/null 2>&1; then
 	eval "$(pyenv init -)"

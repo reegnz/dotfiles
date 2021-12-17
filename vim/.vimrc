@@ -1,3 +1,8 @@
+" Modeline and Notes {{{
+" vim: set sw=2 ts=2 sts=2 tw=78 et foldlevel=0 foldmethod=marker :
+" }}}
+
+" Install vim plug {{{
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -5,31 +10,36 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   augroup END
 endif
+" }}}
 
+" Plugins {{{
 call plug#begin('~/.vim/plugged')
 
 " core: my must-have plugins
 Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dadbod'
-" Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-speeddating'
 
-Plug 'easymotion/vim-easymotion'
-Plug 'airblade/vim-gitgutter'
-Plug 'itchyny/lightline.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim', {'on': ['Files', 'GFiles', 'Buffers', 'Colors', 'Ag', 'Rg', 'Lines', 'BLines', 'Tags', 'BTags', 'Marks', 'Windows', 'Locate', 'History', 'Snippets', 'Commits', 'BCommits', 'Maps', 'Helptags', 'Filetypes'] }
+Plug 'junegunn/vim-easy-align'
+
+Plug 'flazz/vim-colorschemes'
+
 Plug 'wincent/terminus'
+Plug 'easymotion/vim-easymotion'
+Plug 'mhinz/vim-signify'
+Plug 'itchyny/lightline.vim'
 
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-Plug 'junegunn/fzf', { 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
 
 Plug 'mhinz/vim-startify'
 
@@ -37,42 +47,43 @@ Plug 'mhinz/vim-startify'
 Plug 'dense-analysis/ale'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'hashivim/vim-terraform'
-"Plug 'sheerun/vim-polyglot'
-Plug 'plasticboy/vim-markdown'
-Plug 'jkramer/vim-checkbox'
-Plug 'cespare/vim-toml'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'bfrg/vim-jq'
-Plug 'Glench/Vim-Jinja2-Syntax'
-Plug 'bhurlow/vim-parinfer'
+Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 'markdown'}
+" Plug 'jkramer/vim-checkbox'
+Plug 'cespare/vim-toml', { 'for': 'toml' }
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
+Plug 'buoto/gotests-vim', { 'for': 'go' }
+Plug 'bfrg/vim-jq', { 'for': 'jq' }
+Plug 'bhurlow/vim-parinfer', { 'for': 'clojure' }
 
 " experimental: trying out new stuff
-Plug 'AndrewRadev/splitjoin.vim'
+Plug 'thaerkh/vim-indentguides'
+
+Plug 'mityu/vim-applescript', { 'for': 'applescript' }
+" Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'
 Plug 'direnv/direnv.vim'
-Plug 'junegunn/vim-easy-align'
-"Plug 'dhruvasagar/vim-table-mode'
 Plug 'pbrisbin/vim-mkdir'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'chrisbra/NrrwRgn'
+" Plug 'chrisbra/NrrwRgn'
 Plug 'RRethy/vim-illuminate'
-Plug 'chr4/nginx.vim'
+" Plug 'chr4/nginx.vim', { 'for': 'nginx' }
 
 " Deoplete
 Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
-"Plug '~/github/reegnz/vimernetes'
+
+" has to be last place for startify
+Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
+"}}}
 
-let g:jq_highlight_builtin_functions = 1
-let g:jq_highlight_module_prefix     = 1
-let g:jq_highlight_json_file_prefix  = 1
-let g:jq_highlight_objects           = 1
-let g:jq_highlight_function_calls    = 1
+" General {{{
+
+set termguicolors
+colorscheme nord
 
 set nowrap
 set nofoldenable
@@ -80,78 +91,137 @@ set conceallevel=2
 set hidden
 set noswapfile
 set autochdir
-
 " allow cross-talk between yank buffer and system clipboard
 set clipboard=unnamed
-
 " for incrementing alphabetic numbers with  <C-A> and <C-X>
 set nrformats+=alpha
 
-" split navigation
+" improve search
+set ignorecase
+set smartcase
+
+" split handling
+set splitbelow splitright
+
+" Fix some colors {{{
+set fillchars+=vert:┆,fold:┄,
+highlight VertSplit cterm=NONE ctermfg=darkgrey ctermbg=NONE
+highlight EndOfBuffer ctermfg=darkgrey
+" }}}
+
+" split navigation {{{
 nnoremap <Leader>o       <c-w>o
 nnoremap <Leader><up>    <c-w>k
 nnoremap <Leader><down>  <c-w>j
 nnoremap <Leader><left>  <c-w>h
 nnoremap <Leader><right> <c-w>l
+" }}}
 
-" scrolling
-nnoremap <S-Down> <C-e>
-nnoremap <S-Up>   <C-y>
+" better code indenting {{{
+" indent move
+vnoremap > >gv
+vnoremap < <gv
+" }}}
 
+nnoremap ; :
 
+" aws file types {{{
 augroup filetypedetect
   au BufNewFile,BufRead ~/.aws/config*      set ft=dosini
   au BufNewFile,BufRead ~/.aws/credentials* set ft=dosini
 augroup END
+" }}}
 
+" fix vimdiff colors {{{
+" highlight DiffAdd    cterm=BOLD ctermfg=green  ctermbg=NONE
+" highlight DiffDelete cterm=BOLD ctermfg=red    ctermbg=NONE
+" highlight DiffChange cterm=BOLD ctermfg=yellow ctermbg=NONE
+" highlight DiffText   cterm=BOLD ctermfg=black  ctermbg=yellow
+" highlight SignColumn ctermbg=NONE
+" }}}
 
-" fix vimdiff colors
-highlight DiffAdd    cterm=BOLD ctermfg=green  ctermbg=NONE
-highlight DiffDelete cterm=BOLD ctermfg=red    ctermbg=NONE
-highlight DiffChange cterm=BOLD ctermfg=yellow ctermbg=NONE
-highlight DiffText   cterm=BOLD ctermfg=black  ctermbg=yellow
-
-
-" Reload vimrc after saving
+" Reload vimrc after saving {{{
 if !exists('*ReloadVimrc')
   fun! ReloadVimrc()
     source $MYVIMRC
   endfun
 endif
 autocmd! BufWritePost $MYVIMRC call ReloadVimrc()
+command VimRC :edit $MYVIMRC
+" }}}
 
-
-" :h restore-cursor
+" :h restore-cursor {{{
 augroup restore
   autocmd BufReadPost *
     \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
     \ |   exe "normal! g`\""
     \ | endif
 augroup END
+" }}}
 
-" Plugin configs
+" JIRA link handling like [ABC-123]: {{{
+function OpenJira()
+  let l:word = expand("<cWORD>")
+  let l:match = matchlist(l:word, '\(\w\+-\d\+\)')
+  if empty(l:match)
+    return 0
+  endif
+  let l:issue = l:match[1]
+  let l:url = g:jira_host .. '/browse/' .. l:issue
+  call netrw#BrowseX(l:url, 0)
+endfun
+
+command OpenJira :call OpenJira()<CR>
+
+nnoremap gj :call OpenJira()<CR>
+
+let g:jira_host = 'https://jira.cloudera.com'
+
+" }}}
+
+" Search Google {{{
+" see :h map-operator for how this is implemented
+function BrowserSearch(type = '', ...)
+  if a:type == ''
+    set opfunc=BrowserSearch
+    return 'g@'
+  endif
+  let sel_save = &selection
+  let reg_save = getreginfo('"')
+  let cb_save = &clipboard
+  let visual_marks_save = [getpos("'<"), getpos("'>")]
+  try
+      set clipboard= selection=inclusive
+	    let commands = #{line: "'[V']y", char: "`[v`]y", block: "`[\<c-v>`]y"}
+      silent exe 'noautocmd keepjumps normal! ' .. get(commands, a:type, '')
+      let text = getreg('"')
+      let url = g:web_search_url .. text
+      call netrw#BrowseX(url, 0)
+  finally
+    call setreg('"', reg_save)
+    call setpos("'<", visual_marks_save[0])
+    call setpos("'>", visual_marks_save[1])
+    let &clipboard = cb_save
+    let &selection = sel_save
+  endtry
+
+endfunction
+nnoremap <expr> ss BrowserSearch()
+xnoremap <expr> ss BrowserSearch()
+let g:web_search_url = "https://google.com/search?q="
+" }}}
+
+" }}}
+
+" Plugin configs {{{
 " ==============
 
-" preservim/nerdtree
+" preservim/nerdtree {{{
 " ------------------
 nnoremap <Leader><Tab> :NERDTreeToggle<CR>
+" }}}
 
-" airblade/vim-gitgutter
-" ----------------------
-set updatetime=250
-let g:gitgutter_max_signs = 500
-" No mapping
-let g:gitgutter_map_keys = 0
-" Colors
-let g:gitgutter_override_sign_column_highlight = 0
-highlight clear SignColumn
-highlight GitGutterAdd          ctermfg=2
-highlight GitGutterChange       ctermfg=3
-highlight GitGutterDelete       ctermfg=1
-highlight GitGutterChangeDelete ctermfg=4
-
-
-" dense-analysis/ale
+" dense-analysis/ale {{{
 " ------------------
 let g:ale_completion_enabled = 1
 let b:ale_fix_on_save        = 1
@@ -166,78 +236,52 @@ let g:ale_fixers['md'] = ['remark_lint', 'markdownlint']
 "let g:ale_fixers['sh'] = ['shfmt']
 "let g:ale_fixers['bash'] = ['shfmt']
 
+"let g:ale_linters_explicit = 1
+"let g:ale_linters = {}
+"let g:ale_linters['sh'] = ['shellcheck']
+"let g:ale_linters['bash'] = ['shellcheck']
+" }}}
 
-" hashivim/vim-terraform
-" ----------------------
-let g:terraform_fmt_on_save = 0
-
-
-" plasticboy/vim-markdown
-" -----------------------
-let g:vim_markdown_folding_disabled          = 1
-let g:vim_markdown_frontmatter               = 1
-let g:vim_markdown_strikethrough             = 1
-let g:vim_markdown_no_extensions_in_markdown = 1
-let g:vim_markdown_autowrite                 = 1
-let g:vim_markdown_follow_anchor             = 1
-let g:vim_markdown_edit_url_in               = 'tab'
-let g:vim_markdown_new_list_item_indent      = 0
-
-
-
-" Shougo/deoplete.nvim
+" Shougo/deoplete.nvim {{{
 " --------------------
 let g:deoplete#enable_at_startup = 1
+" }}}
 
-
-" SirVer/UltiSnips
+" SirVer/UltiSnips {{{
 " ----------------
 let g:UltiSnipsExpandTrigger       = "<Tab>"
 let g:UltiSnipsJumpForwardTrigger = "<Tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+" }}}
 
-" alok/notational-fzf-vim
-" -----------------------
-let g:nv_search_paths = [ '~/notes', '~/notes/daily' ]
-
-
-" junegunn/vim-easy-align
+" junegunn/vim-easy-align {{{
 " -----------------------
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+" }}}
 
+" itchyny/lightline.vim {{{
+" ---------------------
+set noshowmode
+let g:lightline                       = {}
+let g:lightline['active']             = {}
+let g:lightline['component_function'] = {}
 
+let g:lightline['active']['left']                   = [['mode', 'paste'], ['gitbranch', 'readonly', 'filename', 'modified']]
+let g:lightline['component_function']['gitbranch']  = "FugitiveHead"
+let g:lightline['component_function']['filetype']   = "MyFiletype"
+let g:lightline['component_function']['fileformat'] = "MyFileformat"
 
-" dhruvasagar/vim-table-mode
-" --------------------------
-function! s:isAtStartOfLine(mapping)
-  let text_before_cursor = getline('.')[0 : col('.')-1]
-  let mapping_pattern = '\V' . escape(a:mapping, '\')
-  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
-  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+function! MyFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 endfunction
 
-inoreabbrev <expr> <bar><bar>
-          \ <SID>isAtStartOfLine('\|\|') ?
-          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
-inoreabbrev <expr> __
-          \ <SID>isAtStartOfLine('__') ?
-          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
+function! MyFileformat()
+  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction
 
+" }}}
 
-" AndrewRadev/switch.vim
-" ----------------------
-autocmd FileType gitrebase let b:switch_custom_definitions =
-    \ [
-    \   [ 'pick', 'reword', 'edit', 'squash', 'fixup', 'exec', 'drop' ]
-    \ ]
-
-autocmd FileType markdown let b:switch_custom_definitions =
-    \ [
-    \   {
-    \      '\[\s\]\s\(.*\)': '[x] \1',
-    \      '\[x\]\s\(.*\)': '[ ] \1'
-    \   }
-    \ ]
+" }}}
