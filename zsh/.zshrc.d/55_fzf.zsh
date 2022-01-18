@@ -1,4 +1,9 @@
-export FZF_DEFAULT_COMMAND='fd --type f --color=always'
+if (( $+commands[fd] )); then
+  export FZF_DEFAULT_COMMAND='fd --type f --color=always'
+elif (( $+commands[rg] )); then
+  export FZF_DEFAULT_COMMAND='rg --files '
+fi
+
 export FZF_DEFAULT_OPTS="--ansi --height=50%"
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

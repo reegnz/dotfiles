@@ -17,8 +17,8 @@ function keg_only_refresh() {
 	cat <(find /usr/local/opt -follow -type d -name gnubin) \
 	    <(echo "/usr/local/opt/curl/bin") \
 	    <(echo "/usr/local/opt/python/libexec/bin") \
-	| paste -s -d':' - \
-	| sed 's/\(.*\)/pathmunge \1/g' >| "$keg_only_bin_cache"
+	| paste -s -d' ' - \
+	| sed 's/\(.*\)/path=(\1 $path)/g' >| "$keg_only_bin_cache"
 }
 keg_only_bin_cache="$HOME/.cache/keg-only-bin"
 [[ -f "$keg_only_bin_cache" ]] || keg_only_refresh

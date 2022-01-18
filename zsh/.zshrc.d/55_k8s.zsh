@@ -1,3 +1,1 @@
-
-pathmunge "${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH
+path=($path "${KREW_ROOT:-$HOME/.krew}/bin")

@@ -75,7 +75,7 @@ __aws_print_profile() (
     }
     keep' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" |
     if type bat &>/dev/null; then
-      bat -l ini --color=always --decorations=never
+      bat -l ini --color=always --decorations=never --theme=gruvbox-dark
     else
       cat
     fi

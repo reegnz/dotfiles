@@ -1,2 +1,1 @@
-pathmunge "$HOME/bin"
-export PATH
+path=("$HOME/bin" $path)

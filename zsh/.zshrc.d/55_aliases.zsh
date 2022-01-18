@@ -13,3 +13,5 @@ alias notes='vim ~/logseq/journals/$(date +%Y_%m_%d.md)'
 
 alias ranger='source ranger'
 alias r='ranger'
+
+alias vim=nvim

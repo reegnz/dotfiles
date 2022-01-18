@@ -1,6 +1,4 @@
 export GOPATH=$HOME/go
-pathmunge "$PATH:$GOPATH/bin" after
-export PATH
+path=($path "${GOPATH}/bin")
 
-
-GOPROXY="https://proxy.golang.org,direct"
+export GOPROXY="https://proxy.golang.org,direct"
