@@ -16,6 +16,7 @@ fi
 if [ -d $HOME/.zshrc.d ]; then
 	for file in $HOME/.zshrc.d/*.zsh; do
 		if [ -r $file ]; then
+			[ $file.zwc -nt $file ] || zcompile -R -- $file.zwc $file
 			if [ "${-#*i}" != "$-" ]; then
 				. "$file"
 			else
