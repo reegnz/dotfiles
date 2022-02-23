@@ -1,5 +1,6 @@
 use_aws_profile() {
 	export AWS_PROFILE=$1
+	export AWS_REGIONAL_ENDPOINTS="regional"
 }
 
 use_aws_region() {
