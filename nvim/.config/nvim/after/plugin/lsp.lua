@@ -1,4 +1,7 @@
 -- Setup lspconfig.
+require'lspsaga'.setup{}
+
+
 local cmp_nvim_lsp = require 'cmp_nvim_lsp'
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
@@ -16,31 +19,42 @@ local on_attach = function(_, bufnr)
     local function nnoremap(key, value)
         buf_set_keymap('n', key, value, {noremap = true, silent = true})
     end
+    local function vnoremap(key, value)
+        buf_set_keymap('v', key, value, {noremap = true, silent = true})
+    end
 
     -- Enable completion triggered by <c-x><c-o>
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-    local opts = {noremap = true, silent = true}
-
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    nnoremap('gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
-    nnoremap('gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
-    nnoremap('<C-]>', '<cmd>lua vim.lsp.buf.definition()<CR>')
-    nnoremap('K', '<cmd>lua vim.lsp.buf.hover()<CR>')
-    nnoremap('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
-    nnoremap('gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-    nnoremap('<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
-    nnoremap('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
-    nnoremap('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
-    nnoremap('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
-    nnoremap('<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-    nnoremap('<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-    nnoremap('<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    nnoremap('<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>')
-    nnoremap('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
-    nnoremap(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
-    nnoremap('<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>')
-    nnoremap('<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    nnoremap('gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
+    nnoremap('gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
+    nnoremap('<C-]>',      '<cmd>lua vim.lsp.buf.definition()<CR>')
+    -- nnoremap('K',       '<cmd>lua vim.lsp.buf.hover()<CR>')
+    nnoremap('gi',         '<cmd>lua vim.lsp.buf.implementation()<CR>')
+    nnoremap('gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
+    nnoremap('<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+    nnoremap('<space>wa',  '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
+    nnoremap('<space>wr',  '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
+    nnoremap('<space>wl',  '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
+    nnoremap('<space>D',   '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+    nnoremap('<space>rn',  '<cmd>lua vim.lsp.buf.rename()<CR>')
+    nnoremap('<space>ca',  '<cmd>lua vim.lsp.buf.code_action()<CR>')
+    nnoremap('<space>e',   '<cmd>lua vim.diagnostic.open_float()<CR>')
+    nnoremap('[d',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+    nnoremap(']d',         '<cmd>lua vim.diagnostic.goto_next()<CR>')
+    nnoremap('<space>q',   '<cmd>lua vim.diagnostic.setloclist()<CR>')
+    nnoremap('<space>f',   '<cmd>lua vim.lsp.buf.formatting()<CR>')
+
+    -- saga
+    nnoremap('K',          '<cmd>Lspsaga hover_doc<CR>')
+    nnoremap('<leader>ca', '<cmd>Lspsaga code_action<CR>')
+    vnoremap('<leader>ca', '<cmd>Lspsaga code_action<CR>')
+    nnoremap('gs',         '<cmd>Lspsaga signature_help<CR>')
+    nnoremap('gr',         '<cmd>Lspsaga rename<CR>')
+    nnoremap('gd',         '<cmd>Lspsaga preview_definition<CR>')
+    nnoremap('[e',         '<cmd>Lspsaga diagnostic_jump_next<CR>')
+    nnoremap(']e',         '<cmd>Lspsaga diagnostic_jump_prev<CR>')
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -86,7 +100,13 @@ local lsp_servers = {
     tflint = {},
     bashls = {},
     vimls = {},
-    rust_analyzer = {}
+    rust_analyzer = {},
+    jdtls = {
+      root_dir = function(fname)
+        return require'lspconfig'.util.root_pattern('pom.xml', 'gradle.build', '.git')(fname) or vim.fn.getcwd()
+      end
+    },
+    tsserver = {}
 }
 local servers = require 'nvim-lsp-installer.servers'
 for lsp, config in pairs(lsp_servers) do

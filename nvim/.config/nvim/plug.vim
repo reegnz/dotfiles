@@ -44,30 +44,35 @@ Plug 'folke/lsp-colors.nvim'
 
 " Git integration
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'mhinz/vim-signify'
 
 
 " NERDTree integrations
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle'}
-Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle'}
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'preservim/nerdtree',                      { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin',             { 'on': 'NERDTreeToggle' }
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 
 " FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim', {'on': ['Files', 'GFiles', 'Buffers', 'Colors', 'Ag', 'Rg', 'Lines', 'BLines', 'Tags', 'BTags', 'Marks', 'Windows', 'Locate', 'History', 'Snippets', 'Commits', 'BCommits', 'Maps', 'Helptags', 'Filetypes'] }
+Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'GFiles', 'Buffers', 'Colors', 'Ag', 'Rg', 'Lines', 'BLines', 'Tags', 'BTags', 'Marks', 'Windows', 'Locate', 'History', 'Snippets', 'Commits', 'BCommits', 'Maps', 'Helptags', 'Filetypes' ] }
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
+Plug 'plasticboy/vim-markdown',      { 'for': 'markdown'    }
+Plug 'dhruvasagar/vim-table-mode',   { 'for': 'markdown'    }
+Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': 'cd app && ./install.sh' }
+Plug 'bfrg/vim-jq',                  { 'for': 'jq'          }
+Plug 'bfrg/vim-jqplay'
+Plug 'mityu/vim-applescript',        { 'for': 'applescript' }
+
 "Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 "Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 "Plug 'buoto/gotests-vim', { 'for': 'go' }
-Plug 'bfrg/vim-jq', { 'for': 'jq' }
-Plug 'bhurlow/vim-parinfer', { 'for': 'clojure' }
-Plug 'mityu/vim-applescript', { 'for': 'applescript' }
 
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
@@ -78,11 +83,24 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 Plug 'onsails/lspkind-nvim'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tami5/lspsaga.nvim'
 Plug 'folke/trouble.nvim'
 
-"Plug 'adelarsq/vim-hackernews'
+" tree-sitter fancyness
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+
+Plug 'glacambre/firenvim'
+
+Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ], 'do': 'cargo build –release' }
+Plug 'kovisoft/slimv',         { 'for': 'clojure' }
+"Plug 'Olical/conjure'
+
+Plug 'vim-test/vim-test'
+Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 "}}}
+"

@@ -1,14 +1,20 @@
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
+require'lualine'.setup {
+  extensions = {
+    "nvim-tree"
   },
-  indent = {
-    enable = true,
-  },
-  incremental_selection = {
-    enable = true,
-  },
-  ensure_installed = "all",
 }
-require'lualine'.setup{}
-require'trouble'.setup{}
+require'trouble'.setup {}
+require'nvim-tree'.setup{
+  disable_netrw = false,
+  hijack_netrw = false,
+  diagnostics = {
+    enable = true,
+  },
+  update_cwd = {
+    enable = true,
+  },
+  update_focused_file = {
+    enable = true,
+    update_cwd = true,
+  },
+}

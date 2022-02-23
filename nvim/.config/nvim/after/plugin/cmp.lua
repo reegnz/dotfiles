@@ -1,11 +1,13 @@
 -- Setup nvim-cmp.
 local cmp = require 'cmp'
-local lspkind = require 'lspkind'
+require'cmp_nvim_ultisnips'.setup{}
+local ultisnips_mappings = require'cmp_nvim_ultisnips.mappings'
+
 cmp.setup {
   enabled = function()
     -- disable completion in comments
     local context = require 'cmp.config.context'
-    return not context.in_treesitter_capture("comment") 
+    return not context.in_treesitter_capture("comment")
       and not context.in_syntax_group("Comment")
   end,
   snippet = {
@@ -27,16 +29,27 @@ cmp.setup {
       c = cmp.mapping.close(),
     }),
     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ["<Tab>"] = cmp.mapping(
+      function(fallback)
+        ultisnips_mappings.expand_or_jump_forwards(fallback)
+      end,
+      { "i", "s"}
+    ),
+    ["<S-Tab>"] = cmp.mapping(
+      function(fallback)
+        ultisnips_mappings.jump_backwards(fallback)
+      end,
+      { "i", "s"}
+    ),
   },
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'ultisnips' }, -- For ultisnips users.
-  }, {
-    { name = 'buffer' },
-    { name = 'path' },
+      { name = 'nvim_lsp' },
+      { name = 'ultisnips' },
+      { name = 'buffer' },
+      { name = 'path' },
   }),
   formatting = {
-    format = lspkind.cmp_format({
+    format = require'lspkind'.cmp_format({
       with_text = true,
       before = function(entry, vim_item)
         vim_item.menu = '[' .. entry.source.name .. ']'

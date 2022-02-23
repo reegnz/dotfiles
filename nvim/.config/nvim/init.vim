@@ -17,7 +17,7 @@ set nofoldenable
 set conceallevel=2
 set hidden
 set noswapfile
-set autochdir
+"set autochdir
 " allow cross-talk between yank buffer and system clipboard
 set clipboard=unnamed
 " for incrementing alphabetic numbers with  <C-A> and <C-X>
@@ -58,3 +58,10 @@ augroup END
 "
 set completeopt=menu,menuone,noselect
 
+
+set updatetime=1000
+set autoread
+augroup autoread_changes
+  au BufEnter,FocusGained,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
+  " au CursorMoved,CursorMovedI * checktime
+augroup END

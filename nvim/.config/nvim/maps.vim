@@ -2,7 +2,7 @@
 " ------------------
 lua <<EOF
 EOF
-nnoremap <Leader><Tab> <cmd>NERDTreeToggle<CR>
+nnoremap <Leader><Tab> <cmd>NvimTreeToggle<CR>
 " }}}
 
 " junegunn/vim-easy-align {{{
