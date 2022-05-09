@@ -20,6 +20,7 @@ if [ -f "$antigen" ]; then
 	# antigen bundle aws
 	antigen bundle docker
 	antigen bundle kubectl
+	antigen bundle z
 
 	antigen theme romkatv/powerlevel10k
 	antigen bundle reegnz/jq-zsh-plugin
