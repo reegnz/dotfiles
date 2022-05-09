@@ -8,7 +8,7 @@ use_aws_region() {
 }
 
 use_eks_cluster() {
-	KUBECONFIG="$(direnv_layout_dir)/k8s/kubeconfig.yaml"
+	KUBECONFIG="$(direnv_layout_dir)/aws_eks/$1.yaml"
 	export KUBECONFIG
 	if [ ! -f "$KUBECONFIG" ]; then
 		aws eks update-kubeconfig --name "$1" >&2
