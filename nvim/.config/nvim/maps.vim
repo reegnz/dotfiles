@@ -33,6 +33,9 @@ nnoremap ; :
 nnoremap == <C-a>
 nnoremap -- <C-x>
 
+" Moving visually selected text up/down
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
 " LSPSaga
 " nnoremap <silent> <leader>ca <cmd>Lspsaga code_action<CR>
@@ -47,4 +50,4 @@ nnoremap -- <C-x>
 
 " nnoremap <silent> [e <cmd>Lspsaga diagnostic_jump_next<CR>
 " nnoremap <silent> ]e <cmd>Lspsaga diagnostic_jump_prev<CR>
-
+"

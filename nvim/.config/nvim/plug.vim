@@ -3,9 +3,8 @@
 " }}}
 
 " Install vim plug {{{
-"`stdpath('config') . '/init.vim'`
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+if empty(glob(stdpath('data') . '/site/autoload/plug.vim'))
+  silent !curl -fLo stdpath('data') ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   augroup install
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
@@ -70,10 +69,6 @@ Plug 'bfrg/vim-jq',                  { 'for': 'jq'          }
 Plug 'bfrg/vim-jqplay'
 Plug 'mityu/vim-applescript',        { 'for': 'applescript' }
 
-"Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
-"Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
-"Plug 'buoto/gotests-vim', { 'for': 'go' }
-
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -97,9 +92,6 @@ Plug 'glacambre/firenvim'
 Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ], 'do': 'cargo build –release' }
 Plug 'kovisoft/slimv',         { 'for': 'clojure' }
 "Plug 'Olical/conjure'
-
-Plug 'vim-test/vim-test'
-Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 "}}}

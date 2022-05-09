@@ -65,7 +65,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 local lsp_servers = {
-    efm = {
+    efm = { -- General purpose language server
         -- init_options = {documentFormatting = true},
         filetypes = {
             'vim', 'dockerfile', 'markdown', 'yaml', 'sh', 'python', 'json',
@@ -94,19 +94,20 @@ local lsp_servers = {
             }
         }
     },
-    pyright = {},
+    pyright = {}, -- python
     gopls = {},
     terraformls = {},
-    tflint = {},
+    tflint = {}, -- terraform lint
     bashls = {},
     vimls = {},
     rust_analyzer = {},
-    jdtls = {
+    jdtls = { -- java
       root_dir = function(fname)
         return require'lspconfig'.util.root_pattern('pom.xml', 'gradle.build', '.git')(fname) or vim.fn.getcwd()
       end
     },
-    tsserver = {}
+    tsserver = {}, --typescript
+    zls= {}, -- zig
 }
 local servers = require 'nvim-lsp-installer.servers'
 for lsp, config in pairs(lsp_servers) do
