@@ -82,9 +82,6 @@ call plug#end()
 
 " General {{{
 
-set termguicolors
-colorscheme nord
-
 set nowrap
 set nofoldenable
 set conceallevel=2
@@ -101,12 +98,12 @@ set ignorecase
 set smartcase
 
 " split handling
-set splitbelow splitright
+"set splitbelow splitright
 
 " Fix some colors {{{
-set fillchars+=vert:┆,fold:┄,
-highlight VertSplit cterm=NONE ctermfg=darkgrey ctermbg=NONE
-highlight EndOfBuffer ctermfg=darkgrey
+"set fillchars+=vert:┆,fold:┄,
+"highlight VertSplit cterm=NONE ctermfg=darkgrey ctermbg=NONE
+"highlight EndOfBuffer ctermfg=darkgrey
 " }}}
 
 " split navigation {{{
@@ -167,7 +164,7 @@ function OpenJira()
     return 0
   endif
   let l:issue = l:match[1]
-  let l:url = g:jira_host .. '/browse/' .. l:issue
+  let l:url = g:jira_host . '/browse/' . l:issue
   call netrw#BrowseX(l:url, 0)
 endfun
 
@@ -181,7 +178,7 @@ let g:jira_host = 'https://jira.cloudera.com'
 
 " Search Google {{{
 " see :h map-operator for how this is implemented
-function BrowserSearch(type = '', ...)
+function BrowserSearch(a, b, c, type = '', ...)
   if a:type == ''
     set opfunc=BrowserSearch
     return 'g@'
@@ -242,16 +239,15 @@ let g:ale_fixers['md'] = ['remark_lint', 'markdownlint']
 "let g:ale_linters['bash'] = ['shellcheck']
 " }}}
 
-" Shougo/deoplete.nvim {{{
-" --------------------
-let g:deoplete#enable_at_startup = 1
-" }}}
-
 " SirVer/UltiSnips {{{
 " ----------------
-let g:UltiSnipsExpandTrigger       = "<Tab>"
-let g:UltiSnipsJumpForwardTrigger = "<Tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+"let g:UltiSnipsExpandTrigger       = "<Tab>"
+"let g:UltiSnipsJumpForwardTrigger = "<Tab>"
+"let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+let g:UltiSnipsExpandTrigger       = "<C-right>"
+let g:UltiSnipsJumpForwardTrigger = "<C-right>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-left>"
+
 " }}}
 
 " junegunn/vim-easy-align {{{
@@ -284,4 +280,18 @@ endfunction
 
 " }}}
 
+" flazz/vim-colorschemes {{{
+" ------------------------
+set termguicolors
+colorscheme gruvbox
 " }}}
+
+" }}}
+
+
+set updatetime=1000
+set autoread
+augroup autoread_changes
+  au BufEnter,FocusGained,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
+  " au CursorMoved,CursorMovedI * checktime
+augroup END
