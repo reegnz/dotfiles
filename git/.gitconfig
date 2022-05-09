@@ -2,14 +2,12 @@
   path = .gitconfig-common
   path = .gitconfig-macos
 
-[includeIf "gitdir:~/projects/"]
-  path = .gitconfig-work
-
-[includeIf "gitdir:~/github/"]
-  path = .gitconfig-private
-
-[includeIf "gitdir:/usr/local/Homebrew/"]
-  path = .gitconfig-private
-
 [init]
   defaultBranch = master
+
+[user]
+  name = Zoltán Reegn
+  email = zoltan.reegn@gmail.com
+
+[includeIf "gitdir:~/projects/"]
+  path = .gitconfig-work
