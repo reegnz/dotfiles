@@ -13,6 +13,67 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: ${1:name}
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-resources
+  namespace: $1
+spec:
+  hard:
+    requests.cpu: 4000m
+    requests.memory: 4Gi
+    limits.cpu: 4000m
+    limits.memory: 4Gi
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: storage-resources
+  namespace: $1
+spec:
+  hard:
+    requests.storage: 10Gi
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: object-counts
+  namespace: $1
+spec:
+  hard:
+    configmaps: "50"
+    secrets: "50"
+    services: "50"
+    pods: "50"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-and-memory
+  namespace: $1
+spec:
+  limits:
+  - type: Container
+    min:
+      cpu: 25m
+      memory: 32Mi
+    max:
+      cpu: 500m
+      memory: 512Mi
+    defaultRequest:
+      cpu: 100m
+      memory: 256Mi
+    default:
+      cpu: 250m
+      memory: 256Mi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+  namespace: $1
+  automountServiceAccountToken: false
 endsnippet
 
 snippet "kind: ConfigMap" "Kubernetes ConfigMap" b
@@ -161,6 +222,26 @@ spec:
     restartPolicy: Never$0
 endsnippet
 
+snippet "kind: CronJob" "Kubernetes CronJob" b
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ${1:name}
+  labels:
+    app: ${2:$1}
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: ${3:$1}
+              image: ${4:alpine:latest}
+          restartPolicy: Never$0
+endsnippet
+
 snippet "kind: ServiceAccount" "Kubernetes ServiceAccount" b
 ---
 apiVersion: v1
@@ -169,9 +250,24 @@ metadata:
   name: ${1:name}$0
 endsnippet
 
-snippet "kind: ClusterRole" "Kubernetes ClusterRole" b
+snippet "kind: Role" "Kubernetes RBAC Role" b
 ---
-apiVersion: rbac.authorization.k8s.io
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ${1:name}
+rules:
+  - apiGroups:
+      - ${2:""}
+    resources:
+      - ${3:configmap}
+    verbs:
+      - ${3:get}$0
+endsnippet
+
+snippet "kind: ClusterRole" "Kubernetes RBAC ClusterRole" b
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: ${1:name}
@@ -184,9 +280,24 @@ rules:
       - ${3:get}$0
 endsnippet
 
-snippet "kind: ClusterRoleBinding" "Kubernetes ClusterRoleBinding" b
+snippet "kind: RoleBinding" "Kubernetes RBAC RoleBinding" b
 ---
-apiVersion: v1
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ${1:name}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ${2:myrole}
+subjects:
+  - kind: ${3:ServiceAccount}
+    name: ${4:mysvcacct}$0
+endsnippet
+
+snippet "kind: ClusterRoleBinding" "Kubernetes RBAC ClusterRoleBinding" b
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: ${1:name}
@@ -204,5 +315,27 @@ snippet "kind: Cluster" "kind cluster definition" b
 ---
 apiVersion: "kind.x-k8s.io/v1alpha4"
 kind: Cluster
-name: ${1:kind}
+name: ${1:kind}$0
+endsnippet
+
+snippet "kind: Kustomization" "kustomize kustomization" b
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- $0
+endsnippet
+
+snippet "kind: ResourceQuota" "Resource Quota of a namespace" b
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: ${1:name}
+  namespace: ${2:namespace}
+spec:
+  hard:
+    requests.cpu: 4000m
+    requests.memory: 4Gi
+    limits.cpu: 4000m
+    limits.memory: 4Gi$0
 endsnippet
