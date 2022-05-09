@@ -14,14 +14,6 @@ parsers.gotmpl = {
     "ctmpl",
   },
 }
-parsers.vim = {
-  install_info = {
-    url = "~/github/tree-sitter-viml",
-    files = {"src/parser.c", "src/scanner.c"},
-    requires_generate_from_grammar = true,
-  },
-  filetype = "vim",
-}
 
 require'nvim-treesitter.configs'.setup {
   highlight = {
