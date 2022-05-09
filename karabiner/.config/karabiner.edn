@@ -10,7 +10,6 @@
  :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap$"]
                 :Zoom ["^us\\.zoom\\.xos$"]
                 :iTerm ["^com\\.googlecode\\.iterm2$"]
-                :Alacritty ["^io\\.alacritty$"]
                 :Terminals["^com\\.googlecode\\.iterm2$" "^io\\.alacritty$"]
                 :Chrome ["^com\\.google\\.Chrome$"]
                 :Firefox ["^org\\.mozilla\\.firefox$"]
