@@ -74,6 +74,9 @@ def from_header:
 def to_header:
   map(capitalize) | join("-");
 
+def to_manycase_regex:
+  join("[ -_]*");
+
 
 def map_keys(mapper):
   walk(
@@ -91,3 +94,35 @@ def tsv_with_header:
   (.[0]|keys_unsorted|map(ascii_upcase)) as $keys |
   $keys,(.[]|to_entries|map(.value)) |
   @tsv;
+
+def flatten_object:
+[
+  leaf_paths as $path | {
+    key: $path | join("_"), 
+    value: getpath($path)
+  }
+]|from_entries;
+
+
+
+def k8s_pods:
+  .items |map({
+    metadata
+  }|
+  .metadata |= {name, namespace} |
+  .metadata
+  );
+
+def k8s_pod_annotations:
+  .items|map(.metadata|{
+    name,
+    namespace,
+    annotation: (.annotations|to_entries[]|(.key + "=" + .value))
+  });
+
+def k8s_images:
+  .items|map(
+    .spec|{
+      containers,
+      initContainers
+    }|to_entries|map(.value // empty| .[].image)[])|unique[];
