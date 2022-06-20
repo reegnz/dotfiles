@@ -36,7 +36,7 @@ Install:andUse("URLDispatcher", {
   config = {
     url_patterns = {
 	    { "https?://.*%.zoom%.us", Zoom },
-	    { "https?://.*slack.com", Slack },
+	    { "https?://.*%.slack%.com", Slack },
     },
     default_handler = DefaultBrowser,
   },
