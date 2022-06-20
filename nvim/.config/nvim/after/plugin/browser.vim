@@ -14,7 +14,7 @@ command OpenJira :call OpenJira()<CR>
 
 nnoremap gj :call OpenJira()<CR>
 
-let g:jira_host = 'https://jira.cloudera.com'
+" let g:jira_host = 'https://jira.example.com'
 
 " }}}
 
