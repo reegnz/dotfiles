@@ -1,0 +1,5 @@
+[global]
+strict_env = true
+load_dotenv = false
+
+[whitelist]
