@@ -62,9 +62,9 @@ Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'GFiles', 'Buffers', 'Colors', 'Ag',
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
-Plug 'plasticboy/vim-markdown',      { 'for': 'markdown'    }
-Plug 'dhruvasagar/vim-table-mode',   { 'for': 'markdown'    }
-Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': 'cd app && ./install.sh' }
+"Plug 'plasticboy/vim-markdown',      { 'for': 'markdown'    }
+"Plug 'dhruvasagar/vim-table-mode',   { 'for': 'markdown'    }
+"Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': 'cd app && ./install.sh' }
 Plug 'bfrg/vim-jq',                  { 'for': 'jq'          }
 Plug 'bfrg/vim-jqplay'
 Plug 'mityu/vim-applescript',        { 'for': 'applescript' }
@@ -92,6 +92,8 @@ Plug 'glacambre/firenvim'
 Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ], 'do': 'cargo build –release' }
 Plug 'kovisoft/slimv',         { 'for': 'clojure' }
 "Plug 'Olical/conjure'
+
+Plug 'stsewd/gx-extended.vim'
 
 call plug#end()
 "}}}

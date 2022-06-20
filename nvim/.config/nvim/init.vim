@@ -65,3 +65,11 @@ augroup autoread_changes
   au BufEnter,FocusGained,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
   " au CursorMoved,CursorMovedI * checktime
 augroup END
+
+
+command! Scratch new | setlocal noswapfile | setlocal buftype=nofile | setlocal bufhidden=hide
+
+command! -range=% Jq <line1>,<line2>y z <bar> Scratch <bar> 0put=@z
+
+let g:python_host_prog = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'

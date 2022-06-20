@@ -1,24 +1,23 @@
 -- Setup lspconfig.
-require'lspsaga'.setup{}
-
-
 local cmp_nvim_lsp = require 'cmp_nvim_lsp'
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
-
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
     local function buf_set_keymap(...)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
+
     local function buf_set_option(...)
         vim.api.nvim_buf_set_option(bufnr, ...)
     end
+
     local function nnoremap(key, value)
         buf_set_keymap('n', key, value, {noremap = true, silent = true})
     end
+
     local function vnoremap(key, value)
         buf_set_keymap('v', key, value, {noremap = true, silent = true})
     end
@@ -27,34 +26,39 @@ local on_attach = function(_, bufnr)
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    nnoremap('gD',         '<cmd>lua vim.lsp.buf.declaration()<CR>')
-    nnoremap('gd',         '<cmd>lua vim.lsp.buf.definition()<CR>')
-    nnoremap('<C-]>',      '<cmd>lua vim.lsp.buf.definition()<CR>')
-    -- nnoremap('K',       '<cmd>lua vim.lsp.buf.hover()<CR>')
-    nnoremap('gi',         '<cmd>lua vim.lsp.buf.implementation()<CR>')
-    nnoremap('gr',         '<cmd>lua vim.lsp.buf.references()<CR>')
-    nnoremap('<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>')
-    nnoremap('<space>wa',  '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
-    nnoremap('<space>wr',  '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
-    nnoremap('<space>wl',  '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
-    nnoremap('<space>D',   '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-    nnoremap('<space>rn',  '<cmd>lua vim.lsp.buf.rename()<CR>')
-    nnoremap('<space>ca',  '<cmd>lua vim.lsp.buf.code_action()<CR>')
-    nnoremap('<space>e',   '<cmd>lua vim.diagnostic.open_float()<CR>')
-    nnoremap('[d',         '<cmd>lua vim.diagnostic.goto_prev()<CR>')
-    nnoremap(']d',         '<cmd>lua vim.diagnostic.goto_next()<CR>')
-    nnoremap('<space>q',   '<cmd>lua vim.diagnostic.setloclist()<CR>')
-    nnoremap('<space>f',   '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    nnoremap('gD',        '<cmd>lua vim.lsp.buf.declaration()<CR>')
+    nnoremap('gd',        '<cmd>lua vim.lsp.buf.definition()<CR>')
+    nnoremap('<C-]>',     '<cmd>lua vim.lsp.buf.definition()<CR>')
+    nnoremap('gr',        '<cmd>lua vim.lsp.buf.references()<CR>')
+    nnoremap('gi',        '<cmd>lua vim.lsp.buf.implementation()<CR>')
+    nnoremap('K',         '<cmd>lua vim.lsp.buf.hover()<CR>')
+    nnoremap('<C-k>',     '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+    nnoremap('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
+    nnoremap('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
+    nnoremap('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
+    nnoremap('<space>D',  '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+    nnoremap('<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+    nnoremap('<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+    nnoremap('<space>e',  '<cmd>lua vim.diagnostic.open_float()<CR>')
+    nnoremap('[d',        '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+    nnoremap(']d',        '<cmd>lua vim.diagnostic.goto_next()<CR>')
+    nnoremap('<space>q',  '<cmd>lua vim.diagnostic.setloclist()<CR>')
 
-    -- saga
-    nnoremap('K',          '<cmd>Lspsaga hover_doc<CR>')
-    nnoremap('<leader>ca', '<cmd>Lspsaga code_action<CR>')
-    vnoremap('<leader>ca', '<cmd>Lspsaga code_action<CR>')
-    nnoremap('gs',         '<cmd>Lspsaga signature_help<CR>')
-    nnoremap('gr',         '<cmd>Lspsaga rename<CR>')
-    nnoremap('gd',         '<cmd>Lspsaga preview_definition<CR>')
-    nnoremap('[e',         '<cmd>Lspsaga diagnostic_jump_next<CR>')
-    nnoremap(']e',         '<cmd>Lspsaga diagnostic_jump_prev<CR>')
+    if client.resolved_capabilities.document_formatting then
+        nnoremap('<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    elseif client.resolved_capabilities.document_range_formatting then
+        nnoremap('<space>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>')
+    end
+
+    if client.resolved_capabilities.document_highlight then
+        vim.api.nvim_exec([[
+            augroup lsp_document_highlight
+                autocmd! * <buffer>
+                autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+                autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+            augroup END
+        ]], false)
+    end
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -69,7 +73,7 @@ local lsp_servers = {
         -- init_options = {documentFormatting = true},
         filetypes = {
             'vim', 'dockerfile', 'markdown', 'yaml', 'sh', 'python', 'json',
-            'lua', 'gitcommit'
+            'lua', 'gitcommit',
         }
     },
     sumneko_lua = {
@@ -95,19 +99,37 @@ local lsp_servers = {
         }
     },
     pyright = {}, -- python
-    gopls = {},
+    gopls = {
+        settings = {
+            gopls = {
+                experimentalPostfixCompletions = true,
+                staticcheck = true,
+                usePlaceholders = true,
+                analyses = {
+                    fieldalignment = true,
+                    nilness = true,
+                    unusedparams = true,
+                    unusedwrite = true,
+                    shadow = true,
+                    useany = true
+                }
+            }
+        }
+    },
     terraformls = {},
     tflint = {}, -- terraform lint
     bashls = {},
     vimls = {},
     rust_analyzer = {},
     jdtls = { -- java
-      root_dir = function(fname)
-        return require'lspconfig'.util.root_pattern('pom.xml', 'gradle.build', '.git')(fname) or vim.fn.getcwd()
-      end
+        root_dir = function(fname)
+            return require'lspconfig'.util.root_pattern('pom.xml',
+                                                        'gradle.build', '.git')(
+                       fname) or vim.fn.getcwd()
+        end
     },
-    tsserver = {}, --typescript
-    zls= {}, -- zig
+    tsserver = {}, -- typescript
+    zls = {} -- zig
 }
 local servers = require 'nvim-lsp-installer.servers'
 for lsp, config in pairs(lsp_servers) do
