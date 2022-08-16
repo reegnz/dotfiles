@@ -21,12 +21,17 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-completion'
+Plug 'tpope/vim-dadbod' 
+Plug 'kristijanhusak/vim-dadbod-completion'
+Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'tpope/vim-speeddating'
 
+" make gx more powerful
+Plug 'stsewd/gx-extended.vim'
 
 Plug 'wincent/terminus'
 Plug 'easymotion/vim-easymotion'
+"Plug 'ggandor/lightspeed.nvim'
 Plug 'junegunn/vim-easy-align'
 
 
@@ -59,12 +64,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'GFiles', 'Buffers', 'Colors', 'Ag', 'Rg', 'Lines', 'BLines', 'Tags', 'BTags', 'Marks', 'Windows', 'Locate', 'History', 'Snippets', 'Commits', 'BCommits', 'Maps', 'Helptags', 'Filetypes' ] }
 
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 
 "Plug 'plasticboy/vim-markdown',      { 'for': 'markdown'    }
 "Plug 'dhruvasagar/vim-table-mode',   { 'for': 'markdown'    }
-"Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': 'cd app && ./install.sh' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': ':call mkdp#util#install()', 'for': 'markdown' }
 Plug 'bfrg/vim-jq',                  { 'for': 'jq'          }
 Plug 'bfrg/vim-jqplay'
 Plug 'mityu/vim-applescript',        { 'for': 'applescript' }
@@ -72,14 +75,17 @@ Plug 'mityu/vim-applescript',        { 'for': 'applescript' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
-Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 Plug 'onsails/lspkind-nvim'
-Plug 'tami5/lspsaga.nvim'
+" Plug 'tami5/lspsaga.nvim'
 Plug 'folke/trouble.nvim'
+
+Plug 'SirVer/ultisnips'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " tree-sitter fancyness
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
@@ -87,13 +93,11 @@ Plug 'nvim-treesitter/playground'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
-Plug 'glacambre/firenvim'
+" Plug 'glacambre/firenvim'
 
-Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ], 'do': 'cargo build –release' }
+Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ]}
 Plug 'kovisoft/slimv',         { 'for': 'clojure' }
-"Plug 'Olical/conjure'
-
-Plug 'stsewd/gx-extended.vim'
+" Plug 'Olical/conjure'
 
 call plug#end()
 "}}}

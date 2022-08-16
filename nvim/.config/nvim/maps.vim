@@ -1,7 +1,5 @@
 " preservim/nerdtree {{{
 " ------------------
-lua <<EOF
-EOF
 nnoremap <Leader><Tab> <cmd>NvimTreeToggle<CR>
 " }}}
 
@@ -36,18 +34,3 @@ nnoremap -- <C-x>
 " Moving visually selected text up/down
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
-
-" LSPSaga
-" nnoremap <silent> <leader>ca <cmd>Lspsaga code_action<CR>
-" vnoremap <silent> <leader>ca <cmd><C-U>Lspsaga range_code_action<CR>
-" nnoremap <silent> <leader>cd <cmd>Lspsaga show_line_diagnostics<CR>
-
-" nnoremap <silent> K <cmd>Lspsaga hover_doc<CR>
-" nnoremap <silent> gh <cmd>Lspsaga lsp_finder<CR>
-" nnoremap <silent> gr <cmd>Lspsaga rename<CR>
-" nnoremap <silent> gs <cmd>Lspsaga signature_help<CR>
-" nnoremap <silent> gd <cmd>Lspsaga preview_definition<CR>
-
-" nnoremap <silent> [e <cmd>Lspsaga diagnostic_jump_next<CR>
-" nnoremap <silent> ]e <cmd>Lspsaga diagnostic_jump_prev<CR>
-"
