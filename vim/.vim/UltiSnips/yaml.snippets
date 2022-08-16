@@ -62,18 +62,18 @@ spec:
       cpu: 500m
       memory: 512Mi
     defaultRequest:
-      cpu: 100m
+      cpu: 500m
       memory: 256Mi
     default:
-      cpu: 250m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: default
   namespace: $1
-  automountServiceAccountToken: false
+automountServiceAccountToken: false
 endsnippet
 
 snippet "kind: ConfigMap" "Kubernetes ConfigMap" b
@@ -338,4 +338,27 @@ spec:
     requests.memory: 4Gi
     limits.cpu: 4000m
     limits.memory: 4Gi$0
+endsnippet
+
+snippet "k8s: VolumeToken" "Kubernetes Projected Token Volume"
+- name: $1
+  projected:
+    sources:
+    - serviceAccountToken:
+        audience: $2
+        expirationSeconds: ${3:3600}
+        path: token
+endsnippet
+
+snippet "k8s: VolumeMount" "Kubernetes Token Mount"
+- name: $1
+  mountPath: ${2:path}
+  readOnly: ${3:true}
+endsnippet
+
+snippet "k8s: Sleep Command" "Kubernetes sleep"
+command: ["sh", "-c"]
+args:
+- |
+sleep 3600
 endsnippet
