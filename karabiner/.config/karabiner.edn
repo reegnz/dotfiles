@@ -16,7 +16,7 @@
                 :Browsers ["^com\\.google\\.Chrome$" "^org\\.mozilla\\.firefox$"]}
 
  :layers {:caps-mode {:key :caps_lock
-                      :alone {:key :escape}}}
+                      :alone {:key :delete_or_backspace}}}
 
  :simlayers {:w-mode {:key :w}
              :e-mode {:key :e}
