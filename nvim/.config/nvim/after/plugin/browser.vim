@@ -1,26 +1,6 @@
-" JIRA link handling like [ABC-123]: {{{
-function OpenJira()
-  let l:word = expand("<cWORD>")
-  let l:match = matchlist(l:word, '\(\w\+-\d\+\)')
-  if empty(l:match)
-    return 0
-  endif
-  let l:issue = l:match[1]
-  let l:url = g:jira_host . '/browse/' . l:issue
-  call netrw#BrowseX(l:url, 0)
-endfun
-
-command OpenJira :call OpenJira()<CR>
-
-nnoremap gj :call OpenJira()<CR>
-
-" let g:jira_host = 'https://jira.example.com'
-
-" }}}
-
 " Search Google {{{
 " see :h map-operator for how this is implemented
-function BrowserSearch(type = '', web_search_url = '', ...)
+function! BrowserSearch(type = '', web_search_url = '', ...)
   if a:web_search_url != ''
     let b:web_search_url = a:web_search_url
   endif
