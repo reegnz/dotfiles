@@ -1,12 +1,12 @@
-snippet resource "Terraform resource" b
-resource "${1:type}" "${2:name}" {$0
-}
-endsnippet
+# snippet resource "Terraform resource" b
+# resource "${1:type}" "${2:name}" {$0
+# }
+# endsnippet
 
-snippet data "Terraform data source" b
-data "${1:type}" "${2:name}" {$0
-}
-endsnippet
+# snippet data "Terraform data source" b
+# data "${1:type}" "${2:name}" {$0
+# }
+# endsnippet
 
 snippet module "Terraform module" b
 module "${1:name}" {
@@ -42,7 +42,7 @@ endsnippet
 
 
 
-snippet dynamic "Terraform dynamic block" b
+snippet dynamic "Terraform dynamic block"
 dynamic "${1:label}" {
   for_each = ${2:var.dynamic}
   content {$0
@@ -54,10 +54,16 @@ endsnippet
 snippet versions "Versions" b
 terraform {
   required_version = "${2:>= ${1:1.0}}"
-
   required_providers {$0
   }
 }
+endsnippet
+
+snippet required_provider "Required Provider"
+"${1:aws}" = {
+  version = "${2:>=} ${3:3.0}"
+  source  = "${5:hashicorp/${$1}}"
+}$0
 endsnippet
 
 snippet backend "Terraform backend" b
@@ -80,14 +86,6 @@ endsnippet
 snippet form "Terraform for expression (map)"
 for ${1:key}, ${2:value} in ${3:local.the_map}:
 ${0:$1 => $2}
-endsnippet
-
-
-snippet rp "Required Provider"
-"${1:aws}" = {
-  version = "${2:>=} ${3:3.0}"
-  source  = "${5:hashicorp/${4:aws}}"
-}$0
 endsnippet
 
 
