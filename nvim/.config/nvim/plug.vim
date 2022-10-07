@@ -3,17 +3,21 @@
 " }}}
 
 " Install vim plug {{{
-if empty(glob(stdpath('data') . '/site/autoload/plug.vim'))
-  silent !curl -fLo stdpath('data') ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
-       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+let autoload_plug_path = stdpath('data') . '/site/autoload/plug.vim'
+if !filereadable(autoload_plug_path)
+  silent execute '!curl -fLo ' . autoload_plug_path . '  --create-dirs 
+      \ "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"'
   augroup install
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   augroup END
 endif
+unlet autoload_plug_path
 " }}}
 
 " Plugins {{{
 call plug#begin()
+
+Plug 'dstein64/vim-startuptime'
 
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
@@ -72,8 +76,9 @@ Plug 'bfrg/vim-jq',                  { 'for': 'jq'          }
 Plug 'bfrg/vim-jqplay'
 Plug 'mityu/vim-applescript',        { 'for': 'applescript' }
 
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/nvim-lsp-installer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'hrsh7th/cmp-buffer'
@@ -81,11 +86,13 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'onsails/lspkind-nvim'
+Plug 'nvim-lua/lsp-status.nvim'
 " Plug 'tami5/lspsaga.nvim'
-Plug 'folke/trouble.nvim'
+" Plug 'folke/trouble.nvim'
 
 Plug 'SirVer/ultisnips'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+Plug 'honza/vim-snippets'
 
 " tree-sitter fancyness
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}

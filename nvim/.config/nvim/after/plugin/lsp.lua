@@ -1,11 +1,32 @@
 -- Setup lspconfig.
-local cmp_nvim_lsp = require 'cmp_nvim_lsp'
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+local ok, lspconfig = pcall(require, "lspconfig")
+if not ok then
+    return
+end
+local ok, lsp_status = pcall(require, "lsp-status")
+if not ok then
+    return
+end
+
+local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+if not ok then
+    return
+end
+
+local ok, mason = pcall(require, "mason")
+if not ok then
+    return
+end
+local ok, mason_lspconfig = pcall(require, "mason-lspconfig")
+if not ok then
+    return
+end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
+    lsp_status.on_attach(client)
+
     local function buf_set_keymap(...)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
@@ -44,13 +65,13 @@ local on_attach = function(client, bufnr)
     nnoremap(']d',        '<cmd>lua vim.diagnostic.goto_next()<CR>')
     nnoremap('<space>q',  '<cmd>lua vim.diagnostic.setloclist()<CR>')
 
-    if client.resolved_capabilities.document_formatting then
-        nnoremap('<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
-    elseif client.resolved_capabilities.document_range_formatting then
-        nnoremap('<space>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>')
+    if client.server_capabilities.documentFormattingProvider then
+            nnoremap('<space>f', '<cmd>lua vim.lsp.buf.format {async = true}<CR>')
+    elseif client.server_capabilities.documentRangeFormattingProvider then
+            nnoremap('<space>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>')
     end
 
-    if client.resolved_capabilities.document_highlight then
+    if client.server_capabilities.documentHighlight then
         vim.api.nvim_exec([[
             augroup lsp_document_highlight
                 autocmd! * <buffer>
@@ -61,91 +82,91 @@ local on_attach = function(client, bufnr)
     end
 end
 
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
---
+local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+capabilities = vim.tbl_extend('keep', capabilities, lsp_status.capabilities)
+
+local lsp_defaults = {
+    on_attach = on_attach,
+    flags = {
+        debounce_text_changes = 150,
+    },
+    capabilities = capabilities
+}
+
+mason.setup {}
+mason_lspconfig.setup {
+    automatic_installation = true
+}
+
+
+lspconfig.util.default_config = vim.tbl_deep_extend(
+    'keep',
+    lsp_defaults,
+    lspconfig.util.default_config
+)
+
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
+lspconfig.sumneko_lua.setup {
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+                -- Setup your lua path
+                path = runtime_path
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = {'vim'}
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file("", true)
+            },
+            format = {
+                enable = true,
+            },
 
-local lsp_servers = {
-    efm = { -- General purpose language server
-        -- init_options = {documentFormatting = true},
-        filetypes = {
-            'vim', 'dockerfile', 'markdown', 'yaml', 'sh', 'python', 'json',
-            'lua', 'gitcommit',
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {enable = false}
         }
-    },
-    sumneko_lua = {
-        settings = {
-            Lua = {
-                runtime = {
-                    -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                    version = 'LuaJIT',
-                    -- Setup your lua path
-                    path = runtime_path
-                },
-                diagnostics = {
-                    -- Get the language server to recognize the `vim` global
-                    globals = {'vim'}
-                },
-                workspace = {
-                    -- Make the server aware of Neovim runtime files
-                    library = vim.api.nvim_get_runtime_file("", true)
-                },
-                -- Do not send telemetry data containing a randomized but unique identifier
-                telemetry = {enable = false}
-            }
-        }
-    },
-    pyright = {}, -- python
-    gopls = {
-        settings = {
-            gopls = {
-                experimentalPostfixCompletions = true,
-                staticcheck = true,
-                usePlaceholders = true,
-                analyses = {
-                    fieldalignment = true,
-                    nilness = true,
-                    unusedparams = true,
-                    unusedwrite = true,
-                    shadow = true,
-                    useany = true
-                }
-            }
-        }
-    },
-    terraformls = {},
-    tflint = {}, -- terraform lint
-    bashls = {},
-    vimls = {},
-    rust_analyzer = {},
-    jdtls = { -- java
-        root_dir = function(fname)
-            return require'lspconfig'.util.root_pattern('pom.xml',
-                                                        'gradle.build', '.git')(
-                       fname) or vim.fn.getcwd()
-        end
-    },
-    tsserver = {}, -- typescript
-    zls = {} -- zig
+    }
 }
-local servers = require 'nvim-lsp-installer.servers'
-for lsp, config in pairs(lsp_servers) do
-    local server_available, requested_server = servers.get_server(lsp)
-    if server_available then
-        if not requested_server:is_installed() then
-            requested_server:install()
-        end
-        requested_server:on_ready(function()
-            local opts = {
-                on_attach = on_attach,
-                flags = {debounce_text_changes = 150},
-                capabilities = capabilities
+lspconfig.gopls.setup {
+    settings = {
+        gopls = {
+            experimentalPostfixCompletions = true,
+            staticcheck = true,
+            usePlaceholders = true,
+            analyses = {
+                fieldalignment = true,
+                nilness = true,
+                unusedparams = true,
+                unusedwrite = true,
+                shadow = true,
+                useany = true,
             }
-            for k, v in pairs(config) do opts[k] = v end
-            requested_server:setup(opts)
-        end)
-    end
-end
+        }
+    }
+}
+lspconfig.jdtls.setup { -- java
+        root_dir = function(fname)
+            return lspconfig.util.root_pattern('pom.xml', 'gradle.build', '.git')(fname) or vim.fn.getcwd()
+        end
+}
+lspconfig.efm.setup { -- General purpose language server
+    -- init_options = {documentFormatting = true},
+    filetypes = {
+        'vim', 'dockerfile', 'markdown', 'yaml', 'sh', 'python', 'json', 'lua', 'gitcommit',
+    }
+}
+lspconfig.pyright.setup {} -- python
+lspconfig.terraformls.setup {}
+lspconfig.tflint.setup {} -- terraform lint
+lspconfig.bashls.setup {}
+lspconfig.vimls.setup {}
+-- lspconfig.rust_analyzer.setup {}
+-- lspconfig.tsserver.setup {} -- typescript
+-- lspconfig.zls.setup {} -- zig

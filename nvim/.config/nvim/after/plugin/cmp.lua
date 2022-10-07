@@ -1,9 +1,18 @@
 -- Setup nvim-cmp.
-local cmp = require 'cmp'
-local lspkind = require 'lspkind'
+local ok, cmp = pcall(require, 'cmp')
+if not ok then
+  return
+end
+local ok, lspkind = pcall(require, 'lspkind')
+if not ok then
+  return
+end
+local ok, cmp_nvim_ultisnips = pcall(require, 'cmp_nvim_ultisnips')
+if not ok then
+  return
+end
 
-
-require 'cmp_nvim_ultisnips'.setup {
+cmp_nvim_ultisnips.setup {
   filetype_source = "treesitter",
   show_snippets = "expandable",
 }
@@ -35,26 +44,16 @@ cmp.setup {
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    ["<Tab>"] = cmp.mapping(
-      function(fallback)
+    ["<Tab>"] = cmp.mapping(function(fallback)
         cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
       end,
       { "i", "s" }
     ),
-    ["<S-Tab>"] = cmp.mapping(
-      function(fallback)
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
         cmp_ultisnips_mappings.jump_backwards(fallback)
       end,
       { "i", "s" }
     ),
-  }),
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'nvim_lsp_signature_help' },
-    { name = 'ultisnips' },
-    { name = 'vim-dadbod-completion' },
-    { name = 'buffer' },
-    { name = 'path' },
   }),
   formatting = {
     format = lspkind.cmp_format({
@@ -64,7 +63,15 @@ cmp.setup {
         return vim_item
       end
     })
-  }
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'ultisnips' },
+    { name = 'vim-dadbod-completion' },
+    { name = 'buffer' },
+    { name = 'path' },
+  }),
 }
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).

@@ -1,9 +1,20 @@
+local lsp_status = require('lsp-status')
+lsp_status.config {
+    diagnostics = false,
+}
+lsp_status.register_progress()
+
 require'lualine'.setup {
+  options = {
+    theme = 'gruvbox',
+  },
+  sections = {
+    lualine_c = { "filename", "require'lsp-status'.status()" }
+  },
   extensions = {
     "nvim-tree"
   },
 }
-require'trouble'.setup {}
 require'nvim-tree'.setup{
   disable_netrw = false,
   hijack_netrw = false,

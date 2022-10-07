@@ -27,6 +27,9 @@ set nrformats+=alpha
 set ignorecase
 set smartcase
 
+set showbreak=↪\ 
+set listchars=tab:→\ ,eol:↲,nbsp:␣,space:•,trail:•,extends:⟩,precedes:⟨
+
 " AWS {{{
 augroup awsfiletype
   au BufNewFile,BufRead ~/.aws/config*      set ft=dosini
