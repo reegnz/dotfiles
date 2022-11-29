@@ -106,8 +106,9 @@ spec:
   selector:
     app: ${2:$1}
   ports:
-  - port: ${3:80}
-    targetPort: ${4:$3}$0
+  - name: ${3:http}
+    port: ${4:80}
+    targetPort: ${5:$3}$0
 endsnippet
 
 snippet "kind: Ingress" "Kubernetes Ingress" b
@@ -127,9 +128,9 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: ${6:service}
+            name: ${6:$1}
             port:
-              number: ${7:80}$0
+              name: ${7:http}$0
 endsnippet
 
 snippet "kind: Deployment" "Kubernetes Deployment" b

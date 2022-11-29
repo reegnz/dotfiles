@@ -1,0 +1,32 @@
+snippet if "description"
+{{- if ${2:.Values.${1:x}} }}
+${0:${VISUAL}}
+{{- end -}}
+endsnippet
+
+snippet ife "description"
+{{- if ${2:.Values.${1:x}} }}
+${3:${VISUAL}}
+{{- else -}}
+${4}
+{{- end -}}
+endsnippet
+  
+
+snippet {{ "block"
+{{ ${0:${VISUAL}} }}
+endsnippet
+  
+snippet def "define"
+{{- define ${1} -}}
+${0:${VISUAL}}
+{{- end -}}
+endsnippet
+
+snippet printf "printf"
+{{- printf ${2:"${1:%s}"} ${4:.Values.${3:x}} -}}
+endsnippet
+
+snippet var "variable"
+{{- $${1:varname} := ${2:expression} -}}
+endsnippet
