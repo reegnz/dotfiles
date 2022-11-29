@@ -1,26 +1,9 @@
 -- Setup lspconfig.
-local ok, lspconfig = pcall(require, "lspconfig")
-if not ok then
-    return
-end
-local ok, lsp_status = pcall(require, "lsp-status")
-if not ok then
-    return
-end
-
-local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if not ok then
-    return
-end
-
-local ok, mason = pcall(require, "mason")
-if not ok then
-    return
-end
-local ok, mason_lspconfig = pcall(require, "mason-lspconfig")
-if not ok then
-    return
-end
+local lspconfig = require('lspconfig')
+local lsp_status = require('lsp-status')
+local cmp_nvim_lsp = require('cmp_nvim_lsp')
+local mason = require('mason')
+local mason_lspconfig = require('mason-lspconfig')
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -82,7 +65,7 @@ local on_attach = function(client, bufnr)
     end
 end
 
-local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities = vim.tbl_extend('keep', capabilities, lsp_status.capabilities)
 
 local lsp_defaults = {
@@ -92,18 +75,22 @@ local lsp_defaults = {
     },
     capabilities = capabilities
 }
-
-mason.setup {}
-mason_lspconfig.setup {
-    automatic_installation = true
-}
-
-
 lspconfig.util.default_config = vim.tbl_deep_extend(
     'keep',
     lsp_defaults,
     lspconfig.util.default_config
 )
+
+mason.setup {
+    providers = {
+        "mason.providers.client",
+    },
+}
+mason_lspconfig.setup {
+    automatic_installation = true
+}
+
+
 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
@@ -152,9 +139,10 @@ lspconfig.gopls.setup {
     }
 }
 lspconfig.jdtls.setup { -- java
-        root_dir = function(fname)
-            return lspconfig.util.root_pattern('pom.xml', 'gradle.build', '.git')(fname) or vim.fn.getcwd()
-        end
+    filetypes = {'java', 'groovy'}
+        -- root_dir = function(fname)
+        --     return lspconfig.util.root_pattern('.git', 'pom.xml', 'build.gradle', 'settings.gradle')(fname) or vim.fn.getcwd()
+        -- end
 }
 lspconfig.efm.setup { -- General purpose language server
     -- init_options = {documentFormatting = true},
@@ -162,6 +150,20 @@ lspconfig.efm.setup { -- General purpose language server
         'vim', 'dockerfile', 'markdown', 'yaml', 'sh', 'python', 'json', 'lua', 'gitcommit',
     }
 }
+
+lspconfig.yamlls.setup {
+    settings = {
+        yaml = {
+            schemas = {
+                kubernetes = "/*.k8s.yaml"
+            }
+        }
+    }
+}
+
+lspconfig.ltex.setup {}
+
+
 lspconfig.pyright.setup {} -- python
 lspconfig.terraformls.setup {}
 lspconfig.tflint.setup {} -- terraform lint
@@ -169,4 +171,7 @@ lspconfig.bashls.setup {}
 lspconfig.vimls.setup {}
 -- lspconfig.rust_analyzer.setup {}
 -- lspconfig.tsserver.setup {} -- typescript
--- lspconfig.zls.setup {} -- zig
+lspconfig.zls.setup {} -- zig
+
+lspconfig.emmet_ls.setup{}
+lspconfig.tsserver.setup{}

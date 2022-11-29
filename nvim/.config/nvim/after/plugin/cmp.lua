@@ -1,16 +1,7 @@
 -- Setup nvim-cmp.
-local ok, cmp = pcall(require, 'cmp')
-if not ok then
-  return
-end
-local ok, lspkind = pcall(require, 'lspkind')
-if not ok then
-  return
-end
-local ok, cmp_nvim_ultisnips = pcall(require, 'cmp_nvim_ultisnips')
-if not ok then
-  return
-end
+local cmp = require('cmp')
+local lspkind = require('lspkind')
+local cmp_nvim_ultisnips = require('cmp_nvim_ultisnips')
 
 cmp_nvim_ultisnips.setup {
   filetype_source = "treesitter",
@@ -39,11 +30,15 @@ cmp.setup {
       vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm { select = true },
     ["<Tab>"] = cmp.mapping(function(fallback)
         cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
       end,
@@ -68,7 +63,6 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
     { name = 'ultisnips' },
-    { name = 'vim-dadbod-completion' },
     { name = 'buffer' },
     { name = 'path' },
   }),

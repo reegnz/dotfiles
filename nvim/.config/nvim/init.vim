@@ -30,6 +30,11 @@ set smartcase
 set showbreak=↪\ 
 set listchars=tab:→\ ,eol:↲,nbsp:␣,space:•,trail:•,extends:⟩,precedes:⟨
 
+set undodir=~/.local/share/nvim/undodir
+set undofile
+
+set nu rnu
+
 " AWS {{{
 augroup awsfiletype
   au BufNewFile,BufRead ~/.aws/config*      set ft=dosini
@@ -62,11 +67,23 @@ augroup END
 set completeopt=menu,menuone,noselect
 
 
+
 set updatetime=1000
 set autoread
 augroup autoread_changes
   au BufEnter,FocusGained,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
   " au CursorMoved,CursorMovedI * checktime
+augroup END
+
+" highlight recently yanked selection
+augroup highlight_yank
+    autocmd!
+    au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=1000}
+augroup END
+
+augroup toggle_relative
+    au InsertEnter * silent! set nornu
+    au InsertLeave * silent! set rnu
 augroup END
 
 

@@ -52,12 +52,20 @@ require'nvim-treesitter.configs'.setup {
         ['as'] = "@statement.outer",
       },
     },
+    move = {
+      enabe = true,
+      set_jumps = true,
+      goto_next_start = {
+        ["]m"] = "@function.outer",
+      },
+    },
   },
   context_commentstring = {
     enable = true,
     config = {
       yaml = "# %s",
       gotmpl = "{{- /* %s */}}",
+      hcl = "# %s",
     },
-  }
+  },
 }

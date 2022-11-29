@@ -15,6 +15,7 @@ require'lualine'.setup {
     "nvim-tree"
   },
 }
+
 require'nvim-tree'.setup{
   disable_netrw = false,
   hijack_netrw = false,
@@ -27,3 +28,5 @@ require'nvim-tree'.setup{
     update_cwd = true,
   },
 }
+
+require'octo'.setup {}

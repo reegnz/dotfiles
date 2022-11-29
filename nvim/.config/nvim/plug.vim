@@ -53,16 +53,13 @@ Plug 'folke/lsp-colors.nvim'
 " Git integration
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
+Plug 'pwntester/octo.nvim'
 Plug 'mhinz/vim-signify'
 
 
-" NERDTree integrations
+" file explorer
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'preservim/nerdtree',                      { 'on': 'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin',             { 'on': 'NERDTreeToggle' }
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': 'NERDTreeToggle' }
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'ryanoasis/vim-devicons'
 
 " FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -87,6 +84,7 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'onsails/lspkind-nvim'
 Plug 'nvim-lua/lsp-status.nvim'
+Plug 'b0o/schemastore.nvim'
 " Plug 'tami5/lspsaga.nvim'
 " Plug 'folke/trouble.nvim'
 
