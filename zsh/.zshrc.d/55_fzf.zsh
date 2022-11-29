@@ -17,4 +17,10 @@ export FZF_ALT_C_COMMAND="fzf-alt-c z"
 
 #export FZF_ALT_C_OPTS="--preview 'exa --color=always --icons --group-directories-first --git -lah {}' --bind='alt-p:toggle-preview' --preview-window=~1"
 
-export FZF_ALT_C_OPTS="--preview 'fzf-alt-c preview {}' --bind='alt-p:toggle-preview' --bind='alt-a:reload:fzf-alt-c dirs' --bind='alt-z:reload:fzf-alt-c z' --preview-window=~1 --info=inline --keep-right"
+FZF_ALT_C_OPTS="--preview-window=~1 --info=inline --keep-right"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --preview 'fzf-alt-c preview {}' --bind='alt-p:toggle-preview'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --disabled --prompt='z > '"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='change:reload(fzf-alt-c z {q} || true)'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='alt-d:unbind(change)+change-prompt(fzf > )+enable-search+clear-query+reload(fzf-alt-c dirs)'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='alt-z:rebind(change)+change-prompt(z > )+disable-search+clear-query+reload(fzf-alt-c z)'"
+export FZF_ALT_C_OPTS

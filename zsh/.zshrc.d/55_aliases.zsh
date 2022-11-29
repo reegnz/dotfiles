@@ -15,3 +15,4 @@ alias ranger='source ranger'
 alias r='ranger'
 
 alias vim=nvim
+alias n=nvim
