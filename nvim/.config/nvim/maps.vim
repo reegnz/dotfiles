@@ -34,3 +34,17 @@ nnoremap -- <C-x>
 " Moving visually selected text up/down
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+
+" Split management
+" window
+nmap <leader>sw<left>  :topleft vnew<cr>
+nmap <leader>sw<right> :botright vnew<cr>
+nmap <leader>sw<up>    :topleft new<cr>
+nmap <leader>sw<down>  :botright new<cr>
+
+" buffer
+nmap <leader>s<left>   :leftabove vnew<cr>
+nmap <leader>s<right>  :rightbelow vnew<cr>
+nmap <leader>s<up>     :leftabove new<cr>
+nmap <leader>s<down>   :rightbelow new<cr>

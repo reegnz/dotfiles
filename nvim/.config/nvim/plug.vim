@@ -35,12 +35,10 @@ Plug 'stsewd/gx-extended.vim'
 
 Plug 'wincent/terminus'
 Plug 'easymotion/vim-easymotion'
-"Plug 'ggandor/lightspeed.nvim'
 Plug 'junegunn/vim-easy-align'
 
 
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-lua/lsp-status.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 
 " Rice
@@ -53,7 +51,6 @@ Plug 'folke/lsp-colors.nvim'
 " Git integration
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-Plug 'pwntester/octo.nvim'
 Plug 'mhinz/vim-signify'
 
 
@@ -83,10 +80,8 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'onsails/lspkind-nvim'
-Plug 'nvim-lua/lsp-status.nvim'
 Plug 'b0o/schemastore.nvim'
-" Plug 'tami5/lspsaga.nvim'
-" Plug 'folke/trouble.nvim'
+Plug 'j-hui/fidget.nvim'
 
 Plug 'SirVer/ultisnips'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
@@ -98,8 +93,7 @@ Plug 'nvim-treesitter/playground'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
-" Plug 'glacambre/firenvim'
-
+" lisp
 Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ]}
 Plug 'kovisoft/slimv',         { 'for': 'clojure' }
 " Plug 'Olical/conjure'

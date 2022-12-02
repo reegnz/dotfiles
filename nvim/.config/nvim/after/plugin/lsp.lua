@@ -1,6 +1,5 @@
 -- Setup lspconfig.
 local lspconfig = require('lspconfig')
-local lsp_status = require('lsp-status')
 local cmp_nvim_lsp = require('cmp_nvim_lsp')
 local mason = require('mason')
 local mason_lspconfig = require('mason-lspconfig')
@@ -8,7 +7,6 @@ local mason_lspconfig = require('mason-lspconfig')
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    lsp_status.on_attach(client)
 
     local function buf_set_keymap(...)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -66,7 +64,6 @@ local on_attach = function(client, bufnr)
 end
 
 local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities = vim.tbl_extend('keep', capabilities, lsp_status.capabilities)
 
 local lsp_defaults = {
     on_attach = on_attach,
