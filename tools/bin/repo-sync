@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cat ~/.config/ghq.sync.d/* | ghq get -u -P
