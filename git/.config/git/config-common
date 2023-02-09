@@ -7,8 +7,9 @@
   diffFilter = delta --color-only
 [delta]
   line-numbers = true
-  theme = Monokai Extended Origin
   diff-so-fancy = true
+[diff]
+  colorMoved = default
 [color]
   ui = true
 [pull]

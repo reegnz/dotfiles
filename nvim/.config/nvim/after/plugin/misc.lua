@@ -1,15 +1,6 @@
-local lsp_status = require('lsp-status')
-lsp_status.config {
-    diagnostics = false,
-}
-lsp_status.register_progress()
-
 require'lualine'.setup {
   options = {
     theme = 'gruvbox',
-  },
-  sections = {
-    lualine_c = { "filename", "require'lsp-status'.status()" }
   },
   extensions = {
     "nvim-tree"
@@ -17,8 +8,9 @@ require'lualine'.setup {
 }
 
 require'nvim-tree'.setup{
-  disable_netrw = false,
-  hijack_netrw = false,
+  -- disable_netrw = true,
+  hijack_netrw = true,
+  hijack_cursor = true,
   diagnostics = {
     enable = true,
   },
@@ -26,7 +18,9 @@ require'nvim-tree'.setup{
   update_focused_file = {
     enable = true,
     update_cwd = true,
+    update_root = true,
   },
 }
 
-require'octo'.setup {}
+-- shows LSP status on bottom right corner
+require'fidget'.setup{}

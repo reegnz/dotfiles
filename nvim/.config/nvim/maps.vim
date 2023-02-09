@@ -25,7 +25,7 @@ vnoremap > >gv
 vnoremap < <gv
 " }}}
 
-nnoremap ; :
+" nnoremap ; :
 
 " Increment / Decrement
 nnoremap == <C-a>

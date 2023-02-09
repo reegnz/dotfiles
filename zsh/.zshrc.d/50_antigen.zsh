@@ -12,18 +12,15 @@ if [ -f "$antigen" ]; then
 
 	# https://github.com/ohmyzsh/ohmyzsh
 	antigen use oh-my-zsh
-
-	# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins
+	# oh-my-zsh builtin plugins
 	antigen bundle sudo
 	antigen bundle copybuffer
 	antigen bundle fzf
-	# antigen bundle asdf
-	# use own implementation of asp utilizing fzf
-	# antigen bundle aws
-	antigen bundle docker
+	antigen bundle aws
 	antigen bundle kubectl
 	antigen bundle z
 
+	# 3rd party plugins and themes
 	antigen theme romkatv/powerlevel10k
 	antigen bundle reegnz/jq-zsh-plugin
 

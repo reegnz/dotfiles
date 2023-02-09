@@ -20,6 +20,7 @@ function keg_only_refresh() {
 	    <(echo "/usr/local/opt/python/libexec/bin") \
 	| paste -s -d' ' - \
 	| sed 's/\(.*\)/path=(\1 $path)/g' >| "$keg_only_bin_cache"
+	zcompile -R -- "$keg_only_bin_cache.zwc" "$keg_only_bin_cache"
 }
 [[ -f "$keg_only_bin_cache" ]] || keg_only_refresh
 source "$keg_only_bin_cache"

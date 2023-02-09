@@ -1,0 +1,8 @@
+[include]
+  path = config-common
+  path = config-os
+  path = config-ghq
+
+[user]
+  name = Zoltán Reegn
+  email = zoltan.reegn@gmail.com

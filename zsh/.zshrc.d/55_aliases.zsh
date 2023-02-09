@@ -16,3 +16,7 @@ alias r='ranger'
 
 alias vim=nvim
 alias n=nvim
+
+
+alias tf=terraform
+alias k=kubectl

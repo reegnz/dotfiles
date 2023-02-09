@@ -5,6 +5,7 @@ if [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then
 		echo "Downloading iterm shell integration..."
 		curl -# -L https://iterm2.com/shell_integration/zsh \
 			-o "$iterm_script_path"
+		zcompile "$iterm_script_path"
 	fi
 	source "$iterm_script_path"
 	unset iterm_script_path

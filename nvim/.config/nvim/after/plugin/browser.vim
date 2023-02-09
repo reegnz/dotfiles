@@ -30,8 +30,8 @@ endfunction
 
 let g:google_search = "https://google.com/search?q="
 let g:github_search = "https://github.com/search?q="
-nnoremap <expr> ss BrowserSearch('', g:google_search)
-xnoremap <expr> ss BrowserSearch('', g:google_search)
-nnoremap <expr> sg BrowserSearch('', g:github_search)
-xnoremap <expr> sg BrowserSearch('', g:github_search)
+" nnoremap <expr> ss BrowserSearch('', g:google_search)
+" xnoremap <expr> ss BrowserSearch('', g:google_search)
+" nnoremap <expr> sg BrowserSearch('', g:github_search)
+" xnoremap <expr> sg BrowserSearch('', g:github_search)
 " }}}

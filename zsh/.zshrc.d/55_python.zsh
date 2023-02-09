@@ -9,7 +9,9 @@ if [ -n "$+commands[pyenv]" ]; then
   pyenv_cache=$ZSH_CACHE_DIR/pyenv.zsh
   if [ ! -f $pyenv_cache ]; then
     pyenv init - > $pyenv_cache
+    # https://github.com/pyenv/pyenv-virtualenv/issues/259#issuecomment-1007432346
     pyenv virtualenv-init - | sed 's/precmd/precwd/g' >> $pyenv_cache
+    zcompile "$pyenv_cache"
   fi
   source $pyenv_cache
   unset pyenv_cache

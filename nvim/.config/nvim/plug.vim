@@ -26,6 +26,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dadbod' 
+Plug 'tpope/vim-scriptease' 
 Plug 'kristijanhusak/vim-dadbod-completion'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'tpope/vim-speeddating'
@@ -36,6 +37,7 @@ Plug 'stsewd/gx-extended.vim'
 Plug 'wincent/terminus'
 Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/vim-easy-align'
+Plug 'justinmk/vim-sneak'
 
 
 Plug 'nvim-lua/plenary.nvim'
@@ -66,8 +68,6 @@ Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'GFiles', 'Buffers', 'Colors', 'Ag',
 "Plug 'plasticboy/vim-markdown',      { 'for': 'markdown'    }
 "Plug 'dhruvasagar/vim-table-mode',   { 'for': 'markdown'    }
 Plug 'iamcco/markdown-preview.nvim', { 'do': ':call mkdp#util#install()', 'for': 'markdown' }
-Plug 'bfrg/vim-jq',                  { 'for': 'jq'          }
-Plug 'bfrg/vim-jqplay'
 Plug 'mityu/vim-applescript',        { 'for': 'applescript' }
 
 Plug 'williamboman/mason.nvim'
