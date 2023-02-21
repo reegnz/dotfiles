@@ -126,3 +126,6 @@ def k8s_images:
       containers,
       initContainers
     }|to_entries|map(.value // empty| .[].image)[])|unique[];
+
+def chunk($n):
+  range(length/$n|ceil) as $i | .[$n*$i:$n*$i+5];

@@ -44,12 +44,14 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 let g:sneak#label = 1
 
 
+" auto-adjust splits to equal size on resize
+autocmd VimResized * wincmd =
+
 if executable('rg')
   set grepprg=rg\ --vimgrep\ --smart-case
   set grepformat^=%f:%l:%c:%m
 endif
 nnoremap <Leader>g :silent grep<Space>
-
 
 " command! -range=% Base64URLDecode <line1>,<line2>c<c-r>=system('basenc --base64url -d', @")<cr><esc>
 " command! -range=% Base64URLEncode c<c-r>=system('basenc --base64url', @")<cr><esc>

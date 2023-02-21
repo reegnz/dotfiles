@@ -2,4 +2,4 @@
 set -euo pipefail
 
 ghq list "github.com/" | tee ~/.config/ghq.sync.d/github
-ghq list | grep "${WORK_REPO}/" | tee ~/.config/ghq.sync.d/work
+ghq list "${WORK_REPO}/" | tee ~/.config/ghq.sync.d/work
