@@ -206,6 +206,29 @@ spec:
               storage: 1Gi$0
 endsnippet
 
+snippet "kind: DaemonSet" "Kubernetes DaemonSet" b
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ${1:name}
+  labels:
+    app: ${2:$1}
+spec:
+  selector:
+    matchLabels:
+      app: ${3:$2}
+  template:
+    metadata:
+      labels:
+        app: ${4:$2}
+    spec:
+      containers:
+      - name: ${5:$1}
+        image: ${6:image}$0
+endsnippet
+
+
 snippet "kind: Job" "Kubernetes Job" b
 ---
 apiVersion: batch/v1
@@ -362,4 +385,18 @@ command: ["sh", "-c"]
 args:
 - |
 sleep 3600
+endsnippet
+
+snippet vendir_helm "Vendir helm vendoring"
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: ${1:vendor}
+  contents:
+  - path: ${2:thechart}
+    helmChart:
+      name: ${3:$2}
+      version: ${4:1.0.0}
+      repository:
+        url: ${5:https://...}$0
 endsnippet

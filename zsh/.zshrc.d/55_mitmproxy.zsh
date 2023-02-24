@@ -26,3 +26,25 @@ mitmproxy_env_enable() {
 mitmproxy_env_disable() {
     unset HTTP_PROXY HTTPS_PROXY JAVA_TOOL_OPTIONS REQUESTS_CA_BUNDLE AWS_CA_BUNDLE
 }
+
+mitmproxy_add_trust() { 
+    if security find-certificate \
+	-c mitmproxy \
+	-p /Library/Keychains/System.keychain >/dev/null 2>&1; then
+	sudo security delete-certificate \
+	    -c mitmproxy /Library/Keychains/System.keychain
+	echo "Removed existing mitmproxy certificate from system keychain." >&2
+    fi
+    sudo security add-trusted-cert \
+	-d -p ssl -p basic \
+	-k /Library/Keychains/System.keychain \
+	"$HOME/.mitmproxy/mitmproxy-ca-cert.pem"
+
+    # re-generate openssl certificate bundle from system keychain
+    if brew ls --versions openssl@1.1; then
+	brew postinstall openssl@1.1
+    fi
+    echo "Added mitmproxy certificate to system keychain." >&2
+}
+
+

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# This script allows for limiting the scope of the current user to 
+# the policy provided in the argument.
+
+set -euo pipefail
+
+source_profile=$1
+target_profile=$2
+policy_arn=$3
+shift 3
+
+unset AWS_PROFILE AWS_DEFAULT_PROFILE
+ 
+assume_role() {
+  role_arn=$(aws configure get role_arn --profile "${target_profile}")
+  role_session_name=$(aws configure get role_session_name --profile "${target_profile}")
+  region=$(aws configure get region --profile "${target_profile}")
+  aws sts assume-role --profile "${source_profile}" \
+    --role-arn "${role_arn}" \
+    --role-session-name "${role_session_name}" \
+    --region "${region}" \
+    --policy-arns arn="${policy_arn}"
+  export AWS_DEFAULT_REGION="${region}"
+}
+
+to_export() {
+  jq -r '.Credentials|{
+    AWS_ACCESS_KEY_ID: .AccessKeyId, 
+    AWS_SECRET_ACCESS_KEY: .SecretAccessKey,
+    AWS_SESSION_TOKEN: .SessionToken
+  }|to_entries[]|"export \(.key)=\(.value)"'
+}
+
+eval "$(assume_role|to_export)"
+
+exec "$@"

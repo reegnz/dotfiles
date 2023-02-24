@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Two-phase filtering with Ripgrep and fzf
+#
+# 1. Search for text in files using Ripgrep
+# 2. Interactively restart Ripgrep with reload action
+#    * Press alt-f to switch to fzf-only filtering
+#    * Press alt-r to drop back into rg mode
+# 3. Open the file in Vim by hitting return
+
+RG_PREFIX="rg --vimgrep --color=always --smart-case"
+REGEX_QUERY='"$(echo {q} | sed -E "s, ,[. _-]*,g")"'
+
+INITIAL_QUERY="\"\$(echo ${*:-} | sed -E 's, ,[. _-]*,g')\""
+IFS=: read -ra selected < <(
+  FZF_DEFAULT_COMMAND="$RG_PREFIX $INITIAL_QUERY" \
+  fzf --ansi \
+      --header "alt-f to switch to fzf" \
+      --reverse \
+      --height=100% \
+      --color "hl:-1:underline,hl+:-1:underline:reverse" \
+      --disabled --query "${*:-}" \
+      --bind "change:reload:sleep 0.1; $RG_PREFIX $REGEX_QUERY || true" \
+      --bind "alt-f:unbind(change)+change-prompt(2. fzf> )+enable-search+clear-query" \
+      --bind "alt-r:change-prompt(2. ripgrep> )+disable-search+clear-query+rebind(change)" \
+      --prompt '1. ripgrep> ' \
+      --delimiter : \
+      --preview 'echo {1}:; echo ----------------; bat --color=always {1} --highlight-line {2}' \
+      --preview-window 'down,60%,+{2}+3/3,~2'
+)
+[ -n "${selected[0]}" ] && nvim "${selected[0]}" "+${selected[1]}"

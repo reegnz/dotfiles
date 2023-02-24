@@ -163,9 +163,10 @@
 
         {:des "Slack bindings"
          :rules [[:condi :Slack :j-mode]
-                 [:s :!CSd]
-                 [:f :!Ck] ; search / jump to
-                 [:q :!Cperiod]]}
+                 [:s :!CSd] ; toggle left sidebar
+                 [:q :!Cperiod] ; toggle right sidebar
+                 [:i :!CSi] ; toggle info
+                 [:f :!Ck]]} ; search / jump to
 
         {:des "Media buttons (Audio mode)"
          :rules [:a-mode

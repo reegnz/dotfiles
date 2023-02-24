@@ -13,6 +13,7 @@ if [ -f "$antigen" ]; then
 	# https://github.com/ohmyzsh/ohmyzsh
 	antigen use oh-my-zsh
 	# oh-my-zsh builtin plugins
+	antigen bundle iterm2
 	antigen bundle sudo
 	antigen bundle copybuffer
 	antigen bundle fzf
