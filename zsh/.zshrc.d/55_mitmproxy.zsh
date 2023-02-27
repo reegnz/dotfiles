@@ -38,7 +38,7 @@ mitmproxy_add_trust() {
     sudo security add-trusted-cert \
 	-d -p ssl -p basic \
 	-k /Library/Keychains/System.keychain \
-	"$HOME/.mitmproxy/mitmproxy-ca-cert.pem"
+	"$XDG_HOME/.mitmproxy/mitmproxy-ca-cert.pem"
 
     # re-generate openssl certificate bundle from system keychain
     if brew ls --versions openssl@1.1; then

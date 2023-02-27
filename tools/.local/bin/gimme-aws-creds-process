@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ -n "${DEBUG:-}" ]; then
+  set -x
+fi
+
+unset AWS_PROFILE
+CRED_FILE="${HOME}/.aws/gimme-aws-creds-${1-DEFAULT}.json"
+needs_refresh() {
+  if [ -f "${CRED_FILE}" ]; then
+    if jq -e -s '.[0].credentials.expiration // "1970-01-01T00:00:00Z" | fromdate > (now + 300)' "$CRED_FILE" &>/dev/null; then
+        return 1
+      fi
+  fi
+  [ -z "${DEBUG:-}" ] || echo "Credential expired, needs refresh" >&2
+  return 0
+}
+
+refresh_creds() {
+  TZ=UTC gimme-aws-creds ${1+--profile $1} -o json |
+    jq '.credentials.expiration |= sub("\\+00:00$"; "Z")' > "${CRED_FILE}"
+}
+
+
+if needs_refresh; then
+  [ -z "${DEBUG:-}" ] || echo "Refreshing credentials..." >&2
+  refresh_creds "$@"
+else
+  [ -z "${DEBUG:-}" ] || echo "Using cached credentials." >&2
+fi
+
+jq '
+  .credentials |
+  {
+    Version: 1,
+    AccessKeyId: .aws_access_key_id,
+    SecretAccessKey: .aws_secret_access_key,
+    SessionToken: .aws_session_token,
+    Expiration: .expiration,
+  }
+  ' "${CRED_FILE}" 2>/dev/null

@@ -4,7 +4,7 @@
 #
 # Here I'm using my preferred configuration of zsh plugins.
 
-export ANTIGEN_LOG=$HOME/antigen.log
+export ANTIGEN_LOG=$XDG_CACHE_HOME/antigen.log
 
 antigen=/usr/local/share/antigen/antigen.zsh
 if [ -f "$antigen" ]; then

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+jq -s 'JOIN(INDEX(.[1][]; .nodeName); .[0][] ; .nodeName; add)' \
+	<(kubectl get pods -A -o json  | jq '.items|map({name: .metadata.name, namespace: .metadata.namespace, nodeName: .spec.nodeName})') \
+	<(kubectl get nodes -o json  | jq '.items|map({nodeName: .metadata.name, nodeAZ: .metadata.labels["topology.kubernetes.io/zone"]})')

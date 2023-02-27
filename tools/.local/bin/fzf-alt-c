@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+preview() {
+  exa --color=always --icons --group-directories-first --git -lah "$1"
+}
+
+dirs() {
+  fd --type d --color=always
+}
+
+z() {
+  source $HOME/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/z/z.plugin.zsh
+  zshz -l $@ | tac | awk '{print $2}'
+  awk -v home="$HOME" -v pwd="$PWD" '
+    $0 ~ pwd {gsub(pwd"/","./",$0); print; next}
+    {print $0}'
+}
+
+command=$1
+shift
+$command "$@"

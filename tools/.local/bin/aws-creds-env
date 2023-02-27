@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+# This script allows using your current AWS environment credentials as
+# environment variables. This acts mainly as a wrapper for tools that cannot
+# make sense of newer credential sources, like credential_process or
+# WEB_IDENTITY_TOKEN_FILE. With this wrapper you simply wrap the original
+# command, and have it translate the credentials for you.
+#
+# Pitfall: the credentials don't get renewed, so the application that is
+# wrapped will need to be stopped and wrapped again once the session expires.
+
+
+import os
+import sys
+
+import boto3
+
+creds = boto3.Session().get_credentials().get_frozen_credentials()
+
+os.environ["AWS_ACCESS_KEY_ID"] = creds.access_key
+os.environ["AWS_SECRET_ACCESS_KEY"] = creds.secret_key
+os.environ["AWS_SESSION_TOKEN"] = creds.token
+
+os.system(" ".join(sys.argv[1:]))

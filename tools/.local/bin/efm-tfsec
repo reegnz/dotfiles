@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+file=$1
+
+tfsec -f csv "${file%/*}" | awk -F, '{OFS=":"}{print $1,$2,$3,$6" ("$4")"}' | tail -n +2 | tee $HOME/lintresult.txt

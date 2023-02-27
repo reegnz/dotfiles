@@ -1,4 +1,4 @@
-path=($path "${KREW_ROOT:-$HOME/.krew}/bin")
+path=($path "${KREW_ROOT:-$XDG_HOME/.krew}/bin")
 
 
 # kubectl() {

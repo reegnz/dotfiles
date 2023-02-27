@@ -51,13 +51,18 @@ Install:andUse("URLDispatcher", {
 		url_patterns = {
 			{ "https?://.*%.zoom%.us", Zoom },
 			{ "https?://.*%.slack%.com", Slack },
-
 			-- example redirect work stuff to work browser
-			{ "https?://.*%.aws%.amazon.com", WorkBrowser },
+			{ "https?://.*%.aws%.amazon%.com", WorkBrowser },
 			{ "https?://login%.microsoftonline%.com", WorkBrowser },
-			{ "https?://.*%.atlassian.net", WorkBrowser },
-			{ "https?://.*%.datadoghq.com", WorkBrowser },
-			{ "https?://.*%.pagerduty.com", WorkBrowser },
+			{ "https?://.*%.atlassian%.net", WorkBrowser },
+			{ "https?://.*%.datadoghq%.com", WorkBrowser },
+			{ "https?://.*%.pagerduty%.com", WorkBrowser },
+			{ "https?://.*%.visualforce%.com", WorkBrowser },
+			{ "https?://.*%.visual%.force%.com", WorkBrowser },
+			{ "https?://.*%.salesforce%.com", WorkBrowser },
+			{ "https?://.*%.documentforce%.com", WorkBrowser },
+
+
 
 		},
 		default_handler = DefaultBrowser

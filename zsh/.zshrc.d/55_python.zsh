@@ -1,10 +1,10 @@
 # fix location of `pip3 install --user <package>`
-export PYTHONUSERBASE=$HOME/.local
+export PYTHONUSERBASE="${XDG_HOME}/.local"
 export PIPX_DEFAULT_PYTHON=python3
 
 ## pyenv
 if [ -n "$+commands[pyenv]" ]; then
-  export PYENV_ROOT="$HOME/.pyenv"
+  export PYENV_ROOT="$XDG_HOME/.pyenv"
   path=("${PYENV_ROOT}/shims" $path)
   pyenv_cache=$ZSH_CACHE_DIR/pyenv.zsh
   if [ ! -f $pyenv_cache ]; then
