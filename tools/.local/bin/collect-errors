@@ -1,0 +1,18 @@
+#!/usr/bin/env awk -f
+BEGIN {
+  fail=0
+};
+$1 {
+  failed[$0] = $0
+  fail = 1
+};
+END {
+  if(!fail) {
+    exit
+  }
+  print "==== Error Summary ====" | "cat 1>&2"
+  for(mod in failed) {
+    print mod | "cat 1>&2"
+  }
+  exit 1
+}
