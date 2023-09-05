@@ -133,6 +133,19 @@ spec:
               name: ${7:http}$0
 endsnippet
 
+snippet "kind: PodDisruptionBudget" "Kubernetes PodDisruptionBudget" b
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: "${1:name}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: ${1}$0
+endsnippet
+
 snippet "kind: Deployment" "Kubernetes Deployment" b
 ---
 apiVersion: apps/v1
@@ -399,4 +412,35 @@ directories:
       version: ${4:1.0.0}
       repository:
         url: ${5:https://...}$0
+endsnippet
+
+
+snippet "kind: ClusterPolicy" "Kyverno Cluster Policy"
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: ${1:policy}
+  annotatons:
+    policies.kyverno.io/title: ${2:$1}
+    policies.kyverno.io/category: ""
+    policies.kyverno.io/subject: ""
+    kyverno.io/kyverno-version: 1.6.0
+    kyverno.io/kubernetes-version: "1.22"
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: ""
+spec:
+  rules:
+  - name: ${3:$1}
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    context:
+    - name: context
+      configMap:
+        name: name
+        value: value
+    mutate:
+      
 endsnippet

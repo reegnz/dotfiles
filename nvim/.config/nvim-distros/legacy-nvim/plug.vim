@@ -83,6 +83,9 @@ Plug 'onsails/lspkind-nvim'
 Plug 'b0o/schemastore.nvim'
 Plug 'j-hui/fidget.nvim'
 
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'jay-babu/mason-null-ls.nvim'
+
 Plug 'SirVer/ultisnips'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 Plug 'honza/vim-snippets'
@@ -94,9 +97,11 @@ Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 " lisp
-Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ]}
+Plug 'eraserhd/parinfer-rust', { 'for': [ 'clojure', 'query' ], 'do':  'cargo build --release'}
 Plug 'kovisoft/slimv',         { 'for': 'clojure' }
 " Plug 'Olical/conjure'
+"
+Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 "}}}

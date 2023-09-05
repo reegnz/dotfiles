@@ -38,8 +38,8 @@ set nu rnu
 
 set completeopt=menu,menuone,noselect
 
-let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python_host_prog = '/opt/homebrew/bin/python'
+let g:python3_host_prog = '/opt/homebrew/bin/python3'
 
 let g:sneak#label = 1
 
@@ -57,3 +57,7 @@ nnoremap <Leader>g :silent grep<Space>
 " command! -range=% Base64URLEncode c<c-r>=system('basenc --base64url', @")<cr><esc>
 " command! -range=% Base64Decode c<c-r>=system('basenc --base64 -d', @")<cr><esc>
 " command! -range=% Base64Encode c<c-r>=system('basenc --base64', @")<cr><esc>
+"
+set wrap
+set linebreak
+set showbreak=+++
