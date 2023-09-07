@@ -28,6 +28,7 @@ require("lazy").setup({
     -- { import = "plugins" },
     { import = "plugins.extras.colorscheme.gruvbox" },
     { import = "plugins.extras.editor.fugitive" },
+    { import = "plugins.extras.editor.easyalign" },
     { import = "plugins.extras.editor.oil" },
     { import = "plugins.extras.editor.tmux" },
     { import = "plugins.extras.lang.applescript" },
