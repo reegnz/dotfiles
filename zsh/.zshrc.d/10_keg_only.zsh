@@ -15,9 +15,9 @@
 keg_only_bin_cache="$ZSH_CACHE_DIR/keg-only-bin.sh"
 
 function keg_only_refresh() {
-	cat <(find /usr/local/opt -follow -type d -name gnubin) \
-	    <(echo "/usr/local/opt/curl/bin") \
-	    <(echo "/usr/local/opt/python/libexec/bin") \
+	cat <(find "${HOMEBREW_PREFIX}/opt" -follow -type d -name gnubin) \
+	    <(echo "${HOMEBREW_PREFIX}/opt/curl/bin") \
+	    <(echo "${HOMEBREW_PREFIX}/opt/python/libexec/bin") \
 	| paste -s -d' ' - \
 	| sed 's/\(.*\)/path=(\1 $path)/g' >| "$keg_only_bin_cache"
 	zcompile -R -- "$keg_only_bin_cache.zwc" "$keg_only_bin_cache"

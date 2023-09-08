@@ -48,4 +48,5 @@ alias awsp='asp $(aws-profiles | fzf --reverse --preview "$(declare -f __aws_pri
 alias aws-edit-config='vim -c "cd ~/.aws" -c "Rg"' # open fzf ripgrep vim plugin in the aws config folder
 alias ac='aws-edit-config'
 
-
+autoload bashcompinit && bashcompinit
+complete -C aws_completer aws

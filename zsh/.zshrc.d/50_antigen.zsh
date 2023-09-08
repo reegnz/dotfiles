@@ -6,7 +6,7 @@
 
 export ANTIGEN_LOG=$XDG_CACHE_HOME/antigen.log
 
-antigen=/usr/local/share/antigen/antigen.zsh
+antigen="${HOMEBREW_PREFIX}/share/antigen/antigen.zsh"
 if [ -f "$antigen" ]; then
 	source "$antigen"
 
@@ -16,10 +16,11 @@ if [ -f "$antigen" ]; then
 	antigen bundle iterm2
 	antigen bundle sudo
 	antigen bundle copybuffer
+	antigen bundle command-not-found
 	antigen bundle fzf
-	antigen bundle aws
 	antigen bundle kubectl
-	antigen bundle z
+  antigen bundle zoxide
+	antigen bundle aws
 
 	# 3rd party plugins and themes
 	antigen theme romkatv/powerlevel10k

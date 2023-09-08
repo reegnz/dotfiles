@@ -14,3 +14,12 @@ if [ -n "$+commands[pluto]" ]; then
   fi
   unset pluto_completiog
 fi
+
+
+export KREW_ROOT="${XDG_DATA_HOME}/krew"
+
+krew_link() {
+  for file in $KREW_ROOT/bin/*; do
+    ln -f -s $file $(realpath --relative-to "${HOME}/.local/bin" -s $file) "${HOME}/.local/bin"
+  done
+}

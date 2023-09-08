@@ -12,10 +12,10 @@ case "$unamestr" in
 esac
 
 
-XDG_HOME="${XDG_HOME:-${HOME}}"
-XDG_DATA_HOME="${XDG_DATA_HOME:-${XDG_HOME}/.local/share}"
-XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${XDG_HOME}/.config}"
-XDG_CACHE_HOME="${XDG_CACHE_HOME:-${XDG_HOME}/.cache}"
+export XDG_HOME="${XDG_HOME:-${HOME}}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${XDG_HOME}/.local/share}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${XDG_HOME}/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${XDG_HOME}/.cache}"
 
 ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
 fpath+="$ZSH_CACHE_DIR/completions"
@@ -45,3 +45,6 @@ source $ZSH_CACHE_DIR/shorthost.sh
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 # I swear OMZ just keeps adding crap to annoy me.
 ZSH_DISABLE_COMPFIX=true
+
+autoload -U bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
