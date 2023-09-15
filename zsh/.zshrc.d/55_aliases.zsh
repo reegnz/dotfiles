@@ -1,11 +1,11 @@
 #exa
+alias exa=eza
 alias x='exa --icons --group-directories-first --git'
-alias xl='x -lah --all'
+alias xl='x -lah'
 
 alias ls='x'
-alias ll='x -lh'
-alias la='xl'
-alias l='la'
+alias ll='xl'
+alias l='ll'
 
 alias vimrc="vim +'e "'$MYVIMRC'"'"
 

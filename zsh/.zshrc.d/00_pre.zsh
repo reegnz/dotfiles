@@ -25,20 +25,22 @@ if [[ ! -d "${ZSH_CACHE_DIR}" ]]; then
 fi
 
 # Figure out the SHORT hostname
-if [ ! -f $ZSH_CACHE_DIR/shorthost.sh ]; then
-  # OS X
-  if [ -n "$+commands[scutil]" ]; then
-    SHORT_HOST=$(scutil --get ComputerName)
-    SHORT_HOST="${SHORT_HOST%% \(*\)}"
-    SHORT_HOST="${SHORT_HOST// /-}"
-    SHORT_HOST="${SHORT_HOST//’/}"
-    SHORT_HOST="${SHORT_HOST:l}"
-  else
-    SHORT_HOST=${HOST/.*/}
+if [[ $platform == "darwin" ]]; then
+  if [ ! -f $ZSH_CACHE_DIR/shorthost.sh ]; then
+    # OS X
+    if [ -n "$+commands[scutil]" ]; then
+      SHORT_HOST=$(scutil --get ComputerName)
+      SHORT_HOST="${SHORT_HOST%% \(*\)}"
+      SHORT_HOST="${SHORT_HOST// /-}"
+      SHORT_HOST="${SHORT_HOST//’/}"
+      SHORT_HOST="${SHORT_HOST:l}"
+    else
+      SHORT_HOST=${HOST/.*/}
+    fi
+    echo "export SHORT_HOST=$SHORT_HOST"  > $ZSH_CACHE_DIR/shorthost.sh
   fi
-  echo "export SHORT_HOST=$SHORT_HOST"  > $ZSH_CACHE_DIR/shorthost.sh
-fi
 source $ZSH_CACHE_DIR/shorthost.sh
+fi
 
 # Save the location of the current completion dump file.
 # Forces oh-my-zsh to use this location.
