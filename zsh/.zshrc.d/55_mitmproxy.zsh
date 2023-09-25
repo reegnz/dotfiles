@@ -1,3 +1,8 @@
+# check if mitmproxy is installed
+if (( ! ${+commands[mitmproxy]} )); then
+  return
+fi
+
 mitmproxy_env_enable() {
     # TODO: make OS agnostic, right now only works on MacOS
     echo "Looking for openssl cert bundle..." >&2

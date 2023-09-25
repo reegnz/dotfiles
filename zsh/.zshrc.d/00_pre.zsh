@@ -47,6 +47,3 @@ fi
 ZSH_COMPDUMP="${ZSH_CACHE_DIR}/zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 # I swear OMZ just keeps adding crap to annoy me.
 ZSH_DISABLE_COMPFIX=true
-
-autoload -U bashcompinit && bashcompinit
-autoload -Uz compinit && compinit

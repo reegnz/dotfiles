@@ -1,25 +1,20 @@
-path=($path "${KREW_ROOT:-$XDG_HOME/.krew}/bin")
+# check if eza is installed
+if (( ! ${+commands[kubectl]} )); then
+  return
+fi
 
-
-# kubectl() {
-#   kubectl-speedup "$@"
-# }
-
-
+alias k=kubectl
 
 if [ -n "$+commands[pluto]" ]; then
   pluto_completion="$ZSH_CACHE_DIR/completions/_pluto"
   if [ ! -f "$pluto_completion" ]; then
     pluto completion zsh > "$pluto_completion"
   fi
-  unset pluto_completiog
+  unset pluto_completion
 fi
 
+if (( ! ${+commands[kubectl-krew]} )); then
+  return
+fi
+path=($path "${KREW_ROOT:-$XDG_HOME/.krew}/bin")
 
-export KREW_ROOT="${XDG_DATA_HOME}/krew"
-
-krew_link() {
-  for file in $KREW_ROOT/bin/*; do
-    ln -f -s $file $(realpath --relative-to "${HOME}/.local/bin" -s $file) "${HOME}/.local/bin"
-  done
-}

@@ -1,3 +1,14 @@
+# check if eza is installed
+if (( ! ${+commands[eza]} )); then
+  return
+fi
+
+alias x='eza --icons --group-directories-first --git'
+alias xl='x -lah'
+alias ls='x'
+alias ll='xl'
+alias l='ll'
+
 function chpwd_exa() {
 	if [ -z "${ENABLE_CHPWD_EXA:-}" ]; then
 		return

@@ -6,11 +6,13 @@
 
 export ANTIGEN_LOG=$XDG_CACHE_HOME/antigen.log
 
-antigen="${HOMEBREW_PREFIX}/share/antigen/antigen.zsh"
-if [ ! -f "$antigen" ]; then
-  antigen="/usr/share/zsh/share/antigen.zsh"
-fi
-if [ ! -f "$antigen" ]; then
+mac_antigen="${HOMEBREW_PREFIX}/share/antigen/antigen.zsh"
+linux_antigen="/usr/share/zsh/share/antigen.zsh"
+if [ -f "$mac_antigen" ]; then
+  antigen="$mac_antigen"
+elif [ -f "$linux_antigen" ]; then
+  antigen="$linux_antigen"
+else
   return
 fi
 source "$antigen"

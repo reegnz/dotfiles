@@ -1,12 +1,17 @@
 if (( $+commands[terraform] )); then
+  alias tf=terraform
   autoload -U +X bashcompinit && bashcompinit
   complete -o nospace -C terraform terraform
 fi
 
-
 if (( $+commands[consul] )); then
   autoload -U +X bashcompinit && bashcompinit
   complete -o nospace -C consul consul
+fi
+
+
+if (( ! $+commands[tfenv] )); then
+  return
 fi
 
 tfenv_switch_arch() {
