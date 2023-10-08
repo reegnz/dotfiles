@@ -7,22 +7,20 @@ install() {
 	for dir in */; do
 		dir="${dir%/*}"
 		dirname="${dir##*/}"
-		# skip OS specific stuff if OS does not match
-		if [[ "${dirname}" == "macos" ]] && [[ $OS != "Darwin" ]]; then
+		# skip OS specific stuff
+		if [[ "${dirname}" =~ ^macos ]] && [[ $OS != "Darwin" ]]; then
 			echo "Skipping ${dirname}" >&2
 			continue
 		fi
-		if [[ "${dirname}" == "linux" ]] && [[ $OS != "Linux" ]]; then
+		if [[ "${dirname}" =~ ^linux ]] && [[ $OS != "Linux" ]]; then
 			echo "Skipping ${dirname}" >&2
 			continue
 		fi
-		# blacklisting packages
-		case $dirname in
-		"nvim-legacy")
-			echo "Skipping $dirname" >&2
+		# blacklisting packages by suffixing with .disabled
+		if [[ "$dirname" =~ \.disabled$ ]]; then
+			echo "Skipping ${dirname}" >&2
 			continue
-			;;
-		esac
+		fi
 		echo "Installing ${dirname}" >&2
 		stow -R -v --no-folding --target "$HOME" "${dir%*/}"
 	done
