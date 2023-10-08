@@ -1,4 +1,5 @@
 return {
+  "towolf/vim-helm",
   {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
