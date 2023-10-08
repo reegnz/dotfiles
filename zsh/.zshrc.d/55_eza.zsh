@@ -9,19 +9,19 @@ alias ls='x'
 alias ll='xl'
 alias l='ll'
 
-function chpwd_exa() {
-	if [ -z "${ENABLE_CHPWD_EXA:-}" ]; then
+function chpwd_eza() {
+	if [ -z "${ENABLE_CHPWD_EZA:-}" ]; then
 		return
 	fi
-	exa -1 --icons --group-directories-first
+	eza -1 --icons --group-directories-first
 }
-function toggle_chpwd_exa() {
-	if [ -n "${ENABLE_CHPWD_EXA:-}" ]; then
-		unset ENABLE_CHPWD_EXA
+function toggle_chpwd_eza() {
+	if [ -n "${ENABLE_CHPWD_EZA:-}" ]; then
+		unset ENABLE_CHPWD_EZA
 		return
 	fi
-	export ENABLE_CHPWD_EXA=1
+	export ENABLE_CHPWD_EZA=1
 }
-chpwd_functions=(${chpwd_functions[@]} "chpwd_exa")
+chpwd_functions=(${chpwd_functions[@]} "chpwd_eza")
 
-export ENABLE_CHPWD_EXA=1
+export ENABLE_CHPWD_EZA=1
