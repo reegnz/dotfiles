@@ -35,8 +35,13 @@
     os_icon                 # os identifier
     dir                     # current directory
     vcs                     # git status
-    # =========================[ Line #2 ]=========================
     newline                 # \n
+    # =========================[ Line #2 ]=========================
+    aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
+    azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
+    kubecontext             # current kubernetes context (https://kubernetes.io/)
+    newline
+    # =========================[ Line #3 ]=========================
     prompt_char             # prompt symbol
   )
 
@@ -95,9 +100,6 @@
     # timewarrior             # timewarrior tracking status (https://timewarrior.net/)
     # taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
     # time                    # current time
-    aws                     # aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
-    azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
-    kubecontext             # current kubernetes context (https://kubernetes.io/)
     vpn_ip                # virtual private network indicator
     # # =========================[ Line #2 ]=========================
     newline
