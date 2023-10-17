@@ -1,5 +1,8 @@
 return {
-  "towolf/vim-helm",
+  {
+    "towolf/vim-helm",
+    ft = "helm",
+  },
   {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts

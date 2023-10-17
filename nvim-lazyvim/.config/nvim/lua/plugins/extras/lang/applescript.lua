@@ -1,4 +1,5 @@
 return {
   "mityu/vim-applescript",
-  lazy = false,
+  lazy = true,
+  ft = "applescript",
 }
