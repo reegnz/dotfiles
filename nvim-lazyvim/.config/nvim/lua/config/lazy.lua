@@ -34,8 +34,10 @@ require("lazy").setup({
     { import = "plugins.extras.editor.telescope" },
     { import = "plugins.extras.editor.tmux" },
     { import = "plugins.extras.lang.applescript" },
+    { import = "plugins.extras.lang.bash" },
     { import = "plugins.extras.lang.helm" },
     { import = "plugins.extras.lang.lisp" },
+    { import = "plugins.extras.lang.terraform" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
