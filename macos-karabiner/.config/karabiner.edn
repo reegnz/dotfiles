@@ -1,22 +1,38 @@
+;; !  | means mandatory
+;; #  | means optional
+;; C  | left_command
+;; T  | left_control
+;; O  | left_option
+;; S  | left_shift
+;; F  | fn
+;; Q  | right_command
+;; W  | right_control
+;; E  | right_option
+;; R  | right_shift
+;; P  | caps_lock
+;; !! | mandatory command + control + optional + shift (hyper)
+;; ## | optional any
+
 {:profiles {:Default {:default true
-                      :sim 100
-                      :delay 200
-                      :alone 200
-                      :held 200}}
+                      :sim 50
+                      :delay 50
+                      :alone 50
+                      :held 50}}
  :devices {:macbook-internal [{:vendor_id 1452 :product_id 832}]
            :anne-pro-2 [{:vendor_id 1241 :product_id 41619}]}
 
-; getting app id's with: osascript -e 'id of app "Slack"'
+ ;; getting app id's with eg: osascript -e 'id of app "Slack"'
  :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap$"]
                 :Zoom ["^us\\.zoom\\.xos$"]
                 :iTerm ["^com\\.googlecode\\.iterm2$"]
-                :Terminals["^com\\.googlecode\\.iterm2$" "^io\\.alacritty$"]
+                :Terminals["^com\\.googlecode\\.iterm2$" "^org\\.alacritty$"]
                 :Chrome ["^com\\.google\\.Chrome$"]
                 :Firefox ["^org\\.mozilla\\.firefox$"]
                 :Browsers ["^com\\.google\\.Chrome$" "^org\\.mozilla\\.firefox$"]}
 
  :layers {:caps-mode {:key :caps_lock
                       :alone {:key :delete_or_backspace}}}
+
 
  :simlayers {:w-mode {:key :w}
              :e-mode {:key :e}
@@ -34,54 +50,84 @@
              :b-mode {:key :b}}
 
  :main [{:des "Caps Mode"
+         ;; Remap caps to it's own layer, making some keys more convenient to reach
+         ;; Caps + . = ~
+         ;; Caps + \" = `
+         ;; Caps + backspace = delete
          :rules [:caps-mode
-                 ;; remap accent and tilde keys
                  [:##period :!Sgrave_accent_and_tilde]
-                 [:##quote :grave_accent_and_tilde]]}
+                 [:##quote :grave_accent_and_tilde]
+                 [:##delete_or_backspace :delete_forward]]}
 
         {:des "Mouse mode"
+         ;; allows scrolling the mouse cursor with keyboard keys
+         ;; f + m - switch to mouse mode
+         ;; while in mouse mode:
+         ;; esc = exit mouse mode
+         ;; h,j,k,l = use vim motions to move mouse cursor coarsely
+         ;; Shift + h,j,k,l = use vim motions to move mouse cursor precisely
+         ;; u = left click
+         ;; i = right click
          :rules [
                  [:m [["mouse-mode" 1] [:noti :mmode "Hit ESC to quit Mouse Mode"]] :f-mode]
                  :mouse-mode
-                 [:escape [["mouse-mode" 0] [:noti :mmode]]] ; escape quits mouse mode
-                 [:h {:mkey {:x -1536}}]
-                 [:j {:mkey {:y 1536}}]
-                 [:k {:mkey {:y -1536}}]
-                 [:l {:mkey {:x 1536}}]
+                 [:escape [["mouse-mode" 0] [:noti :mmode]]] 
+                 [:h {:mkey {:x -5000}}]
+                 [:j {:mkey {:y 5000}}]
+                 [:k {:mkey {:y -5000}}]
+                 [:l {:mkey {:x 5000}}]
+                 [:!Sh {:mkey {:x -1000}}]
+                 [:!Sj {:mkey {:y 1000}}]
+                 [:!Sk {:mkey {:y -1000}}]
+                 [:!Sl {:mkey {:x 1000}}]
                  [:u {:pkey :button1}]
                  [:i {:pkey :button2}]]}
 
         {:des "window and tab navigation" ;
+         ;; Window handing mnemonics
+         ;; w+n = new window
+         ;; w+q = close window
+         ;; w+m = minimize window
+         ;; w+j = previous window
+         ;; w+k = next window
+         ;; t+n = new tab
+         ;; t+q = close tab
+         ;; t+j = previous tab
+         ;; t+k = next tab
+         ;; e+j = next window of same app
+         ;; e+k = previous window of same app
+         ;; h+j = go back in history
+         ;; h+k = go forward in history
          :rules [:w-mode
-                 [:##n :!Cn] ; new window
-                 [:##q :!Cw] ; close window
-                 [:##m :!Cm] ; minimize window
-                 ;; switch windows
-                 [:##j :!CStab] ; previous window
-                 [:##k :!Ctab]  ; next window
-
+                 [:##n :!Cn]
+                 [:##q :!Cw]
+                 [:##m :!Cm]
+                 [:##j :!CStab]
+                 [:##k :!Ctab] 
                  :t-mode
-                 [:##n :!Ct] ; new tab
-                 [:##q :!Cw] ; close tab
-                 ;; switch tabs in most apps
-                 [:##j :!CSopen_bracket] ; prev tab
-                 [:##k :!CSclose_bracket] ; next tab
-
-                 :e-mode ; switch windows of same app
+                 [:##n :!Ct]
+                 [:##q :!Cw]
+                 [:##j :!CSopen_bracket]
+                 [:##k :!CSclose_bracket]
+                 :e-mode
                  [:##j :!CSgrave_accent_and_tilde]
                  [:##k :!Cgrave_accent_and_tilde]
-
-                 ; history navigation
                  :h-mode
                  [:##j :!Cleft_arrow]
                  [:##k :!Cright_arrow]]}
 
         {:des "Delete mode"
+         ;; d+h = backspace (delete backwards)
+         ;; d+l = delete (delete forwards)
          :rules [:d-mode
                  [:##h :delete_or_backspace]
                  [:##l :delete_forward]]}
 
         {:des "Use s + hjkl for scrolling"
+         ;; s+h = home
+         ;; s+l = end
+         ;; s+j = page_down
+         ;; s+k = page_up
          :rules [:s-mode
                  [:##h :home]
                  [:##l :end]
@@ -89,6 +135,10 @@
                  [:##k :page_up]]}
 
         {:des "f + hjkl as arrow keys"
+         ;; f+h = left
+         ;; f+j = down
+         ;; f+k = up
+         ;; f+l = right
          :rules [:f-mode
                  [:##h :left_arrow]
                  [:##j :down_arrow]
@@ -97,7 +147,7 @@
 
         {:des "use f and j as shift for symbols"
          :rules [
-                 ;; when f is pressed, act as shift for symbols
+                 ;; when f is pressed, act as SHIFT for symbols
                  :f-mode
                  [:##hyphen :!Shyphen]
                  [:##equal_sign :!Sequal_sign]
@@ -109,9 +159,9 @@
                  [:##period :!Speriod]
                  [:##slash :!Sslash]
                  [:##backslash :!Sbackslash]
-                 [:delete_or_backspace :delete_forward]
+                 [:##delete_or_backspace :delete_forward]
 
-                 ; when f is pressed, act as SHIFT for numbers 1 through 5
+                 ;; when f is pressed, act as SHIFT for numbers 6 through 0
                  :f-mode
                  [:##6 :!S6]
                  [:##7 :!S7]
@@ -119,7 +169,7 @@
                  [:##9 :!S9]
                  [:##0 :!S0]
 
-                 ;; when j is pressed, act as shift for numbers 1 through 5
+                 ;; when j is pressed, act as SHIFT for numbers 1 through 5
                  :j-mode
                  [:##1 :!S1]
                  [:##2 :!S2]
@@ -128,10 +178,23 @@
                  [:##5 :!S5]]}
 
         {:des "Rectancle window management"
+         ;; j+w = enter Rectangle mode
+         ;; while in rectangle mode:
+         ;; esc = exit rectangle mode
+         ;; h = left half
+         ;; j = bottom half
+         ;; k = top half
+         ;; l = right half
+         ;; u = top left
+         ;; p = top right
+         ;; m = bottom left
+         ;; / = bottom right
+         ;; o = cycle thirds
+         ;; i = cycle two-thirds
          :rules [
-                 [:w [["rectangle-mode" 1] [:noti :rmode "Hit ESC to quit rectangle-mode"]] :j-mode] ; j + w activates rectangle mode
+                 [:w [["rectangle-mode" 1] [:noti :rmode "Hit ESC to quit rectangle-mode"]] :j-mode] ;; j + w activates rectangle mode
                  :rectangle-mode
-                 [:escape [["rectangle-mode" 0] [:noti :rmode]]] ; escape quits rectangle mode
+                 [:escape [["rectangle-mode" 0] [:noti :rmode]]] ;; escape quits rectangle mode
                  [:##h :!TOleft_arrow]
                  [:##j :!TOdown_arrow]
                  [:##k :!TOup_arrow]
@@ -144,31 +207,53 @@
                  [:##i :!TOe]]}
 
         {:des "terminal bindings"
+         ;; j+r is Ctrl+R - reverse history search
+         ;; j+t is Ctrl+T - fuzzy path parameter substitution
+         ;; j+c is Alt+C - fuzzy cd
          :rules [[:condi :Terminals :j-mode]
-                 [:##r :!Tr]
-                 [:##t :!Tt]
-                 [:##c :!Oc]]}
+                 [:r :!Tr]
+                 [:t :!Tt]
+                 [:c :!Oc]]}
 
         {:des "Browser bindings"
+         ;; j+d = toggle darkreader extension dark mode
          :rules [[:condi :Browsers :j-mode]
-                 ;; toggle dark mode for a single site
                  [:d :!OSa]]}
 
-        ; some modal
         {:des "Zoom bindings"
-         :rules [ ; j + a toggles audio, j + v toggles video
+         ;; j+g = toggle between gallery/speaker view
+         ;; j+c = toggle chat window
+         ;; j+a = toggles audio
+         ;; j+v = toggles video
+         ;; j+r = start/stop recording
+         ;; j+p = pause/resume recording
+         :rules [ 
                  [:condi :Zoom :j-mode]
+                 [:g :!CSw]
+                 [:c :!CSh]
                  [:a :!CSa]
-                 [:v :!CSv]]}
+                 [:v :!CSv]
+                 [:r :!CSc]
+                 [:p :!CSp]]}
 
         {:des "Slack bindings"
+         ;; j+f = global search
+         ;; j+s = toggle left sidebar
+         ;; j+q = toggle right sidebar
+         ;; j+i = toggle info
          :rules [[:condi :Slack :j-mode]
-                 [:s :!CSd] ; toggle left sidebar
-                 [:q :!Cperiod] ; toggle right sidebar
-                 [:i :!CSi] ; toggle info
-                 [:f :!Ck]]} ; search / jump to
+                 [:f :!Cg]
+                 [:s :!CSd]
+                 [:q :!Cperiod]
+                 [:i :!CSi]]}
 
-        {:des "Media buttons (Audio mode)"
+        {:des "Audio controls simplayer"
+         ;; a+j = decreases volume
+         ;; a+k = increases volume
+         ;; a+h = rewind
+         ;; a+l = fast forward
+         ;; a+p = play or pause
+         ;; a+m = mute
          :rules [:a-mode
                  [:j :volume_decrement]
                  [:k :volume_increment]
@@ -176,7 +261,10 @@
                  [:l :fastforward]
                  [:p :play_or_pause]
                  [:m :mute]]}
-        {:des "Brightnetss control"
+
+        {:des "Display brightness simlayer"
+         ;; b+j = decrease brightness
+         ;; b+k = increase brightness
          :rules [:b-mode
                  [:j :display_brightness_decrement]
                  [:k :display_brightness_increment]]}]}
