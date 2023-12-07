@@ -24,4 +24,4 @@ function toggle_chpwd_eza() {
 }
 chpwd_functions=(${chpwd_functions[@]} "chpwd_eza")
 
-export ENABLE_CHPWD_EZA=1
+# export ENABLE_CHPWD_EZA=1

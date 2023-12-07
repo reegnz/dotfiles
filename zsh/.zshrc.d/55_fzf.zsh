@@ -4,9 +4,9 @@ if (( ! ${+commands[fzf]} )); then
 fi
 
 if (( $+commands[fd] )); then
-  export FZF_DEFAULT_COMMAND='fd --type f --color=always'
+  export FZF_DEFAULT_COMMAND='fd --follow --type f --color=always'
 elif (( $+commands[rg] )); then
-  export FZF_DEFAULT_COMMAND='rg --files'
+  export FZF_DEFAULT_COMMAND='rg -follow --files'
 fi
 export FZF_DEFAULT_OPTS="--ansi --height=50%"
 
