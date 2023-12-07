@@ -50,9 +50,16 @@ WorkBrowser = Chrome
 Install:andUse("URLDispatcher", {
 	config = {
 		url_patterns = {
-			{ "https?://.*%.zoom%.us", Zoom },
+			{ "https?://.*%.zoom%.us/saml", WorkBrowser },
+			{ "https?://.*%.zoom%.us/j", Zoom },
+			{ "https?://app%.slack%.com", WorkBrowser },
+			{ "https?://.*%.slack%.com/services", WorkBrowser },
 			{ "https?://.*%.slack%.com", Slack },
-			-- example redirect work stuff to work browser
+			{ "https?://drive%.google%.com", WorkBrowser },
+			{ "https?://slides%.google%.com", WorkBrowser },
+			{ "https?://docs%.google%.com", WorkBrowser },
+			{ "https?://calendar%.google%.com", WorkBrowser },
+			{ "https?://.*%.google%.com/calendar", WorkBrowser },
 			{ "https?://.*%.aws%.amazon%.com", WorkBrowser },
 			{ "https?://login%.microsoftonline%.com", WorkBrowser },
 			{ "https?://.*%.atlassian%.net", WorkBrowser },
@@ -60,8 +67,11 @@ Install:andUse("URLDispatcher", {
 			{ "https?://.*%.pagerduty%.com", WorkBrowser },
 			{ "https?://.*%.visualforce%.com", WorkBrowser },
 			{ "https?://.*%.visual%.force%.com", WorkBrowser },
+			{ "https?://.*%.vf%.force%.com", WorkBrowser },
 			{ "https?://.*%.salesforce%.com", WorkBrowser },
 			{ "https?://.*%.documentforce%.com", WorkBrowser },
+			{ "https?://miro%.com", WorkBrowser },
+			{ "https?://.*%.miro%.com", WorkBrowser },
 
 
 
