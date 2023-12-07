@@ -10,7 +10,7 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
-vim.opt.rtp:prepend(lazypath)
+vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 require("lazy").setup({
   spec = {
@@ -27,17 +27,9 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.test" },
     -- import/override with your plugins
     { import = "plugins" },
-    { import = "plugins.extras.colorscheme.gruvbox" },
-    { import = "plugins.extras.editor.easyalign" },
-    { import = "plugins.extras.editor.fugitive" },
-    { import = "plugins.extras.editor.oil" },
-    { import = "plugins.extras.editor.telescope" },
-    { import = "plugins.extras.editor.tmux" },
-    { import = "plugins.extras.lang.applescript" },
-    { import = "plugins.extras.lang.bash" },
-    { import = "plugins.extras.lang.helm" },
-    { import = "plugins.extras.lang.lisp" },
-    { import = "plugins.extras.lang.terraform" },
+    { import = "plugins.extras.colorscheme" },
+    { import = "plugins.extras.editor" },
+    { import = "plugins.extras.lang" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
