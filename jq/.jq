@@ -121,11 +121,7 @@ def k8s_pod_annotations:
   });
 
 def k8s_images:
-  .items|map(
-    .spec|{
-      containers,
-      initContainers
-    }|to_entries|map(.value // empty| .[].image)[])|unique[];
+  [..|objects|.image|select(.)]|unique[];
 
 def chunk($n):
   range(length/$n|ceil) as $i | .[$n*$i:$n*$i+5];
