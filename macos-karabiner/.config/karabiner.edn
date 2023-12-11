@@ -25,7 +25,7 @@
  :applications {:Slack ["^com\\.tinyspeck\\.slackmacgap$"]
                 :Zoom ["^us\\.zoom\\.xos$"]
                 :iTerm ["^com\\.googlecode\\.iterm2$"]
-                :Terminals["^com\\.googlecode\\.iterm2$" "^org\\.alacritty$"]
+                :Terminals ["^com\\.googlecode\\.iterm2$" "^org\\.alacritty$"]
                 :Chrome ["^com\\.google\\.Chrome$"]
                 :Firefox ["^org\\.mozilla\\.firefox$"]
                 :Browsers ["^com\\.google\\.Chrome$" "^org\\.mozilla\\.firefox$"]}
@@ -68,10 +68,9 @@
          ;; Shift + h,j,k,l = use vim motions to move mouse cursor precisely
          ;; u = left click
          ;; i = right click
-         :rules [
-                 [:m [["mouse-mode" 1] [:noti :mmode "Hit ESC to quit Mouse Mode"]] :f-mode]
+         :rules [[:m [["mouse-mode" 1] [:noti :mmode "Hit ESC to quit Mouse Mode"]] :f-mode]
                  :mouse-mode
-                 [:escape [["mouse-mode" 0] [:noti :mmode]]] 
+                 [:escape [["mouse-mode" 0] [:noti :mmode]]]
                  [:h {:mkey {:x -5000}}]
                  [:j {:mkey {:y 5000}}]
                  [:k {:mkey {:y -5000}}]
@@ -103,7 +102,7 @@
                  [:##q :!Cw]
                  [:##m :!Cm]
                  [:##j :!CStab]
-                 [:##k :!Ctab] 
+                 [:##k :!Ctab]
                  :t-mode
                  [:##n :!Ct]
                  [:##q :!Cw]
@@ -146,8 +145,7 @@
                  [:##l :right_arrow]]}
 
         {:des "use f and j as shift for symbols"
-         :rules [
-                 ;; when f is pressed, act as SHIFT for symbols
+         :rules [;; when f is pressed, act as SHIFT for symbols
                  :f-mode
                  [:##hyphen :!Shyphen]
                  [:##equal_sign :!Sequal_sign]
@@ -191,8 +189,7 @@
          ;; / = bottom right
          ;; o = cycle thirds
          ;; i = cycle two-thirds
-         :rules [
-                 [:w [["rectangle-mode" 1] [:noti :rmode "Hit ESC to quit rectangle-mode"]] :j-mode] ;; j + w activates rectangle mode
+         :rules [[:w [["rectangle-mode" 1] [:noti :rmode "Hit ESC to quit rectangle-mode"]] :j-mode] ;; j + w activates rectangle mode
                  :rectangle-mode
                  [:escape [["rectangle-mode" 0] [:noti :rmode]]] ;; escape quits rectangle mode
                  [:##h :!TOleft_arrow]
@@ -227,15 +224,13 @@
          ;; j+v = toggles video
          ;; j+r = start/stop recording
          ;; j+p = pause/resume recording
-         :rules [ 
-                 [:condi :Zoom :j-mode]
+         :rules [[:condi :Zoom :j-mode]
                  [:g :!CSw]
                  [:c :!CSh]
                  [:a :!CSa]
                  [:v :!CSv]
                  [:r :!CSc]
                  [:p :!CSp]]}
-
         {:des "Slack bindings"
          ;; j+f = global search
          ;; j+s = toggle left sidebar
