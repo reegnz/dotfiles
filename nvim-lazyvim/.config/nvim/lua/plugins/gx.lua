@@ -12,16 +12,15 @@ return {
         -- vim.g.gx_jira_url = https://jira.example.com/browse/
         name = "Open JIRA Issue",
         match_to_url = function(line_string)
-          if vim.g.gx_jira_url then
-            local ticket = string.match(line_string, "(%a+-%d+)")
-            if ticket then
-              return vim.g.gx_jira_url .. ticket
-            else
-              return nil
-            end
-          else
+          if not vim.g.gx_jira_url then
             return nil
           end
+          local col = vim.fn.col(".")
+          local match_start, match_end, ticket = string.find(line_string, "(%a+-%d+)")
+          if not ticket or match_start > col or match_end < col then
+            return nil
+          end
+          return vim.g.gx_jira_url .. ticket
         end,
       },
       {
@@ -49,6 +48,47 @@ return {
           lines[1] = string.sub(lines[1], vstart[3])
           local query = table.concat(lines, " ")
           return "https://google.com/search?q=" .. query
+        end,
+      },
+      {
+        name = "Open Markdown Link",
+        filetypes = { "markdown" },
+        match_to_url = function(line_string)
+          local cursor = vim.fn.getpos(".")
+          match = vim.fn.matchstrpos(line_string, "\\[.+\\]\\((.+)\\)", cursor[3])
+          if cursor[3] < match[2] or cursor[3] > match[3] then
+            -- cursor is not within pattern
+            return
+          end
+          line_string:sub(match[2], match[3] + 1)
+          local url = line_string:match("%[%]%(.+)%)")
+          if url then
+            return url
+          end
+          return nil
+        end,
+      },
+      {
+        name = "Open GitHub issue",
+        match_to_url = function(line_string)
+          if not vim.fn.executable("gh") then
+            return nil
+          end
+          local col = vim.fn.col(".")
+          local match_start, match_end, issue = string.find(line_string, "#(%d+)")
+          if not issue or match_start > col or match_end < col then
+            return nil
+          end
+          local cmd = string.format("gh issue view %s --json url --jq .url", issue)
+          local lines
+          local job = vim.fn.jobstart(cmd, {
+            stdout_buffered = true,
+            on_stdout = function(_, _lines)
+              lines = _lines
+            end,
+          })
+          vim.fn.jobwait({ job })
+          return lines[1]
         end,
       },
     },

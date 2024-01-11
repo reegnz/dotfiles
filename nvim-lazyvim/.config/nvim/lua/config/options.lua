@@ -3,7 +3,6 @@
 -- Add any additional options here
 
 local opt = vim.opt
-opt.wrap = false
 opt.swapfile = false
 opt.nrformats:append({ "alpha" })
 -- opt.listchars:append({ space = "-" })

@@ -1,7 +1,7 @@
 return {
   {
     "tpope/vim-fugitive",
-    cmd = { "G", "Git", "Gclog", "GBrowse" },
+    cmd = { "G", "Git", "Gclog", "GBrowse", "Gdiffsplit", "Gvdiffsplit" },
     -- stylua: ignore
     keys = {
       { "<leader>gs", ":G<cr>",       desc = "fugitive status",                  remap = true },
