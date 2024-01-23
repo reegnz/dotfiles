@@ -2,9 +2,10 @@ return {
   "reegnz/gx-extended.nvim",
   branch = "dev",
   keys = {
-    { "gx", mode = { "n", "v" } },
+    { "gx", mode = { "n", "x" } },
   },
   opts = {
+    open_fn = require("lazy.util").open,
     log_level = vim.log.levels.DEBUG,
     extensions = {
       {
@@ -89,6 +90,65 @@ return {
           })
           vim.fn.jobwait({ job })
           return lines[1]
+        end,
+      },
+      {
+        name = "Open brew formula/cask",
+        filenames = { "Brewfile" },
+        match_to_url = function(line_string)
+          local _, _, brew = string.find(line_string, 'brew ["]([^%s]+)["]')
+          if brew then
+            return "https://formulae.brew.sh/formula/" .. brew
+          end
+          local _, _, cask = string.find(line_string, 'cask ["]([^%s]+)["]')
+          if cask then
+            return "https://formulae.brew.sh/cask/" .. cask
+          end
+          return nil
+        end,
+      },
+      {
+        name = "Open lazy.nvim plugin",
+        patterns = { "*/.config/nvim/**/*.lua", "*/.local/share/nvim/lazy/LazyVim/lua/lazyvim/**/*.lua" },
+        filetypes = { "lua" },
+        match_to_url = function(line_string)
+          local _, _, repo = string.find(line_string, "[\"'']([^%s~/]+/[^%s~/]+)[\"'']")
+          if not repo then
+            return nil
+          end
+          return "https://github.com/" .. repo
+        end,
+      },
+      {
+        name = "Open terraform docs",
+        match_to_url = function(line_string)
+          local col = vim.fn.col(".")
+          local namespace = "hashicorp"
+          local m_start, m_end, provider, resource, data
+          m_start, m_end, provider, resource = string.find(line_string, 'resource "(%a+)_([%a_]+)"')
+          if m_start then
+            if m_start > col or m_end < col then
+              return nil
+            end
+            return "https://registry.terraform.io/providers/"
+              .. namespace
+              .. "/"
+              .. provider
+              .. "/latest/docs/resources/"
+              .. resource
+          end
+          m_start, m_end, provider, data = string.find(line_string, 'data "(%a+)_([%a_]+)"')
+          if not m_start or m_start > col or m_end < col then
+            return nil
+          end
+          local url = "https://registry.terraform.io/providers/"
+            .. namespace
+            .. "/"
+            .. provider
+            .. "/latest/docs/data-sources/"
+            .. data
+          print(url)
+          return url
         end,
       },
     },
