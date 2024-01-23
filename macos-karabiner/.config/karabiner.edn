@@ -16,8 +16,9 @@
 {:profiles {:Default {:default true
                       :sim 50
                       :delay 50
-                      :alone 50
-                      :held 50}}
+                      :alone 1000
+                      :held 200}}
+
  :devices {:macbook-internal [{:vendor_id 1452 :product_id 832}]
            :anne-pro-2 [{:vendor_id 1241 :product_id 41619}]}
 
@@ -30,8 +31,7 @@
                 :Firefox ["^org\\.mozilla\\.firefox$"]
                 :Browsers ["^com\\.google\\.Chrome$" "^org\\.mozilla\\.firefox$"]}
 
- :layers {:caps-mode {:key :caps_lock
-                      :alone {:key :delete_or_backspace}}}
+ :layers {:caps-mode {:key :caps_lock :alone {:key :escape}}}
 
 
  :simlayers {:w-mode {:key :w}
