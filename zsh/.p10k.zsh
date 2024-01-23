@@ -106,7 +106,7 @@
     taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
     per_directory_history   # Oh My Zsh per-directory-history local/global indicator
     # cpu_arch              # CPU architecture
-    # time                  # current time
+    time                  # current time
     # =========================[ Line #2 ]=========================
     newline
     # ip                    # ip address and bandwidth usage for a specified network interface
@@ -1255,8 +1255,10 @@
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_FOREGROUND=28
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_VISUAL_IDENTIFIER_EXPANSION='⭐'
   #   typeset -g POWERLEVEL9K_KUBECONTEXT_TEST_CONTENT_EXPANSION='> ${P9K_CONTENT} <'
+  typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_FOREGROUND=196
+  typeset -g POWERLEVEL9K_KUBECONTEXT_PROD_CONTENT_EXPANSION='❗${P9K_KUBECONTEXT_CLOUD_CLUSTER:-${P9K_KUBECONTEXT_NAME}}❗'
   typeset -g POWERLEVEL9K_KUBECONTEXT_CLASSES=(
-      # '*prod*'  PROD    # These values are examples that are unlikely
+      '*prod*'  PROD    # These values are examples that are unlikely
       # '*test*'  TEST    # to match your needs. Customize them as needed.
       '*'       DEFAULT)
   typeset -g POWERLEVEL9K_KUBECONTEXT_DEFAULT_FOREGROUND=134
@@ -1378,8 +1380,11 @@
   #   typeset -g POWERLEVEL9K_AWS_TEST_FOREGROUND=28
   #   typeset -g POWERLEVEL9K_AWS_TEST_VISUAL_IDENTIFIER_EXPANSION='⭐'
   #   typeset -g POWERLEVEL9K_AWS_TEST_CONTENT_EXPANSION='> ${P9K_CONTENT} <'
+
+  typeset -g POWERLEVEL9K_AWS_PROD_FOREGROUND=196
+  typeset -g POWERLEVEL9K_AWS_PROD_CONTENT_EXPANSION='❗${P9K_AWS_PROFILE//\%/%%}${P9K_AWS_REGION:+ ${P9K_AWS_REGION//\%/%%}}❗'
   typeset -g POWERLEVEL9K_AWS_CLASSES=(
-      # '*prod*'  PROD    # These values are examples that are unlikely
+      '*prod*'  PROD    # These values are examples that are unlikely
       # '*test*'  TEST    # to match your needs. Customize them as needed.
       '*'       DEFAULT)
   typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=208
