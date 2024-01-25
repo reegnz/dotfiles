@@ -3,31 +3,31 @@ set -euo pipefail
 IFS=$'\n\t'
 
 install() {
-	OS=$(uname)
-	for dir in */; do
-		dir="${dir%/*}"
-		dirname="${dir##*/}"
-		# skip OS specific stuff
-		if [[ "${dirname}" =~ ^macos ]] && [[ $OS != "Darwin" ]]; then
-			echo "Skipping ${dirname}" >&2
-			continue
-		fi
-		if [[ "${dirname}" =~ ^linux ]] && [[ $OS != "Linux" ]]; then
-			echo "Skipping ${dirname}" >&2
-			continue
-		fi
-		# blacklisting packages by suffixing with .disabled
-		if [[ "$dirname" =~ \.disabled$ ]]; then
-			echo "Skipping ${dirname}" >&2
-			continue
-		fi
-		echo "Installing ${dirname}" >&2
-		stow -R -v --no-folding --target "$HOME" "${dir%*/}"
-	done
+  OS=$(uname)
+  for dir in */; do
+    dir="${dir%/*}"
+    dirname="${dir##*/}"
+    # skip OS specific stuff
+    if [[ "${dirname}" =~ ^macos ]] && [[ $OS != "Darwin" ]]; then
+      echo "Skipping ${dirname}" >&2
+      continue
+    fi
+    if [[ "${dirname}" =~ ^linux ]] && [[ $OS != "Linux" ]]; then
+      echo "Skipping ${dirname}" >&2
+      continue
+    fi
+    # blacklisting packages by suffixing with .disabled
+    if [[ "$dirname" =~ \.disabled$ ]]; then
+      echo "Skipping ${dirname}" >&2
+      continue
+    fi
+    echo "Installing ${dirname}" >&2
+    stow -R -v --no-folding --target "$HOME" "${dir%*/}"
+  done
 }
 
 add_color() {
-	awk '
+  awk '
     BEGIN{
       bold="\033[1m"
       underline="\033[4m"
@@ -68,7 +68,7 @@ add_color() {
 
 # See https://github.com/aspiers/stow/issues/65#issuecomment-1465060710
 strip_bug() {
-	awk '/^BUG in find_stowed_path\? Absolute\/relative mismatch/{next};1'
+  awk '/^BUG in find_stowed_path\? Absolute\/relative mismatch/{next};1'
 }
 
 install 2> >(strip_bug | add_color)

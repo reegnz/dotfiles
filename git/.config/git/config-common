@@ -3,11 +3,16 @@
   useConfigOnly = true
 [core]
   pager = delta
+[pager]
+  blame  = delta
+  diff   = delta
+  reflog = delta
+  show   = delta
 [interactive]
   diffFilter = delta --color-only
 [delta]
-  line-numbers = true
-  diff-so-fancy = true
+  line-numbers            = true
+  diff-so-fancy           = true
 [diff]
   colorMoved = default
 [color]

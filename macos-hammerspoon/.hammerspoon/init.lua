@@ -69,9 +69,11 @@ Install:andUse("URLDispatcher", {
 			{ "https?://.*%.visual%.force%.com", WorkBrowser },
 			{ "https?://.*%.vf%.force%.com", WorkBrowser },
 			{ "https?://.*%.salesforce%.com", WorkBrowser },
+			{ "https?://.*%.myworkday%.com", WorkBrowser },
 			{ "https?://.*%.documentforce%.com", WorkBrowser },
 			{ "https?://miro%.com", WorkBrowser },
 			{ "https?://.*%.miro%.com", WorkBrowser },
+			{ "https?://.*%.happyfox%.com", WorkBrowser },
 
 
 

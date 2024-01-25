@@ -95,15 +95,6 @@ def tsv_with_header:
   $keys,(.[]|to_entries|map(.value)) |
   @tsv;
 
-def flatten_object:
-[
-  leaf_paths as $path | {
-    key: $path | join("_"), 
-    value: getpath($path)
-  }
-]|from_entries;
-
-
 
 def k8s_pods:
   .items |map({

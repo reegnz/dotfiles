@@ -1,18 +1,34 @@
 return {
   {
-    "nvim-treesitter/nvim-treesitter",
+    "nvim-treesitter",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, { "fennel", "clojure" })
     end,
   },
   {
-    "williamboman/mason.nvim",
+    "mason.nvim",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, { "joker", "clj-kondo" })
     end,
   },
   {
-    "stevearc/conform.nvim",
+    "nvim-cmp",
+    dependencies = {
+      {
+        "PaterJason/cmp-conjure",
+      },
+    },
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      local cmp = require("cmp")
+      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
+        { name = "conjure" },
+      }))
+    end,
+  },
+  {
+    "conform.nvim",
+    optional = true,
     ---@param opts conform.Context
     opts = {
       formatters_by_ft = {
@@ -23,7 +39,8 @@ return {
     },
   },
   {
-    "mfussenegger/nvim-lint",
+    "nvim-lint",
+    optional = true,
     opts = {
       linters_by_ft = {
         clojure = { "clj-kondo", "joker" },
@@ -40,21 +57,5 @@ return {
     "Olical/conjure",
     ft = { "clojure", "clojurescript", "fennel" },
     cmd = "ConjureSchool",
-  },
-
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      {
-        "PaterJason/cmp-conjure",
-      },
-    },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local cmp = require("cmp")
-      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
-        { name = "conjure" },
-      }))
-    end,
   },
 }

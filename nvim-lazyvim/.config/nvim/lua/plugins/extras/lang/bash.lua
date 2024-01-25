@@ -1,35 +1,27 @@
 return {
   {
-    "neovim/nvim-lspconfig",
+    "mason.nvim",
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, { "shellcheck" })
+    end,
+  },
+  {
+    "nvim-lspconfig",
+    optional = true,
     opts = {
-      servers = {},
+      servers = {
+        bashls = {},
+      },
     },
   },
   {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "bash",
-      })
-    end,
-  },
-  {
-    "williamboman/mason.nvim",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "bash-language-server",
-        "shfmt",
-      })
-    end,
-  },
-  {
-    "stevearc/conform.nvim",
+    "conform.nvim",
+    optional = true,
     opts = {
-      formatters_by_ft = {
-        ["bash"] = { "shfmt" },
-      },
       formatters = {
         shfmt = {
+          -- Override defaults with Google style guide
           prepend_args = { "-i", "2", "-ci" },
         },
       },
