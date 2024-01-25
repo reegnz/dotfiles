@@ -8,18 +8,8 @@ return {
   {
     "stevearc/conform.nvim",
     opts = {
-      formatters = {
-        terragrunt = {
-          command = "terragrunt",
-          args = { "hclfmt", "--terragrunt-hclfmt-file", "$FILENAME" },
-          stdin = false,
-          condition = function(self, ctx)
-            return vim.fs.basename(ctx.filename) ~= "terragrunt.hcl"
-          end,
-        },
-      },
       formatters_by_ft = {
-        hcl = { "terragrunt" },
+        hcl = { "terragrunt_hclfmt" },
       },
     },
   },
