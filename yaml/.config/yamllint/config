@@ -1,0 +1,5 @@
+---
+# vim: ft=yaml :
+rules:
+  indentation:
+    indent-sequences: consistent
