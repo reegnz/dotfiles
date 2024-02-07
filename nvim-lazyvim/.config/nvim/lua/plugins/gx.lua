@@ -10,6 +10,7 @@ return {
     extensions = {
       {
         -- to use, set this somewhere:
+        -- ABC-123 ABC-456
         -- vim.g.gx_jira_url = https://jira.example.com/browse/
         name = "Open JIRA Issue",
         match_to_url = function(line_string)
@@ -17,9 +18,18 @@ return {
             return nil
           end
           local col = vim.fn.col(".")
-          local match_start, match_end, ticket = string.find(line_string, "(%a+-%d+)")
-          if not ticket or match_start > col or match_end < col then
-            return nil
+          local match_start
+          --- @type integer|nil
+          local match_end = 1
+          local ticket
+          while true do
+            match_start, match_end, ticket = string.find(line_string, "(%a+-%d+)", match_end)
+            if not ticket then
+              return nil
+            end
+            if match_start <= col and match_end >= col then
+              break
+            end
           end
           return vim.g.gx_jira_url .. ticket
         end,
@@ -56,7 +66,7 @@ return {
         filetypes = { "markdown" },
         match_to_url = function(line_string)
           local cursor = vim.fn.getpos(".")
-          match = vim.fn.matchstrpos(line_string, "\\[.+\\]\\((.+)\\)", cursor[3])
+          local match = vim.fn.matchstrpos(line_string, "\\[.+\\]\\((.+)\\)", cursor[3])
           if cursor[3] < match[2] or cursor[3] > match[3] then
             -- cursor is not within pattern
             return
