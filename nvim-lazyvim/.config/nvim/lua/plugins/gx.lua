@@ -161,6 +161,44 @@ return {
           return url
         end,
       },
+      {
+        name = "GitHub Vulnerability ID",
+        match_to_url = function(line_string)
+          local col = vim.fn.col(".")
+          local match_start, id
+          --- @type integer|nil
+          local match_end = 1
+          while true do
+            match_start, match_end, id = string.find(line_string, "(GHSA[%w-]+)", match_end)
+            if not id then
+              return nil
+            end
+            if match_start <= col and match_end >= col then
+              break
+            end
+          end
+          return "https://github.com/advisories/" .. id
+        end,
+      },
+      {
+        name = "CVE ID",
+        match_to_url = function(line_string)
+          local col = vim.fn.col(".")
+          local match_start, id
+          --- @type integer|nil
+          local match_end = 1
+          while true do
+            match_start, match_end, id = string.find(line_string, "(CVE[%d-]+)", match_end)
+            if not id then
+              return nil
+            end
+            if match_start <= col and match_end >= col then
+              break
+            end
+          end
+          return "https://nvd.nist.gov/vuln/detail/" .. id
+        end,
+      },
     },
   },
 }
