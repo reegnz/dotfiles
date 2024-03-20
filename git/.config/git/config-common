@@ -21,11 +21,10 @@
   ff = only
 [fetch]
   prune = true
-  pruneTags = true
+  ; pruneTags = true
 [rebase]
   autoSquash = true
   missingCommitsCheck = error
-
 [alias]
   fixup=!git merge-base --fork-point origin/master | xargs -I{} git log {}..HEAD --oneline | fzf --height=50% | awk {'print $1'} | xargs git commit --fixup
   fetch-pr  = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
@@ -41,3 +40,13 @@
   tool = vimdiff3
 [log]
   date = iso-local
+
+[credential "https://github.com"]
+	helper = 
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !gh auth git-credential
+[credential "https://github.infra.cloudera.com"]
+	helper = 
+	helper = !gh auth git-credential
