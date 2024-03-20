@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ -n "${DEBUG:-}" ]; then
-  set -x
-fi
-
-unset AWS_PROFILE
-CRED_FILE="${HOME}/.aws/gimme-aws-creds-${1-DEFAULT}.json"
+unset AWS_PROFILE AWS_DEFAULT_PROFILE AWS_EB_PROFILE
+export AWS_STS_REGIONAL_ENDPOINTS=regional
+export AWS_DEFAULT_REGION=us-east-1
+# put cached creds at the same location as the shared creds file
+AWS_CRED_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$HOME/.aws/credentials}"
+CRED_FILE="${AWS_CRED_FILE%/*}/gimme-aws-creds-${1-DEFAULT}.json"
 needs_refresh() {
   if [ -f "${CRED_FILE}" ]; then
     if jq -e -s '.[0].credentials.expiration // "1970-01-01T00:00:00Z" | fromdate > (now + 300)' "$CRED_FILE" &>/dev/null; then
-        return 1
-      fi
+      return 1
+    fi
   fi
   [ -z "${DEBUG:-}" ] || echo "Credential expired, needs refresh" >&2
   return 0
@@ -19,9 +19,8 @@ needs_refresh() {
 
 refresh_creds() {
   TZ=UTC gimme-aws-creds ${1+--profile $1} -o json |
-    jq '.credentials.expiration |= sub("\\+00:00$"; "Z")' > "${CRED_FILE}"
+    jq '.credentials.expiration |= sub("\\+00:00$"; "Z")' >"${CRED_FILE}"
 }
-
 
 if needs_refresh; then
   [ -z "${DEBUG:-}" ] || echo "Refreshing credentials..." >&2
