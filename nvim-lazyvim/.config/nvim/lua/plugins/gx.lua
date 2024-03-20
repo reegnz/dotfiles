@@ -41,13 +41,12 @@ return {
         -- that show up in squashed PR commit messages, which is quite common.
         gh_issue = {
           handle = function(mode, line, _)
+            -- I'm assuming the system has the gh cli installed
             if not vim.fn.executable("gh") then
               return
             end
             local id = require("gx.helper").find(line, mode, "#(%d+)")
             if id then
-              -- here I'm assuming the system has the gh cli installed
-              -- TODO: add branch to get upstream URL from git cli output
               local cmd = string.format("gh issue view %s --json url --jq .url", id)
               local lines
               local job = vim.fn.jobstart(cmd, {

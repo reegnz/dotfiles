@@ -13,11 +13,12 @@ return {
     dependencies = "tpope/vim-rhubarb",
   },
   {
-    "tpope/vim-abolish",
+    "reegnz/vim-abolish",
+    branch = "fix_space_case",
     keys = {
       { "<leader>ac.", "<Plug>(abolish-coerce).", desc = "dot.case", mode = { "x", "o", "n" } },
       { "<leader>ac_", "<Plug>(abolish-coerce)_", desc = "snake_case", mode = { "x", "o", "n" } },
-      { "<leader>ac-", "<Plug>(abolish-coerce)-", desc = "kebab_case", mode = { "x", "o", "n" } },
+      { "<leader>ac-", "<Plug>(abolish-coerce)-", desc = "kebab-case", mode = { "x", "o", "n" } },
       { "<leader>acc", "<Plug>(abolish-coerce)c", desc = "camelCase", mode = { "x", "o", "n" } },
       { "<leader>acm", "<Plug>(abolish-coerce)m", desc = "MixedCase", mode = { "x", "o", "n" } },
       { "<leader>acu", "<Plug>(abolish-coerce)u", desc = "UPPER_CASE", mode = { "x", "o", "n" } },

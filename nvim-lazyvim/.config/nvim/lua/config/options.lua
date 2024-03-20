@@ -6,3 +6,11 @@ local opt = vim.opt
 opt.swapfile = false
 opt.nrformats:append({ "alpha" })
 opt.listchars:append({ space = "·" })
+
+vim.treesitter.language.register("terraform", "terraform-vars")
+
+-- uncomment to disable autoformat
+-- vim.g.autoformat = false
+--
+opt.exrc = true
+opt.secure = true
