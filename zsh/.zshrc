@@ -30,5 +30,6 @@ fi
 
 [[ ~/.zcompdump.zwc -nt ~/.zcompdump ]] || zcompile -R -- ~/.zcompdump.zwc ~/.zcompdump
 [[ ~/.zshrc.zwc -nt ~/.zshrc ]] || zcompile -R -- ~/.zshrc.zwc ~/.zshrc 
+[[ ~/.p10k.zsh.zwc -nt ~/.p10k.zsh ]] || zcompile -R -- ~/.p10k.zsh.zwc ~/.p10k.zsh
 
 # zprof

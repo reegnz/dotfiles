@@ -12,6 +12,10 @@
 # right now there's the keg_only_refresh funtion that can be invoked
 # explicitly.
 
+if [ -n "${HOMEBREW_KEG_ONLY_ADDED:-}" ]; then
+  return
+fi
+
 keg_only_bin_cache="$ZSH_CACHE_DIR/keg-only-bin.sh"
 
 function keg_only_refresh() {
@@ -25,3 +29,5 @@ function keg_only_refresh() {
 [[ -f "$keg_only_bin_cache" ]] || keg_only_refresh
 source "$keg_only_bin_cache"
 unset keg_only_bin_cache
+
+export HOMEBREW_KEG_ONLY_ADDED=1

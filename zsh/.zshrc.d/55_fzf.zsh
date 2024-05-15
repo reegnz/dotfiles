@@ -2,7 +2,13 @@
 if (( ! ${+commands[fzf]} )); then
   return
 fi
-
+fzf_hook_cache="${ZSH_CACHE_DIR}/fzf.zsh"
+if [[ "$commands[fzf]" -nt "$fzf_hook_cache" || ! -s "$fzf_hook_cache" ]]; then
+  fzf --zsh >| "$fzf_hook_cache"
+  zcompile "$fzf_hook_cache"
+fi
+source "$fzf_hook_cache"
+unset fzf_hook_cache
 if (( $+commands[fd] )); then
   export FZF_DEFAULT_COMMAND='fd --follow --type f --color=always'
 elif (( $+commands[rg] )); then

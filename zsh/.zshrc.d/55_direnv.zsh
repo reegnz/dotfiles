@@ -10,5 +10,5 @@ fi
 if [ -z "${DIRENV_DISABLE:-}" ]; then
   source "$direnv_hook_cache"
 fi
-unset direnv_hook_cache 
+unset direnv_hook_cache
 
