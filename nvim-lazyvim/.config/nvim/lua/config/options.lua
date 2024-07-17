@@ -5,7 +5,7 @@
 local opt = vim.opt
 opt.swapfile = false
 opt.nrformats:append({ "alpha" })
-opt.listchars:append({ space = "·" })
+opt.listchars:append({ space = "·", eol = "$" })
 
 -- turn on syntax highlighting for terraform.tfvars files
 vim.treesitter.language.register("terraform", "terraform-vars")

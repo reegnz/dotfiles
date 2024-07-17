@@ -1,22 +1,22 @@
 return {
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "b0o/SchemaStore.nvim",
-      version = false,
-    },
-    opts = {
-      servers = {
-        yamlls = {
-          settings = {
-            yaml = {
-              schemas = {
-                kubernetes = "*.yaml",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   dependencies = {
+  --     "b0o/SchemaStore.nvim",
+  --     version = false,
+  --   },
+  --   opts = {
+  --     servers = {
+  --       yamlls = {
+  --         settings = {
+  --           yaml = {
+  --             schemas = {
+  --               kubernetes = "*.yaml",
+  --             },
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
 }

@@ -1,6 +1,6 @@
 return {
   {
-    "nvim-lspconfig",
+    "neovim/nvim-lspconfig",
     opts = {
       servers = {
         regols = {},
@@ -9,35 +9,9 @@ return {
     },
   },
   {
-    "nvim-treesitter",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, { "rego" })
-    end,
-  },
-  {
-    "conform.nvim",
+    "nvim-treesitter/nvim-treesitter",
     opts = {
-      formatters_by_ft = {
-        rego = { "opa_fmt" },
-      },
+      ensure_installed = { "rego" },
     },
-  },
-  -- {
-  --   "nvim-lint",
-  --   opts = {
-  --     linters_by_ft = {
-  --       rego = { "regal" },
-  --     },
-  --   },
-  -- },
-  {
-    "mason.nvim",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "opa",
-        "regols",
-        -- "regal",
-      })
-    end,
   },
 }
