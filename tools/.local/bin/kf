@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+KF="${BASH_SOURCE[0]}"
+
+# KF_NODES_EXTRA_ARGS='-o wide'
+# KF_PODS_EXTRA_ARGS='-o wide'
+
+generic() {
+  resource=$1
+  shift
+  ARGS_VAR="KF_${resource^^}_EXTRA_ARGS"
+  EXTRA_ARGS="${!ARGS_VAR:-}"
+  export FZF_DEFAULT_COMMAND="grc --colour=on kubectl get ${resource} -A $EXTRA_ARGS"
+  fzf --header-lines=1 --reverse --info=inline --height=100% \
+    --prompt "${resource} > " \
+    --header $'/ Ctrl-r (reload) / Ctrl-d (describe) / Return (open manifest in vim) /\n\n' \
+    --bind "ctrl-r:reload($FZF_DEFAULT_COMMAND)" \
+    --bind "ctrl-d:change-preview-window(up:70%)+change-preview($KF describe ${resource} {1} {2})" \
+    --bind "return:execute($KF manifest_view ${resource} {1} {2})" \
+    --bind "ctrl-e:execute($KF manifest_edit ${resource} {1} {2})" \
+    --bind 'ctrl-/:toggle-preview' "$@"
+}
+
+describe() {
+  if [ -n "${NAMESPACED:-}" ]; then
+    namespace=$2
+    name=$3
+  else
+    name=$2
+  fi
+  grc --colour=on kubectl describe "$1" "$name" ${namespace:+-n $namespace}
+}
+
+# open the yaml representation of the resource in a vim scratch buffer
+manifest_view() {
+  if [ -n "${NAMESPACED:-}" ]; then
+    namespace=$2
+    name=$3
+  else
+    name=$2
+  fi
+  kubectl get "$1" "$name" ${namespace+-n $namespace} -o yaml | 
+    ${EDITOR:-nvim} \
+      -c 'setlocal ft=yaml' \
+      -c 'setlocal buftype=nofile' \
+      -c 'setlocal bufhidden=hide' \
+      -c 'setlocal noswapfile' - 
+}
+
+manifest_edit() {
+
+  if [ -n "${NAMESPACED:-}" ]; then
+    namespace=$2
+    name=$3
+  else
+    name=$2
+  fi
+  kubectl edit "$1" "$name" ${namespace+-n $namespace}
+}
+
+nodes() {
+  generic nodes \
+    --bind "ctrl-t:reload($KF top_nodes)" \
+    --header $'/ Ctrl-r (reload) / Ctrl-d (describe) / Return (open manifest in vim) / Ctrl-t (top) /\n\n'
+}
+
+# KF_TOP_PODS_EXTRA_ARGS=""
+
+top_nodes() {
+  grc --colour=on kubectl top nodes ${KF_TOP_NODES_EXTRA_ARGS:-}
+}
+
+# KF_TOP_PODS_EXTRA_ARGS=""
+
+top_pods() {
+  grc --colour=on kubectl top pods -A ${KF_TOP_PODS_EXTRA_ARGS:-}
+}
+
+# Pods
+
+pods() {
+  generic pods \
+  --bind "ctrl-j:change-preview-window(up:70%)+change-preview($KF pod_sa_jwt {1} {2})" \
+  --bind "ctrl-l:change-preview-window(up:70%:follow)+change-preview($KF pod_logs {1} {2})" \
+  --bind "ctrl-x:execute($KF pod_exec {1} {2})" \
+  --bind "ctrl-t:reload($KF top_pods)" \
+  --header $'/ Ctrl-r (reload) / Ctrl-d (describe) / Return (open manifest in vim) / Ctrl-t (top) / /\n/ Ctrl-x (execute into pod) / Ctrl-l (view logs) / Ctrl-j (show SA token) /\n\n'
+}
+
+pod_sa_jwt() {
+  kubectl exec -n "$1" "$2" \
+    -- cat /var/run/secrets/kubernetes.io/serviceaccount/token | 
+    jq -R 'split(".")|.[0:2]|map(@base64d|fromjson)' --color-output
+}
+
+pod_logs() {
+  kubectl logs --follow --all-containers --tail=1000 -n "$1" "$2"
+}
+
+pod_exec() {
+  kubectl exec -it -n "$1" "$2" -- /bin/sh
+}
+
+is_namespaced() {
+    kind=$1
+    kubectl api-resources --no-headers --namespaced=true | 
+      grep -i "${kind}" 2>&1 >/dev/null
+}
+
+if [ ! $# -gt 0 ]; then
+  kubectl api-resources | 
+    fzf --header-lines=1 --reverse --info=inline --height=100% \
+      --prompt 'Resource > ' \
+      --preview 'kubectl get {} -A' \
+      --preview-window 'up,70%,hidden,~1' \
+      --bind "return:execute($KF {1})" \
+      --bind 'ctrl-/:toggle-preview' "$@"
+else
+  case $1 in
+    describe|manifest_edit)
+      if is_namespaced "$2"; then
+        export NAMESPACED="1"
+      fi
+      ;;
+  esac
+  case $(type -t "$1") in
+    function)
+      "$@"
+      ;;
+    *)
+      generic "$@"
+      ;;
+  esac
+fi
