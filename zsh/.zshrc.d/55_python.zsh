@@ -24,3 +24,7 @@ export PIPX_DEFAULT_PYTHON=python3
 #   fi
 #   unset poetry_completion
 # fi
+
+if [ -f "$HOME/.rye/env" ]; then
+  source "$HOME/.rye/env"
+fi

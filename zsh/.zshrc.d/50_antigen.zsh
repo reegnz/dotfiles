@@ -24,9 +24,7 @@ antigen bundle iterm2
 antigen bundle sudo
 antigen bundle copybuffer
 antigen bundle command-not-found
-# antigen bundle fzf
 antigen bundle kubectl
-antigen bundle zoxide
 antigen bundle aws
 
 # 3rd party plugins and themes
