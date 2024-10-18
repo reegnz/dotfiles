@@ -11,21 +11,21 @@ return {
       vim.list_extend(opts.ensure_installed, { "joker", "clj-kondo" })
     end,
   },
-  {
-    "nvim-cmp",
-    dependencies = {
-      {
-        "PaterJason/cmp-conjure",
-      },
-    },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local cmp = require("cmp")
-      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
-        { name = "conjure" },
-      }))
-    end,
-  },
+  -- {
+  --   "nvim-cmp",
+  --   dependencies = {
+  --     {
+  --       "PaterJason/cmp-conjure",
+  --     },
+  --   },
+  --   ---@param opts cmp.ConfigSchema
+  --   opts = function(_, opts)
+  --     local cmp = require("cmp")
+  --     opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
+  --       { name = "conjure" },
+  --     }))
+  --   end,
+  -- },
   {
     "conform.nvim",
     optional = true,
@@ -53,9 +53,9 @@ return {
     "gpanders/nvim-parinfer",
     ft = { "clojure", "clojurescript", "fennel" },
   },
-  {
-    "Olical/conjure",
-    ft = { "clojure", "clojurescript", "fennel" },
-    cmd = "ConjureSchool",
-  },
+  -- {
+  --   "Olical/conjure",
+  --   ft = { "clojure", "clojurescript", "fennel" },
+  --   cmd = "ConjureSchool",
+  -- },
 }
