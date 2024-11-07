@@ -274,7 +274,7 @@
                  [:j :volume_decrement]
                  [:k :volume_increment]
                  [:h :rewind]
-                 [:l :fastforward]
+                 [:l :fast_forward]
                  [:p :play_or_pause]
                  [:m :mute]]}
 
