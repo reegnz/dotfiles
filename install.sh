@@ -66,9 +66,4 @@ add_color() {
     1'
 }
 
-# See https://github.com/aspiers/stow/issues/65#issuecomment-1465060710
-strip_bug() {
-  awk '/^BUG in find_stowed_path\? Absolute\/relative mismatch/{next};1'
-}
-
-install 2> >(strip_bug | add_color)
+install 2> >(add_color)

@@ -212,10 +212,31 @@
                  [:t :!Tt]
                  [:c :!Oc]]}
 
+        ;; vim-like browser bindings
         {:des "Browser bindings"
-         ;; j+d = toggle darkreader extension dark mode
-         :rules [[:condi :Browsers :j-mode]
+         :rules [[:condi :Browsers]
+                 ;; Ctrl-D = page down
+                 [:!Td :page_down]
+                 [:!Wd :page_down]
+                 ;; Ctrl-U  = page up
+                 [:!Tu :page_up]
+                 [:!Wu :page_up]
+                 ;; Ctrl-O = history back
+                 [:!To :!Copen_bracket]
+                 ;; Ctrl-I = history forward
+                 [:!Ti :!Cclose_bracket]
+                 ;; Shift-g = end
+                 ;; [:!Sg :end]
+                 ;; [:!Rg :end]
+                 ;; gg = home
+                 ;; [:g [:home ["double-g" 0]] ["double-g" 1]]
+                 ;; [:g ["double-g" 1] nil {:delayed {:invoked [:g ["double-g" 0]]
+                 ;;                                   :canceled ["double-g" 0]}}]
+                 ;; j+d = toggle darkreader extension dark mode
+                 [:condi :Browsers :j-mode]
                  [:d :!OSa]]}
+        ;; [:condi :Browsers]
+        ;; navigate history
 
         {:des "Zoom bindings"
          ;; j+g = toggle between gallery/speaker view

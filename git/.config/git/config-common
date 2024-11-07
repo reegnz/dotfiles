@@ -30,6 +30,8 @@
   fetch-pr  = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
   delete-prs = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
   repo-root = !git rev-parse --show-toplevel
+  changed-files = !git diff --merge-base origin/master --diff-filter=ACMR --name-status
+  modified-files = !git diff --merge-base origin/master --diff-filter=ACMRD --name-status
 
 [diff "hcl"]
   xfuncname = "^(.*=.*[{|[].*)$"
