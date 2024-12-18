@@ -36,6 +36,7 @@ return {
       },
       windows = {
         preview = true,
+        width_preview = 40,
       },
     },
   },
