@@ -4,9 +4,10 @@ return {
     event = "VeryLazy",
     opts = {
       hints = {
-        enabled = true,
+        enabled = false,
       },
       provider = "ollama",
+      auto_suggestions_provider = "ollama",
       vendors = {
         ollama = {
           __inherited_from = "openai",
@@ -15,8 +16,18 @@ return {
           model = "codellama:7b",
         },
       },
+      file_selector = {
+        provider = "fzf",
+        provider_opts = {},
+      },
     },
     build = "make",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+    },
   },
   {
     "folke/which-key.nvim",
@@ -28,11 +39,48 @@ return {
     },
   },
   {
-    -- Make sure to set this up properly if you have lazy=true
     "MeanderingProgrammer/render-markdown.nvim",
-    opts = {
-      file_types = { "markdown", "Avante" },
+    ft = { "Avante" },
+  },
+  {
+    "saghen/blink.cmp",
+    lazy = true,
+    dependencies = {
+      "saghen/blink.compat",
     },
-    ft = { "markdown", "Avante" },
+    opts = {
+      sources = {
+        default = {
+          "avante_commands",
+          "avante_mentions",
+          "avante_files",
+        },
+        compat = {
+          "avante_commands",
+          "avante_mentions",
+          "avante_files",
+        },
+        providers = {
+          avante_commands = {
+            name = "avante_commands",
+            module = "blink.compat.source",
+            score_offset = 90,
+            opts = {},
+          },
+          avante_files = {
+            name = "avante_files",
+            module = "blink.compat.source",
+            score_offset = 100,
+            opts = {},
+          },
+          avante_mentions = {
+            name = "avante_mentions",
+            module = "blink.compat.source",
+            score_offset = 1000,
+            opts = {},
+          },
+        },
+      },
+    },
   },
 }
