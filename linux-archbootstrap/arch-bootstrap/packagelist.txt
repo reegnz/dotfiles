@@ -1,0 +1,17 @@
+antigen
+eza
+fastfetch
+fd
+git
+github-cli
+go
+neovim
+nodejs
+npm
+ripgrep
+stow
+ttf-hack-nerd
+wezterm
+wl-clipboard
+zoxide
+zsh
