@@ -3,6 +3,7 @@ eza
 fastfetch
 fd
 git
+git-delta
 github-cli
 go
 neovim

@@ -23,6 +23,3 @@ export LESS='--tabs=4 -FRX'
 set -a
 [[ ! -f $HOME/.env ]] || source $HOME/.env
 set +a
-
-export EDITOR="nvim"
-

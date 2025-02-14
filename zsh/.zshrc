@@ -1,14 +1,6 @@
 # zmodload zsh/zprof
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # to profile zsh startup, uncomment the `zmodload zsh/zprof` and `zprof` lines
-
 
 # for improving the structure of the zsh config, it's split into multiple
 # files based on various concerns.
@@ -30,6 +22,5 @@ fi
 
 [[ ~/.zcompdump.zwc -nt ~/.zcompdump ]] || zcompile -R -- ~/.zcompdump.zwc ~/.zcompdump
 [[ ~/.zshrc.zwc -nt ~/.zshrc ]] || zcompile -R -- ~/.zshrc.zwc ~/.zshrc 
-[[ ~/.p10k.zsh.zwc -nt ~/.p10k.zsh ]] || zcompile -R -- ~/.p10k.zsh.zwc ~/.p10k.zsh
 
 # zprof
