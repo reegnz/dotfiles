@@ -1,4 +1,4 @@
-# check if aws is installed
+# check if broot is installed
 if (( ! ${+commands[broot]} )); then
   return
 fi

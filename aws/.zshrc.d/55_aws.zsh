@@ -7,13 +7,13 @@ fi
 export AWS_CONFIG_FILE="${XDG_CONFIG_HOME}/aws/config"
 export AWS_SHARED_CREDENTIALS_FILE="${XDG_CONFIG_HOME}/aws/credentials"
 
-if (( ! ${+commands[gimme-aws-creds]} )); then
+if (( ${+commands[gimme-aws-creds]} )); then
   # gimme-aws-creds config location
   export OKTA_CONFIG="${XDG_CONFIG_HOME}/gimme-aws-creds/config"
   alias gimme-aws-creds="AWS_DEFAULT_REGION=eu-central-1 gimme-aws-creds"
 fi
 
-if (( ! ${+commands[saml2aws]} )); then
+if (( ${+commands[saml2aws]} )); then
   # saml2aws config location
   export SAML2AWS_CONFIGFILE="${XDG_CONFIG_HOME}/saml2aws/config"
 fi
