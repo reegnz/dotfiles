@@ -17,3 +17,17 @@ if [[ "$commands[git-town]" -nt "$git_town_cache" || ! -s "$git_town_cache" ]]; 
 fi
 # source "$git_town_cache"
 unset git_town_cache 
+
+
+if [[ -o zle ]]; then
+  git-switch-branch() {
+  if branch=$(git branch --sort=-committerdate -v | awk '/*/{next};1' | fzf --reverse --prompt="branch > " --bind 'enter:become(echo {1})'); then
+      LBUFFER="git switch ${branch}"
+    fi
+    zle reset-prompt
+  }
+
+  zle -N git-switch-branch
+  # bind `alt + j` to jq-complete
+  bindkey '\es' git-switch-branch
+fi
