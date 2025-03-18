@@ -15,6 +15,7 @@
   diff-so-fancy           = true
 [diff]
   colorMoved = default
+  algorithm = histogram
 [color]
   ui = true
 [pull]
@@ -25,6 +26,9 @@
 [rebase]
   autoSquash = true
   missingCommitsCheck = error
+
+[tag]
+  sort = version:refname
 [alias]
   fixup=!git merge-base --fork-point origin/master | xargs -I{} git log {}..HEAD --oneline | fzf --height=50% | awk {'print $1'} | xargs git commit --fixup
   fetch-pr  = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
