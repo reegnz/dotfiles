@@ -10,7 +10,10 @@ neovim
 nodejs
 npm
 ripgrep
+sbctl
 stow
+tpm2-tools
+tpm2-tss
 ttf-hack-nerd
 wezterm
 wl-clipboard
