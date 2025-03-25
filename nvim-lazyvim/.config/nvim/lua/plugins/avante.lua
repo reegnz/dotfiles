@@ -7,14 +7,8 @@ return {
         enabled = false,
       },
       provider = "ollama",
-      auto_suggestions_provider = "ollama",
-      vendors = {
-        ollama = {
-          __inherited_from = "openai",
-          api_key_name = "",
-          endpoint = "http://127.0.0.1:11434/v1",
-          model = "codellama:7b",
-        },
+      ollama = {
+        model = "codellama:7b",
       },
       file_selector = {
         provider = "fzf",
