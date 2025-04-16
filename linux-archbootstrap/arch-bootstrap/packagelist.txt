@@ -2,10 +2,12 @@ antigen
 eza
 fastfetch
 fd
+fzf
 git
 git-delta
 github-cli
 go
+jq
 neovim
 nodejs
 npm
