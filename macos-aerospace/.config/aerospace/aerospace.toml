@@ -10,8 +10,8 @@ after-login-command = []
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget brew services start borders',
-  'exec-and-forget brew services start sketchybar',
+  'exec-and-forget brew services restart borders',
+  'exec-and-forget brew services restart sketchybar',
 ]
 
 ## Notify Sketchybar about workspace change
