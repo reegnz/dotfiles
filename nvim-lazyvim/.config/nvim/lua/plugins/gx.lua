@@ -1,6 +1,8 @@
 return {
   {
     "chrishrb/gx.nvim",
+    url = "https://github.com/reegnz/gx.nvim",
+    branch = "develop",
     keys = {
       { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } },
     },
@@ -19,15 +21,16 @@ return {
       handlers = {
         jira = {
           name = "jira",
-          handle = function(mode, line, _)
-            -- fail if jira_host global is undefined
-            if not vim.g.jira_host then
+          handle = function(mode, line, handler_options)
+            local id = require("gx.helper").find(line, mode, "(%u+-%d+)")
+            if not id then
               return
             end
-            local id = require("gx.helper").find(line, mode, "(%u+-%d+)")
-            if id then
-              return vim.g.jira_host .. "/browse/" .. id
+            if not handler_options.jira_host then
+              print("handler_options.jira_host is undefined, cannot open JIRA link")
+              return
             end
+            return handler_options.jira_host .. "/browse/" .. id
           end,
         },
 
