@@ -3,6 +3,18 @@ if (( ! ${+commands[kubectl]} )); then
   return
 fi
 
+if (( ${+commands[kubecolor]} )); then
+  kubecolor_completion=$ZSH_CACHE_DIR/completions/_kubecolor
+  if [ ! -f "$kubecolor_completion" ]; then
+    {
+      echo "#compdef kubecolor\ncompdef _kubectl kubecolor"
+      cat $ZSH_CACHE_DIR/completions/_kubectl
+    } > $kubecolor_completion
+  fi
+  unset kubecolor_completion
+  alias kubectl=kubecolor
+fi
+
 alias k=kubectl
 
 if [ -n "$+commands[pluto]" ]; then
