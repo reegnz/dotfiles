@@ -30,7 +30,7 @@ return {
               print("handler_options.jira_host is undefined, cannot open JIRA link")
               return
             end
-            return handler_options.jira_host .. "/browse/" .. id
+            return handler_options.jira_host .. id
           end,
         },
 
