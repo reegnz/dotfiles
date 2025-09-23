@@ -11,8 +11,7 @@
 [interactive]
   diffFilter = delta --color-only
 [delta]
-  line-numbers            = true
-  diff-so-fancy           = true
+  diff-highlight = true
 [diff]
   colorMoved = default
   algorithm = histogram

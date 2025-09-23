@@ -23,6 +23,9 @@ mitmproxy_env_enable() {
     # AWS CLI also doesn't use the keychain so have it use openssl certs.pem instead.
     export AWS_CA_BUNDLE="$cert_file"
 
+    # force uv into using system trust store
+    export UV_NATIVE_TLS=true
+
     echo "Using ca-certificates bundle: $cert_file"
     echo "Using proxy: $HTTP_PROXY"
 }

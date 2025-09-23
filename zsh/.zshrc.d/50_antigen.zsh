@@ -23,8 +23,7 @@ antigen use oh-my-zsh
 antigen bundle iterm2
 antigen bundle sudo
 antigen bundle copybuffer
-antigen bundle command-not-found
-antigen bundle kubectl
+# antigen bundle kubectl
 antigen bundle aws
 
 # 3rd party plugins and themes

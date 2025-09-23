@@ -63,6 +63,7 @@ Install:andUse("URLDispatcher", {
 			{ "https?://.*%.aws%.amazon%.com", WorkBrowser },
 			{ "https?://login%.microsoftonline%.com", WorkBrowser },
 			{ "https?://.*%.atlassian%.net", WorkBrowser },
+			{ "https?://.*%.atlassian%.com", WorkBrowser },
 			{ "https?://.*%.datadoghq%.com", WorkBrowser },
 			{ "https?://.*%.pagerduty%.com", WorkBrowser },
 			{ "https?://.*%.visualforce%.com", WorkBrowser },

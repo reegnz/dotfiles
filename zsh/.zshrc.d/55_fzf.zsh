@@ -26,17 +26,45 @@ if (( ${+commands[eza]} )); then
 else
   FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --preview 'ls -lah {}'"
 fi
+
+
+
 # check if zoxide is installed
-if (( ${+commands[zoxide]} )); then
-  # integrate with zoxide
-  ZOXIDE_COMMAND='zoxide query -l'
-  PWD_FILTER='sed -n -e "s,^$PWD/,," -e "/^[^\/]/p"'
-  export FZF_ALT_C_COMMAND="$ZOXIDE_COMMAND | $PWD_FILTER"
-  FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --disabled --prompt='z > '"
-  FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='change:reload(echo {q} | xargs zoxide query -l | $PWD_FILTER)'"
-  FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='alt-d:unbind(change)+change-prompt(dirs > )+enable-search+clear-query+reload(fd --type d --color=always)'"
-  FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='alt-z:rebind(change)+change-prompt(z > )+disable-search+clear-query+reload($ZOXIDE_COMMAND | $PWD_FILTER)'"
-  FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='alt-f:unbind(change)+change-prompt(z-fzf > )+enable-search+clear-query'"
+if (( ! ${+commands[zoxide]} )); then
+  export FZF_ALT_C_OPTS
+  return
 fi
+
+# integrate with zoxide
+ZOXIDE_COMMAND='zoxide query -l'
+GHQ_COMMAND='ghq list -p'
+PWD_FILTER='sed -n -e \"s,^$PWD/,,\" -e \"/^[^\/]/p\"'
+
+zoxide_start="echo \"rebind(change)+change-prompt(zoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND | $PWD_FILTER)\""
+
+transform_change="
+  case \$FZF_PROMPT in
+    zoxide*)
+      echo \"reload(echo {q} | xargs $ZOXIDE_COMMAND | $PWD_FILTER)\"
+      ;;
+  esac"
+
+change_mode="
+  case \$FZF_PROMPT in
+    zoxide*)
+      echo \"unbind(change)+change-prompt(dirs > )+enable-search+clear-query+reload(fd --follow --type d --color=always)\"
+      ;;
+    dirs*)
+      echo \"rebind(change)+change-prompt(repos > )+enable-search+clear-query+reload($GHQ_COMMAND)\"
+      ;;
+    repos*)
+      echo \"rebind(change)+change-prompt(zoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND | $PWD_FILTER)\"
+      ;;
+  esac"
+
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --disabled"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='start:transform:$zoxide_start'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='change:transform:$transform_change'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='alt-c:transform:$change_mode'"
 
 export FZF_ALT_C_OPTS

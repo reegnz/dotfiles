@@ -3,7 +3,7 @@ if (( ! ${+commands[eza]} )); then
   return
 fi
 
-alias x='eza --icons --group-directories-first --git'
+alias x='eza --icons --group-directories-first'
 alias xl='x -lah'
 alias ls='x'
 alias ll='xl'
