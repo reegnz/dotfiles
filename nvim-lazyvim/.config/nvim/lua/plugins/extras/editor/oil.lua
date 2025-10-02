@@ -87,7 +87,7 @@ return {
     end,
 
     dependencies = {
-      "echasnovski/mini.icons",
+      "nvim-mini/mini.icons",
     },
   },
 }

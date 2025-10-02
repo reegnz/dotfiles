@@ -74,4 +74,7 @@ require("lazy").setup({
       },
     },
   },
+  dev = {
+    path = "~/repos/github.com/reegnz",
+  },
 })

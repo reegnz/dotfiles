@@ -1,0 +1,7 @@
+.git
+node_modules
+*cache*
+*Cache*
+*CACHE*
+.Trash
+.cargo

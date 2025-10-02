@@ -10,9 +10,9 @@ fi
 source "$fzf_hook_cache"
 unset fzf_hook_cache
 if (( $+commands[fd] )); then
-  export FZF_DEFAULT_COMMAND='fd --follow --type f --color=always'
+  export FZF_DEFAULT_COMMAND='fd --follow --hidden --type f --color=always'
 elif (( $+commands[rg] )); then
-  export FZF_DEFAULT_COMMAND='rg -follow --files'
+  export FZF_DEFAULT_COMMAND='rg --hidden --follow --files'
 fi
 export FZF_DEFAULT_OPTS="--ansi --height=50%"
 
@@ -35,12 +35,14 @@ if (( ! ${+commands[zoxide]} )); then
   return
 fi
 
-# integrate with zoxide
+# integrate with zoxide and ghq
 ZOXIDE_COMMAND='zoxide query -l'
 GHQ_COMMAND='ghq list -p'
 PWD_FILTER='sed -n -e \"s,^$PWD/,,\" -e \"/^[^\/]/p\"'
 
 zoxide_start="echo \"rebind(change)+change-prompt(zoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND | $PWD_FILTER)\""
+dirs_start="echo \"unbind(change)+change-prompt(dirs > )+enable-search+clear-query+reload(fd --follow --hidden --type d --color=always)\""
+repos_start="echo \"rebind(change)+change-prompt(repos > )+enable-search+clear-query+reload($GHQ_COMMAND)\""
 
 transform_change="
   case \$FZF_PROMPT in
@@ -49,16 +51,17 @@ transform_change="
       ;;
   esac"
 
+# cycle through modes with alt-c
 change_mode="
   case \$FZF_PROMPT in
     zoxide*)
-      echo \"unbind(change)+change-prompt(dirs > )+enable-search+clear-query+reload(fd --follow --type d --color=always)\"
+      $dirs_start
       ;;
     dirs*)
-      echo \"rebind(change)+change-prompt(repos > )+enable-search+clear-query+reload($GHQ_COMMAND)\"
+      $repos_start
       ;;
     repos*)
-      echo \"rebind(change)+change-prompt(zoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND | $PWD_FILTER)\"
+      $zoxide_start
       ;;
   esac"
 
@@ -66,5 +69,9 @@ FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --disabled"
 FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='start:transform:$zoxide_start'"
 FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='change:transform:$transform_change'"
 FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='alt-c:transform:$change_mode'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='ctrl-d:half-page-down'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='ctrl-u:half-page-up'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='ctrl-f:page-down'"
+FZF_ALT_C_OPTS="$FZF_ALT_C_OPTS --bind='ctrl-b:page-up'"
 
 export FZF_ALT_C_OPTS
