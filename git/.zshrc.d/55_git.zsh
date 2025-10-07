@@ -21,7 +21,7 @@ unset git_town_cache
 
 if [[ -o zle ]]; then
   git-switch-branch() {
-  if branch=$(git branch --sort=-committerdate -vvv --color=always | awk '/*/{next};1' | fzf --reverse --prompt="branch > " --bind 'enter:become(echo {1})'); then
+  if branch=$(git branch --sort=-committerdate -vvv --color=always | awk '/\*/{next};1' | fzf --reverse --prompt="branch > " --bind 'enter:become(echo {1})'); then
       LBUFFER="git switch ${branch}"
     fi
     zle reset-prompt
