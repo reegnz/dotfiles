@@ -14,7 +14,7 @@ if (( $+commands[fd] )); then
 elif (( $+commands[rg] )); then
   export FZF_DEFAULT_COMMAND='rg --hidden --follow --files'
 fi
-export FZF_DEFAULT_OPTS="--ansi --height=~50% --tmux"
+export FZF_DEFAULT_OPTS="--ansi --height=50% --tmux"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-d:half-page-down'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-u:half-page-up'"
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --bind='ctrl-f:page-down'"
@@ -44,17 +44,17 @@ ZOXIDE_COMMAND='zoxide query -l'
 GHQ_COMMAND='ghq list -p'
 PWD_FILTER='sed -n -e \"s,^$PWD/,,\" -e \"/^[^\/]/p\"'
 
-zoxide_start="echo \"rebind(change)+change-prompt(zoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND | $PWD_FILTER)\""
-gzoxide_start="echo \"rebind(change)+change-prompt(gzoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND)\""
+# zoxide_start="echo \"rebind(change)+change-prompt(zoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND | $PWD_FILTER)\""
+zoxide_start="echo \"rebind(change)+change-prompt(zoxide > )+disable-search+clear-query+reload($ZOXIDE_COMMAND)\""
 dirs_start="echo \"unbind(change)+change-prompt(dirs > )+enable-search+clear-query+reload(fd --follow --hidden --type d --color=always)\""
 repos_start="echo \"rebind(change)+change-prompt(repos > )+enable-search+clear-query+reload($GHQ_COMMAND)\""
 
 transform_change="
   case \$FZF_PROMPT in
+    # zoxide*)
+    #   echo \"reload(echo {q} | xargs $ZOXIDE_COMMAND | $PWD_FILTER)\"
+    #   ;;
     zoxide*)
-      echo \"reload(echo {q} | xargs $ZOXIDE_COMMAND | $PWD_FILTER)\"
-      ;;
-    gzoxide*)
       echo \"reload(echo {q} | xargs $ZOXIDE_COMMAND)\"
       ;;
   esac"
@@ -63,9 +63,6 @@ transform_change="
 change_mode="
   case \$FZF_PROMPT in
     zoxide*)
-      $gzoxide_start
-      ;;
-    gzoxide*)
       $dirs_start
       ;;
     dirs*)
