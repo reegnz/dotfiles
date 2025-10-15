@@ -15,6 +15,40 @@
         "Alpha Component" : 1,
         "Green Component" : 0.85882353782653809
       },
+      "Keyboard Map" : {
+        "0xf728-0x0" : {
+          "Action" : 11,
+          "Text" : "0x4"
+        },
+        "0xf702-0x280000" : {
+          "Action" : 10,
+          "Text" : "b"
+        },
+        "0xf702-0x300000" : {
+          "Action" : 11,
+          "Text" : "0x1"
+        },
+        "0xf703-0x280000" : {
+          "Action" : 10,
+          "Text" : "f"
+        },
+        "0xf728-0x80000" : {
+          "Action" : 10,
+          "Text" : "d"
+        },
+        "0x7f-0x100000" : {
+          "Action" : 11,
+          "Text" : "0x15"
+        },
+        "0xf703-0x300000" : {
+          "Action" : 11,
+          "Text" : "0x5"
+        },
+        "0x7f-0x80000" : {
+          "Action" : 11,
+          "Text" : "0x1b 0x7f"
+        }
+      },
       "Command" : "\/opt\/homebrew\/bin\/zsh",
       "Unlimited Scrollback" : true,
       "Bold Color" : {
