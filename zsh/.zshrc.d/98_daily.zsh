@@ -1,5 +1,5 @@
 __daily_dir() {
-  echo $XDG_HOME/daily/$(date --iso-8601=date)
+  echo $XDG_HOME/daily/$(gdate --iso-8601=date)
 }
 
 today() {

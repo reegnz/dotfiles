@@ -11,3 +11,5 @@ map("n", "--", "<C-x>", opts)
 
 -- evaluate expression on line
 map("n", "<leader>e", '^C<C-r>=<C-r>"<CR>')
+
+map("n", ";", ":")
