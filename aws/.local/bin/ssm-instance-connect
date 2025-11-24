@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+host=$1
+port=$2
+instance_user=$3
+
+echo "Finding instance id for ${host}" >&2
+instance_id=$(aws ec2 describe-instances \
+  --filters "Name=private-dns-name,Values=${host}" \
+  --query "Reservations[0].Instances[0].InstanceId" \
+  --output text)
+
+public_key=$(ssh-add -L | awk '$1 ~ /ssh-ed25519/{found=$0; exit}; $1 ~ /ssh-rsa/{found=$0}; END {print found}')
+
+echo "Sending ssh public key with instance-connect" >&2
+aws ec2-instance-connect send-ssh-public-key \
+  --instance-id "${instance_id}" \
+  --instance-os-user "${instance_user}" \
+  --ssh-public-key "${public_key}"
+
+echo "Starting tunnel with SSM" >&2
+aws ssm start-session \
+  --target "${instance_id}" \
+  --document-name AWS-StartSSHSession \
+  --parameters "portNumber=${port}"
