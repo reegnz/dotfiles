@@ -44,42 +44,23 @@ Firefox = "org.mozilla.firefox"
 Zoom = "us.zoom.xos"
 Slack = "com.tinyspeck.slackmacgap"
 
-DefaultBrowser = Firefox
-WorkBrowser = Chrome
+Browsers = {
+	Default = Firefox,
+	Work = Chrome,
+}
 
 Install:andUse("URLDispatcher", {
 	config = {
 		url_patterns = {
-			{ "https?://.*%.zoom%.us/saml", WorkBrowser },
+			{
+				--- # file at ~/.hammerspoon/work_urls.txt containing work-related URL patterns
+				"work_urls.txt",
+				Browsers.Work,
+			},
 			{ "https?://.*%.zoom%.us/j", Zoom },
-			{ "https?://app%.slack%.com", WorkBrowser },
-			{ "https?://.*%.slack%.com/services", WorkBrowser },
 			{ "https?://.*%.slack%.com", Slack },
-			{ "https?://drive%.google%.com", WorkBrowser },
-			{ "https?://slides%.google%.com", WorkBrowser },
-			{ "https?://docs%.google%.com", WorkBrowser },
-			{ "https?://calendar%.google%.com", WorkBrowser },
-			{ "https?://.*%.google%.com/calendar", WorkBrowser },
-			{ "https?://.*%.aws%.amazon%.com", WorkBrowser },
-			{ "https?://login%.microsoftonline%.com", WorkBrowser },
-			{ "https?://.*%.atlassian%.net", WorkBrowser },
-			{ "https?://.*%.atlassian%.com", WorkBrowser },
-			{ "https?://.*%.datadoghq%.com", WorkBrowser },
-			{ "https?://.*%.pagerduty%.com", WorkBrowser },
-			{ "https?://.*%.visualforce%.com", WorkBrowser },
-			{ "https?://.*%.visual%.force%.com", WorkBrowser },
-			{ "https?://.*%.vf%.force%.com", WorkBrowser },
-			{ "https?://.*%.salesforce%.com", WorkBrowser },
-			{ "https?://.*%.myworkday%.com", WorkBrowser },
-			{ "https?://.*%.documentforce%.com", WorkBrowser },
-			{ "https?://miro%.com", WorkBrowser },
-			{ "https?://.*%.miro%.com", WorkBrowser },
-			{ "https?://.*%.happyfox%.com", WorkBrowser },
-
-
-
 		},
-		default_handler = DefaultBrowser,
+		default_handler = Browsers.Default,
 	},
 	start = true,
 })
