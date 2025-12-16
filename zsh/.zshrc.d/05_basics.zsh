@@ -23,3 +23,8 @@ export LESS='--tabs=4 -FRX'
 set -a
 [[ ! -f $HOME/.env ]] || source $HOME/.env
 set +a
+
+
+set -a
+[[ ! -f $HOME/.env.secret ]] || source $HOME/.env.secret
+set +a
