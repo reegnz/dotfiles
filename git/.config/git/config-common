@@ -45,6 +45,8 @@
   tool = vimdiff3
 [log]
   date = iso-local
+[rerere]
+	enabled = true
 
 [credential "https://github.com"]
 	helper = 
