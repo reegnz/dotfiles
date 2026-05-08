@@ -13,3 +13,5 @@ map("n", "--", "<C-x>", opts)
 map("n", "<leader>e", '^C<C-r>=<C-r>"<CR>')
 
 map("n", ";", ":")
+
+map("t", "<Esc>", [[<C-\><C-n>]], opts)
