@@ -5,7 +5,8 @@ fi
 
 # make tools use XDG paths
 export AWS_CONFIG_FILE="${XDG_CONFIG_HOME}/aws/config"
-export AWS_SHARED_CREDENTIALS_FILE="${XDG_CONFIG_HOME}/aws/credentials"
+export AWS_SHARED_CREDENTIALS_FILE="${XDG_STATE_HOME}/aws/credentials"
+export AWS_LOGIN_CACHE_DIRECTORY="${XDG_STATE_HOME}/aws/login/cache"
 
 if (( ${+commands[gimme-aws-creds]} )); then
   # gimme-aws-creds config location

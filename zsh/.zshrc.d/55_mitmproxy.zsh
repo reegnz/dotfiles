@@ -8,7 +8,9 @@ mitmproxy_env_enable() {
     echo "Looking for openssl cert bundle..." >&2
     local cert_file=$(brew --prefix)/etc/ca-certificates/cert.pem
     export HTTP_PROXY="http://127.0.0.1:8080"
+    export http_proxy="http://127.0.0.1:8080"
     export HTTPS_PROXY="http://127.0.0.1:8080"
+    export https_proxy="http://127.0.0.1:8080"
     # JAVA
     # Java doesn't respect the HTTP_PROXY and HTTPS_PROXY environment variables, but it is
     # still possible to have it use a proxy.
@@ -31,7 +33,7 @@ mitmproxy_env_enable() {
 }
 
 mitmproxy_env_disable() {
-    unset HTTP_PROXY HTTPS_PROXY JAVA_TOOL_OPTIONS REQUESTS_CA_BUNDLE AWS_CA_BUNDLE
+    unset HTTP_PROXY HTTPS_PROXY http_proxy https_proxy JAVA_TOOL_OPTIONS REQUESTS_CA_BUNDLE AWS_CA_BUNDLE
 }
 
 mitmproxy_add_trust() { 
