@@ -2,8 +2,12 @@
 if (( ! ${+commands[git]} )); then
   return
 fi
-cd_repo_root() {
+git-cd-repo-root() {
 	cd $(git repo-root)
+}
+
+git-cd-worktree() {
+  cd $(fzf --bind 'start:reload(git worktree list)' --bind 'enter:become(echo {1})')
 }
 
 if (( ! ${+commands[git-town]})); then
