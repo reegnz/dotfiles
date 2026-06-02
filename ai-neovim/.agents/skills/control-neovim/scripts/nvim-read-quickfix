@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# nvim-read-quickfix [--server <socket>]
+# Print the current quickfix list as file:line:col entries, one per line.
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s)
+      server="$2"
+      shift 2
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "nvim-read-quickfix: unknown option: $1" >&2
+      exit 1
+      ;;
+    *)
+      echo "nvim-read-quickfix: unexpected argument: $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+fi
+
+nvim --server "$server" --headless \
+  --remote-expr "join(map(getqflist(), 'bufname(v:val.bufnr) . \":\" . v:val.lnum . \":\" . v:val.col'), \"\n\")"

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# nvim-open-diff [--server <socket>] <file1> <file2>
+# Open two files side-by-side in vimdiff (new tab, vertical split).
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-open-diff: unknown option: $1" >&2; exit 1 ;;
+    *) break ;;
+  esac
+done
+
+if [[ $# -ne 2 ]]; then
+  echo "usage: nvim-open-diff [--server <socket>] <file1> <file2>" >&2
+  exit 1
+fi
+
+file1="$(realpath "$1")"
+file2="$(realpath "$2")"
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+fi
+
+nvim --server "$server" --headless \
+  --remote-expr "execute('tabnew | edit ' . fnameescape('$file1') . ' | diffthis | vsplit ' . fnameescape('$file2') . ' | diffthis')"

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# nvim-read-selection [--server <socket>]
+# Print the content of the last visual selection (full lines).
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-read-selection: unknown option: $1" >&2; exit 1 ;;
+    *) echo "nvim-read-selection: unexpected argument: $1" >&2; exit 1 ;;
+  esac
+done
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+fi
+
+nvim --server "$server" --headless \
+  --remote-expr "join(getline(line(\"'<\"), line(\"'>\")), \"\n\")"

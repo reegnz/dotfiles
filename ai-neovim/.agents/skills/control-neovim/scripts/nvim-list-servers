@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# nvim-list-servers
+# Resolve and print the Neovim server socket to use.
+#
+# Resolution order:
+#   1. $NVIM_ADDR environment variable
+#   2. Auto-discover from ~/.cache/nvim/servers/ (all entries assumed live)
+#      - One result  → print it
+#      - Multiple    → print list to stderr, exit 1 (caller must pass $NVIM_ADDR)
+#      - None        → exit 1 with instructions
+set -euo pipefail
+
+if [[ -n "${NVIM_ADDR:-}" ]]; then
+  echo "$NVIM_ADDR"
+  exit 0
+fi
+
+socks=()
+for f in ~/.cache/nvim/servers/*.sock; do
+  [[ -e "$f" ]] && socks+=("$f")
+done
+
+case "${#socks[@]}" in
+  0)
+    echo "nvim-list-servers: no Neovim servers found; run :NvimListen in a Neovim instance" >&2
+    exit 1
+    ;;
+  1)
+    echo "${socks[0]}"
+    ;;
+  *)
+    echo "nvim-list-servers: multiple servers found, set NVIM_ADDR to one of:" >&2
+    printf '  %s\n' "${socks[@]}" >&2
+    exit 1
+    ;;
+esac

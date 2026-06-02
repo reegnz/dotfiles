@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# nvim-start-tmux <dir>
+# Open a new Neovim instance in the given directory with NvimListen active.
+# Requires tmux ($TMUX must be set).
+set -euo pipefail
+
+dir="${1:?usage: nvim-start-tmux <dir>}"
+dir="$(realpath "$dir")"
+
+if [[ ! -d "$dir" ]]; then
+  echo "nvim-start-tmux: not a directory: $dir" >&2
+  exit 1
+fi
+
+if [[ -z "${TMUX:-}" ]]; then
+  echo "nvim-start-tmux: not in a tmux session; open Neovim manually and run :NvimListen" >&2
+  exit 1
+fi
+
+name="nvim:$(basename "$dir")"
+tmux new-window -n "$name" -c "$dir" "nvim -c 'NvimListen'"

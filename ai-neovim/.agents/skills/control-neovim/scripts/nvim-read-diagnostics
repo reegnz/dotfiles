@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# nvim-read-diagnostics [--server <socket>]
+# Print LSP diagnostics for the current buffer.
+# Output: <line>:<col>: [<severity>] (<source>) <message>
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-read-diagnostics: unknown option: $1" >&2; exit 1 ;;
+    *) echo "nvim-read-diagnostics: unexpected argument: $1" >&2; exit 1 ;;
+  esac
+done
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+fi
+
+nvim --server "$server" --headless \
+  --remote-expr "luaeval('local d=vim.diagnostic.get(0); local t={}; for _,x in ipairs(d) do local sev=vim.diagnostic.severity[x.severity]; local src=x.source and \" (\"..x.source..\")\" or \"\"; table.insert(t,(x.lnum+1)..\":\"..(x.col+1)..\": [\"..sev..\"]\"..src..\" \"..x.message) end; return #t>0 and table.concat(t,\"\\n\") or \"no diagnostics\"')"
