@@ -12,87 +12,39 @@ allowed-tools:
 
 # Control Neovim
 
-**Never try to find or resolve the Neovim server yourself.** The scripts handle
-server resolution automatically. Just run them.
+**Never try to find or resolve the Neovim server yourself.** The scripts handle server resolution automatically. Just run them.
+
+**All scripts connect to a Unix socket — always run with `dangerouslyDisableSandbox: true`.**
 
 ---
 
-## Querying state
+## Query state
 
-```bash
-./scripts/nvim-read-current
-```
+| Script | Output |
+|--------|--------|
+| `./scripts/nvim-read-current` | Active file/line/col as `path:line:col` |
+| `./scripts/nvim-read-buffers` | Open buffers as `bufnr\tpath` |
+| `./scripts/nvim-read-selection` | Last visual selection (full lines) |
+| `./scripts/nvim-read-diagnostics` | LSP diagnostics for current buffer |
+| `./scripts/nvim-read-workspace-diagnostics` | LSP diagnostics across all buffers |
+| `./scripts/nvim-read-symbols` | Document symbols as `line:kind:name` (indented) |
+| `./scripts/nvim-open-diff <file1> <file2>` | Side-by-side vimdiff in new tab |
 
-Print active file, line, and column as `<path>:<line>:<col>`.
+## Navigate ("show me")
 
-```bash
-./scripts/nvim-read-buffers
-```
+**Prefer `nvim-write-quickfix` over `nvim-goto`** — it populates a list the user can step through.
 
-List open buffers as `<bufnr>\t<absolute-path>`, one per line.
+| Script | Purpose |
+|--------|---------|
+| `./scripts/nvim-goto <file> [line [col]]` | Jump to file/line/col |
+| `./scripts/nvim-write-quickfix [--efm <fmt>] <<EOF` | Populate quickfix, jump to first entry |
+| `./scripts/nvim-read-quickfix` | Print quickfix as `file:line:col:msg` |
+| `./scripts/nvim-quickfix-navigate <first\|last\|next\|previous>` | Step through quickfix |
+| `./scripts/nvim-search <pattern>` | Highlight pattern in editor |
+| `./scripts/nvim-annotate <<EOF` | Add virtual text at `file:line:col:text` |
+| `./scripts/nvim-clear-annotations` | Remove all virtual text |
 
-```bash
-./scripts/nvim-read-selection
-```
-
-Print the content of the last visual selection (full lines).
-
-```bash
-./scripts/nvim-read-diagnostics
-```
-
-Print LSP diagnostics for the current buffer as
-`<line>:<col>: [<severity>] (<source>) <message>`.
-
-```bash
-./scripts/nvim-read-workspace-diagnostics
-```
-
-Print LSP diagnostics across all loaded buffers as
-`<absolute-path>:<line>:<col>: [<severity>] (<source>) <message>`.
-
-```bash
-./scripts/nvim-read-symbols
-```
-
-Print LSP document symbols for the current buffer as `<line>:<kind>:<name>`,
-indented to reflect nesting. Useful for understanding a file's structure before
-navigating into it.
-
-```bash
-./scripts/nvim-open-diff <file1> <file2>
-```
-
-Open two files side-by-side in vimdiff (new tab, vertical split). Use this to
-show the diff of a before/after pair — equivalent to the IDE integration's
-native diff viewer.
-
----
-
-## Navigating ("show me")
-
-**Prefer `nvim-write-quickfix` for navigation.** It populates a list the user
-can step through and provides context messages. Use `nvim-goto` only when the
-quickfix list is already populated and you need to show a related location
-without clobbering it.
-
-```bash
-./scripts/nvim-goto <file> [<line> [<col>]]
-```
-
-Open a file, optionally jumping to a line and column.
-
-```bash
-./scripts/nvim-write-quickfix [--efm <errorformat>] < entries
-```
-
-Reads entries from stdin (one per line), populates the quickfix list, and jumps
-to the first entry. Always pass entries via heredoc, not a pipe.
-
-Always include a message on every entry explaining why that location is in the
-list (e.g. "definition", "caller", "TODO"). The default errorformat matches
-`file:line:col:message` — use it whenever your entries fit that shape. Only
-pass `--efm` when they don't.
+Pass stdin via heredoc (not pipe). Include a message on every quickfix entry.
 
 ```bash
 ./scripts/nvim-write-quickfix <<EOF
@@ -100,45 +52,3 @@ src/foo.py:42:7:undefined variable 'x'
 src/bar.py:15:1:missing return statement
 EOF
 ```
-
-```bash
-./scripts/nvim-read-quickfix
-```
-
-Prints the current quickfix list as `file:line:col:message` entries, one per
-line.
-
-```bash
-./scripts/nvim-quickfix-navigate <first|last|next|previous>
-```
-
-Jump to an entry in the quickfix list.
-
-```bash
-./scripts/nvim-search <pattern>
-```
-
-Set the search register and enable `hlsearch` so all occurrences of `pattern`
-are highlighted in the editor. Vim's default magic applies (same as typing
-`/pattern`).
-
-```bash
-./scripts/nvim-annotate < entries
-```
-
-Read `file:line:col:text` entries from stdin and add virtual text annotations
-at each location (shown after the line, styled as a comment). Text may contain
-colons. Always pass entries via heredoc, not a pipe.
-
-```bash
-./scripts/nvim-annotate <<EOF
-src/foo.py:42:1:bug: off-by-one here
-src/foo.py:58:5:this path is unreachable
-EOF
-```
-
-```bash
-./scripts/nvim-clear-annotations
-```
-
-Remove all virtual text annotations added by `nvim-annotate`.
