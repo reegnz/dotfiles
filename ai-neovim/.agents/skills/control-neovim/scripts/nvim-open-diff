@@ -24,8 +24,12 @@ file1="$(realpath "$1")"
 file2="$(realpath "$2")"
 
 if [[ -z "$server" ]]; then
-  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
 fi
 
+vimesc() { printf '%s' "$1" | sed "s/'/''/g"; }
+file1_ve=$(vimesc "$file1")
+file2_ve=$(vimesc "$file2")
+
 nvim --server "$server" --headless \
-  --remote-expr "execute('tabnew | edit ' . fnameescape('$file1') . ' | diffthis | vsplit ' . fnameescape('$file2') . ' | diffthis')"
+  --remote-expr "execute('tabnew | edit ' . fnameescape('${file1_ve}') . ' | diffthis | vsplit ' . fnameescape('${file2_ve}') . ' | diffthis')"

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Check shell env first, then tmux session env (survives across commands without
+# requiring the caller's shell to export NVIM_ADDR).
+cached="${NVIM_ADDR:-}"
+if [[ -z "$cached" && -n "${TMUX:-}" ]]; then
+  tmux_val=$(tmux show-environment NVIM_ADDR 2>/dev/null || true)
+  if [[ "$tmux_val" != -* && -n "$tmux_val" ]]; then
+    cached="${tmux_val#NVIM_ADDR=}"
+  fi
+fi
+
+if [[ -n "$cached" && -S "$cached" ]]; then
+  echo "$cached"
+  exit 0
+fi
+
+if [[ -z "${TMUX:-}" ]]; then
+  exec "$SCRIPTS_DIR/nvim-list-servers"
+fi
+
+socket=$(
+  tmux list-panes -F '#{pane_pid} #{pane_index} #{pane_current_command} #{pane_title}' |
+    awk '/nvim/' |
+    xargs -L1 sh -c 'echo $0 $*' |
+    awk 'BEGIN{print "PANE_PID PANE_INDEX PANE_COMMAND PANE_TITLE"};1' |
+    column -t |
+    fzf --reverse --header-lines=1 -1 -0 |
+    awk '{print $1}' |
+    xargs pstree -p |
+    awk '$4 ~ /^nvim/' | tail -1 | awk '{print $2}' |
+    xargs lsof -a -U -p |
+    awk 'NR>1 {print $NF}' |
+    grep -m1 nvim
+)
+
+tmux set-environment NVIM_ADDR "$socket"
+echo "$socket"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # nvim-write-quickfix [--server <socket>] [--efm <errorformat>]
 # Read entries from stdin, populate quickfix list, jump to first.
-# Without --efm, Neovim's current errorformat is used.
+# Without --efm, defaults to %f:%l:%c:%m (file:line:col:message).
 set -euo pipefail
 
 SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -34,19 +34,18 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$server" ]]; then
-  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
 fi
 
 tmpfile=$(mktemp)
 trap 'rm -f "$tmpfile"' EXIT
 cat > "$tmpfile"
 
-# $tmpfile and $efm are controlled values, safe to embed in the vimscript string.
-# The server process cannot see client-side env vars.
 if [[ -n "$efm" ]]; then
+  efm_ve=$(printf '%s' "$efm" | sed "s/'/''/g")
   nvim --server "$server" --headless \
-    --remote-expr "execute('let s=&efm | set efm=$efm | cfile $tmpfile | cfirst | let &efm=s')"
+    --remote-expr "execute('let s=&efm | let &efm=''${efm_ve}'' | cfile ${tmpfile} | let &efm=s | copen | cfirst')"
 else
   nvim --server "$server" --headless \
-    --remote-expr "execute('cfile $tmpfile | cfirst')"
+    --remote-expr "execute('cfile $tmpfile | copen | cfirst')"
 fi

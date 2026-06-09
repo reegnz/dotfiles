@@ -17,8 +17,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$server" ]]; then
-  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
 fi
 
 nvim --server "$server" --headless \
-  --remote-expr "luaeval('local d=vim.diagnostic.get(0); local t={}; for _,x in ipairs(d) do local sev=vim.diagnostic.severity[x.severity]; local src=x.source and \" (\"..x.source..\")\" or \"\"; table.insert(t,(x.lnum+1)..\":\"..(x.col+1)..\": [\"..sev..\"]\"..src..\" \"..x.message) end; return #t>0 and table.concat(t,\"\\n\") or \"no diagnostics\"')"
+  --remote-expr "luaeval('(function() local d=vim.diagnostic.get(0); local t={}; for _,x in ipairs(d) do local sev=vim.diagnostic.severity[x.severity]; local src=x.source and \" (\"..x.source..\")\" or \"\"; table.insert(t,(x.lnum+1)..\":\"..(x.col+1)..\": [\"..sev..\"]\"..src..\" \"..x.message) end; return #t>0 and table.concat(t,\"\\n\") or \"no diagnostics\" end)()')"

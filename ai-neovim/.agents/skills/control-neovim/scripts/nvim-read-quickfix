@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # nvim-read-quickfix [--server <socket>]
-# Print the current quickfix list as file:line:col entries, one per line.
+# Print the current quickfix list as file:line:col:message entries, one per line.
 set -euo pipefail
 
 SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -28,8 +28,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$server" ]]; then
-  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
 fi
 
 nvim --server "$server" --headless \
-  --remote-expr "join(map(getqflist(), 'bufname(v:val.bufnr) . \":\" . v:val.lnum . \":\" . v:val.col'), \"\n\")"
+  --remote-expr "join(map(getqflist(), 'fnamemodify(bufname(v:val.bufnr), \":p\") . \":\" . v:val.lnum . \":\" . v:val.col . \":\" . v:val.text'), \"\n\")"

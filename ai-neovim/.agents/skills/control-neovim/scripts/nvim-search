@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# nvim-search [--server <socket>] <pattern>
+# Set the search register and enable hlsearch so all occurrences are highlighted.
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-search: unknown option: $1" >&2; exit 1 ;;
+    *) break ;;
+  esac
+done
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: nvim-search [--server <socket>] <pattern>" >&2
+  exit 1
+fi
+
+pattern="$1"
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
+fi
+
+vimesc() { printf '%s' "$1" | sed "s/'/''/g"; }
+pattern_ve=$(vimesc "$pattern")
+
+nvim --server "$server" --headless \
+  --remote-expr "execute('let @/ = ''${pattern_ve}'' | set hlsearch')"

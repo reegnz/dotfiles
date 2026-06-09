@@ -17,8 +17,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$server" ]]; then
-  server="$("$SCRIPTS_DIR/nvim-list-servers")"
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
 fi
 
 nvim --server "$server" --headless \
   --remote-expr "expand('%:p') . ':' . line('.') . ':' . col('.')"
+echo

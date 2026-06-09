@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# nvim-clear-annotations [--server <socket>]
+# Clear all virtual text annotations added by nvim-annotate (the 'claude' namespace).
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-clear-annotations: unknown option: $1" >&2; exit 1 ;;
+    *) echo "nvim-clear-annotations: unexpected argument: $1" >&2; exit 1 ;;
+  esac
+done
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
+fi
+
+nvim --server "$server" --headless \
+  --remote-expr "luaeval('(function() local ns=vim.api.nvim_create_namespace(\"claude\"); for _,b in ipairs(vim.api.nvim_list_bufs()) do vim.api.nvim_buf_clear_namespace(b,ns,0,-1) end; return \"ok\" end)()')"

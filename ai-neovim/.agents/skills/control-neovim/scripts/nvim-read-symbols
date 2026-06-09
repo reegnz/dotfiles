@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# nvim-read-symbols [--server <socket>]
+# Print LSP document symbols for the current buffer.
+# Output: <line>:<kind>:<indent><name>  (indented to reflect nesting)
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-read-symbols: unknown option: $1" >&2; exit 1 ;;
+    *) echo "nvim-read-symbols: unexpected argument: $1" >&2; exit 1 ;;
+  esac
+done
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
+fi
+
+nvim --server "$server" --headless \
+  --remote-expr "luaeval('(function() if #vim.lsp.get_clients({bufnr=0})==0 then return \"no lsp clients\" end; local kinds={[1]=\"File\",[2]=\"Module\",[3]=\"Namespace\",[4]=\"Package\",[5]=\"Class\",[6]=\"Method\",[7]=\"Property\",[8]=\"Field\",[9]=\"Constructor\",[10]=\"Enum\",[11]=\"Interface\",[12]=\"Function\",[13]=\"Variable\",[14]=\"Constant\",[15]=\"String\",[16]=\"Number\",[17]=\"Boolean\",[18]=\"Array\",[19]=\"Object\",[20]=\"Key\",[21]=\"Null\",[22]=\"EnumMember\",[23]=\"Struct\",[24]=\"Event\",[25]=\"Operator\",[26]=\"TypeParameter\"}; local t={}; local function walk(syms,depth) for _,s in ipairs(syms or {}) do local r=s.range or s.location and s.location.range; local line=r and (r.start.line+1) or 0; local kind=kinds[s.kind] or \"Unknown\"; local indent=string.rep(\"  \",depth); table.insert(t,line..\":\"..kind..\":\"..indent..s.name); if s.children then walk(s.children,depth+1) end end end; local params=vim.lsp.util.make_text_document_params(); local results=vim.lsp.buf_request_sync(0,\"textDocument/documentSymbol\",{textDocument=params},3000); if results then for _,res in pairs(results) do if res.result then walk(res.result,0) end end end; table.sort(t,function(a,b) return tonumber(a:match(\"^(%d+):\")) < tonumber(b:match(\"^(%d+):\")) end); return #t>0 and table.concat(t,\"\\n\") or \"no symbols\" end)()')"

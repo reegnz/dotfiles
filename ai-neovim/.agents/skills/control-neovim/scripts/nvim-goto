@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# nvim-goto [--server <socket>] <file> [<line> [<col>]]
+# Open a file in the running Neovim instance, optionally jumping to a line and column.
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-goto: unknown option: $1" >&2; exit 1 ;;
+    *) break ;;
+  esac
+done
+
+if [[ $# -lt 1 || $# -gt 3 ]]; then
+  echo "usage: nvim-goto [--server <socket>] <file> [<line> [<col>]]" >&2
+  exit 1
+fi
+
+file="$(realpath "$1")"
+line="${2:-}"
+col="${3:-}"
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
+fi
+
+vimesc() { printf '%s' "$1" | sed "s/'/''/g"; }
+file_ve=$(vimesc "$file")
+
+if [[ -n "$line" && -n "$col" ]]; then
+  nvim --server "$server" --headless \
+    --remote-expr "execute('e ' . fnameescape('${file_ve}') . ' | call cursor(${line}, ${col})')"
+elif [[ -n "$line" ]]; then
+  nvim --server "$server" --headless \
+    --remote-expr "execute('e ' . fnameescape('${file_ve}') . ' | call cursor(${line}, 1)')"
+else
+  nvim --server "$server" --headless \
+    --remote-expr "execute('e ' . fnameescape('${file_ve}'))"
+fi

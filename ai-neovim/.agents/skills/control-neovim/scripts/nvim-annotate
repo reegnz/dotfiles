@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# nvim-annotate [--server <socket>] < entries
+# Read file:line:col:text entries from stdin and add virtual text annotations.
+# Uses the 'claude' extmark namespace — clear with nvim-clear-annotations.
+# Text may contain colons. Always pass entries via heredoc, not a pipe.
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-annotate: unknown option: $1" >&2; exit 1 ;;
+    *) echo "nvim-annotate: unexpected argument: $1" >&2; exit 1 ;;
+  esac
+done
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
+fi
+
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+cat > "$tmpfile"
+
+vimesc() { printf '%s' "$1" | sed "s/'/''/g"; }
+tmpfile_ve=$(vimesc "$tmpfile")
+
+nvim --server "$server" --headless \
+  --remote-expr "luaeval('(function() local ns=vim.api.nvim_create_namespace(\"claude\"); local f=io.open(\"${tmpfile_ve}\",\"r\"); if f then for line in f:lines() do local file,lnum,col,text=line:match(\"^(.+):(%d+):(%d+):(.+)$\"); if file then local b=vim.fn.bufadd(file); vim.fn.bufload(b); vim.api.nvim_buf_set_extmark(b,ns,tonumber(lnum)-1,0,{virt_text={{text,\"DiagnosticInfo\"}},virt_text_pos=\"eol\"}) end end; f:close() end; vim.cmd(\"redraw!\"); return \"ok\" end)()')"

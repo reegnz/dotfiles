@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# nvim-read-workspace-diagnostics [--server <socket>]
+# Print LSP diagnostics across all loaded buffers.
+# Output: <absolute-path>:<line>:<col>: [<severity>] (<source>) <message>
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-read-workspace-diagnostics: unknown option: $1" >&2; exit 1 ;;
+    *) echo "nvim-read-workspace-diagnostics: unexpected argument: $1" >&2; exit 1 ;;
+  esac
+done
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
+fi
+
+nvim --server "$server" --headless \
+  --remote-expr "luaeval('(function() local t={}; for _,b in ipairs(vim.api.nvim_list_bufs()) do if vim.api.nvim_buf_is_loaded(b) then local n=vim.api.nvim_buf_get_name(b); for _,x in ipairs(vim.diagnostic.get(b)) do local sev=vim.diagnostic.severity[x.severity]; local src=x.source and \" (\"..x.source..\")\" or \"\"; table.insert(t,n..\":\"..(x.lnum+1)..\":\"..(x.col+1)..\": [\"..sev..\"]\"..src..\" \"..x.message) end end end; return #t>0 and table.concat(t,\"\\n\") or \"no diagnostics\" end)()')"
