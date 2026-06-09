@@ -12,14 +12,8 @@ allowed-tools:
 
 # Control Neovim
 
-## Starting a new instance
-
-```bash
-./scripts/nvim-start-tmux <dir>
-```
-
-Requires tmux. Without tmux, ask the user to open Neovim in the target
-directory.
+**Never try to find or resolve the Neovim server yourself.** The scripts handle
+server resolution automatically. Just run them.
 
 ---
 
