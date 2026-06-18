@@ -15,6 +15,7 @@ elif [ -f "$linux_antigen" ]; then
 else
   return
 fi
+return
 source "$antigen"
 
 # https://github.com/ohmyzsh/ohmyzsh

@@ -2,25 +2,30 @@
 
 # to profile zsh startup, uncomment the `zmodload zsh/zprof` and `zprof` lines
 
+builtin autoload -Uz zrecompile
+
 # for improving the structure of the zsh config, it's split into multiple
 # files based on various concerns.
 # The files are loaded from $HOME/.zshrc.d
-if [ -d $HOME/.zshrc.d ]; then
-	for file in $HOME/.zshrc.d/*.zsh; do
+if [ -d ~/.zshrc.d ]; then
+  for file in ~/.zshrc.d/*.zsh(N); do
 		if [ -r $file ]; then
-			[ $file.zwc -nt $file ] || zcompile -R -- $file.zwc $file
+      zrecompile -q $file
 			if [ "${-#*i}" != "$-" ]; then
-				. "$file"
+				source "$file"
 			else
 				# avoid printing to stdout when non-interactive
-				. "$file" >/dev/null
+				source "$file" >/dev/null
 			fi
 		fi
 	done
 	unset file
 fi
 
-[[ ~/.zcompdump.zwc -nt ~/.zcompdump ]] || zcompile -R -- ~/.zcompdump.zwc ~/.zcompdump
-[[ ~/.zshrc.zwc -nt ~/.zshrc ]] || zcompile -R -- ~/.zshrc.zwc ~/.zshrc 
+if [[ -f "$ZSH_COMPDUMP" ]]; then
+  zrecompile -qp ~/.zshrc -- -M $ZSH_COMPDUMP
+else
+  zrecompile ~/.zshrc
+fi
 
 # zprof
