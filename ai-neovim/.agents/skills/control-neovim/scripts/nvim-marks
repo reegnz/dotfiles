@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# nvim-marks [--server <socket>] list|set|jump [args...]
+# Manage Neovim marks.
+#   list                        - List set marks (human-readable table)
+#   set <mark> [file:line:col]  - Set mark; no location = current cursor position
+#   jump <mark>                 - Jump to exact mark position
+set -euo pipefail
+
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+server=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --server | -s) server="$2"; shift 2 ;;
+    --) shift; break ;;
+    -*) echo "nvim-marks: unknown option: $1" >&2; exit 1 ;;
+    *) break ;;
+  esac
+done
+
+if [[ $# -lt 1 ]]; then
+  echo "usage: nvim-marks [--server <socket>] list|set|jump [args...]" >&2
+  exit 1
+fi
+
+cmd="$1"; shift
+
+if [[ -z "$server" ]]; then
+  server="$("$SCRIPTS_DIR/nvim-find-server")"
+fi
+
+vimesc() { printf '%s' "$1" | sed "s/'/''/g"; }
+
+case "$cmd" in
+  list)
+    nvim --server "$server" --headless \
+      --remote-expr "execute('marks')"
+    echo
+    ;;
+
+  set)
+    if [[ $# -lt 1 ]]; then
+      echo "usage: nvim-marks set <mark> [file:line:col]" >&2
+      exit 1
+    fi
+    mark="$1"; shift
+    if [[ ${#mark} -ne 1 || ! "$mark" =~ [a-zA-Z] ]]; then
+      echo "nvim-marks: mark must be a single letter (a-z or A-Z)" >&2
+      exit 1
+    fi
+    if [[ $# -eq 0 ]]; then
+      nvim --server "$server" --headless \
+        --remote-expr "execute('normal! m${mark}')" > /dev/null
+    elif [[ $# -eq 1 ]]; then
+      location="$1"
+      file="${location%%:*}"
+      rest="${location#*:}"
+      line="${rest%%:*}"
+      col="${rest#*:}"
+      file="$(realpath "$file")"
+      file_ve=$(vimesc "$file")
+      nvim --server "$server" --headless \
+        --remote-expr "execute(['badd ' . fnameescape('${file_ve}'), \"call setpos(\\\"'${mark}\\\", [bufnr('${file_ve}'), ${line}, ${col}, 0])\"])" > /dev/null
+    else
+      echo "usage: nvim-marks set <mark> [file:line:col]" >&2
+      exit 1
+    fi
+    ;;
+
+  jump)
+    if [[ $# -lt 1 ]]; then
+      echo "usage: nvim-marks jump <mark>" >&2
+      exit 1
+    fi
+    mark="$1"
+    if [[ ${#mark} -ne 1 || ! "$mark" =~ [a-zA-Z] ]]; then
+      echo "nvim-marks: mark must be a single letter (a-z or A-Z)" >&2
+      exit 1
+    fi
+    nvim --server "$server" --headless \
+      --remote-expr "execute('normal! \`${mark}')" > /dev/null
+    ;;
+
+  *)
+    echo "nvim-marks: unknown command: $cmd" >&2
+    echo "usage: nvim-marks [--server <socket>] list|set|jump [args...]" >&2
+    exit 1
+    ;;
+esac
