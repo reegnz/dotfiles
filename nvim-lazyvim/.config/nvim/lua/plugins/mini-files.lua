@@ -1,20 +1,20 @@
 return {
   {
     "mini.files",
-    -- lazy = false,
+    init = function()
+      vim.api.nvim_create_user_command("MiniFiles", function(opts)
+        require("mini.files").open(opts.args ~= "" and opts.args or vim.api.nvim_buf_get_name(0), true)
+      end, { nargs = "?" })
+    end,
     keys = {
       {
         "<leader>m",
-        function()
-          require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
-        end,
-        desc = "Open mini.files (Directory of Current File",
+        "<cmd>MiniFiles<cr>",
+        desc = "Open mini.files (Directory of Current File)",
       },
       {
         "-",
-        function()
-          require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
-        end,
+        "<cmd>MiniFiles<cr>",
         desc = "Open mini.files (Directory of Current File)",
         remap = true,
       },
