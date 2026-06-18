@@ -2,12 +2,18 @@
 if (( ! ${+commands[git]} )); then
   return
 fi
-git-cd-repo-root() {
-	cd $(git repo-root)
-}
+alias cd-git-repo-root=git repo-root
 
-git-cd-worktree() {
-  cd $(fzf --bind 'start:reload(git worktree list)' --bind 'enter:become(echo {1})')
+cd-git-worktree() {
+  local dir
+  dir=$(fzf --reverse \
+    --bind 'start:reload(git worktree list)' \
+    --bind 'enter:become(echo {1})' \
+    --preview 'git -C {1} status --short 2>/dev/null; echo "---"; git -C {1} log --oneline -8 2>/dev/null' \
+    --preview-window 'right:40%')
+  if [ -n "$dir" ]; then
+    cd "${dir}"
+  fi
 }
 
 if (( ! ${+commands[git-town]})); then
