@@ -1,0 +1,75 @@
+.TH UNGRON.JQ 1 2026-06-26 gron-jq "User Commands"
+.SH NAME
+ungron.jq \- rebuild JSON from gron.jq assignments
+.SH SYNOPSIS
+.B ungron.jq
+.RI [ file ...]
+.br
+.B jq \-nRf ungron.jq
+.RI [ file ...]
+.SH DESCRIPTION
+.B ungron.jq
+reads the line-oriented assignments produced by
+.BR gron.jq (1)
+and reconstructs the original JSON. Each input line has the form
+\fIpath\fR = \fIvalue\fR; it parses \fIpath\fR into a jq path and assigns the
+decoded \fIvalue\fR there with
+.BR setpath ,
+folding every line into one result.
+.PP
+Because each assignment applies on its own, the input need not be complete or
+ordered. Other tools may filter or rearrange the lines first, and whatever
+remains is reconstructed. Blank lines and lines that are not assignments are
+skipped, and a trailing carriage return is stripped, so grep, awk, and sort may
+leave their usual debris in the stream. Missing intermediate objects and arrays
+are created as needed, and the path decides which: a numeric component makes an
+array, a bare or quoted key makes an object.
+.PP
+The path parser is quote-aware. A key that contains punctuation such as a dot,
+square brackets, a double quote, or even an equals sign still round-trips,
+because it is carried inside a JSON-encoded \fI["..."]\fR path component. A line
+whose path is a lone \fI.\fR assigns the document root, as written by
+.BR gron.jq (1)
+for a top-level scalar or empty container.
+.SH OPTIONS
+.B ungron.jq
+is a jq program and has no options of its own. It runs through
+.BR jq (1)
+with null input and raw input; the
+.B \-n
+and
+.B \-R
+flags are part of the script shebang. Further
+.BR jq (1)
+flags such as
+.B \-c
+may be appended.
+.SH EXAMPLES
+Round-trip through gron.jq:
+.PP
+.RS 4
+.EX
+$ echo '{"a":[1,2]}' | gron.jq | ungron.jq \-c
+{"a":[1,2]}
+.EE
+.RE
+.SH EXIT STATUS
+Exits 0 on success, or non-zero if a line cannot be parsed or
+.BR jq (1)
+fails.
+.SH LIMITATIONS
+.B ungron.jq
+decodes the format that
+.BR gron.jq (1)
+emits. It is not a general parser and assumes well-formed input.
+.PP
+If every line under a container is filtered out, and the container had no
+empty-container assignment of its own, that container is not recreated.
+.SH SEE ALSO
+.BR gron.jq (1),
+.BR jq (1)
+.PP
+gron:
+.I https://github.com/tomnomnom/gron
+.SH AUTHOR
+Part of the gron-jq dotfiles package.

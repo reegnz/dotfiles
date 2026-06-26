@@ -1,0 +1,71 @@
+.TH GRON.JQ 1 2026-06-26 gron-jq "User Commands"
+.SH NAME
+gron.jq \- flatten JSON into greppable assignments
+.SH SYNOPSIS
+.B gron.jq
+.RI [ file ...]
+.br
+.B jq \-rf gron.jq
+.RI [ file ...]
+.SH DESCRIPTION
+.B gron.jq
+rewrites JSON as a sequence of assignments, one per line, of the form
+\fIpath\fR = \fIvalue\fR; where \fIpath\fR is a jq path expression pointing at a
+leaf and \fIvalue\fR is that leaf encoded as JSON. The flat, line-oriented form
+lets you process deeply nested JSON with tools such as
+.BR grep (1),
+.BR awk (1),
+and
+.BR sort (1).
+.PP
+Each line stands on its own, so lines can be filtered, reordered, or removed and
+the result still reconstructs with
+.BR ungron.jq (1).
+.PP
+A leaf is a scalar or an empty array or object; every other node is expanded
+into its leaves. Object keys that look like identifiers use a leading dot, as in
+\fI.foo\fR. Other keys and all array indices use bracket form, such as
+\fI["foo bar"]\fR or \fI[0]\fR. When the whole document is itself a leaf it has
+no path, so it is written with a lone dot, as in \fI. = 42;\fR.
+.SH OPTIONS
+.B gron.jq
+is a jq program and has no options of its own. It runs through
+.BR jq (1)
+in raw output mode; the
+.B \-r
+flag is part of the script shebang, so running
+.B gron.jq
+directly already applies it.
+.SH EXAMPLES
+Flatten an object:
+.PP
+.RS 4
+.EX
+$ echo '{"items":[{"kind":"Pod"}]}' | gron.jq
+\&.items[0].kind = "Pod";
+.EE
+.RE
+.PP
+Keep one subtree with grep, then rebuild it:
+.PP
+.RS 4
+.EX
+$ echo '{"a":1,"items":[2]}' | gron.jq | grep items | ungron.jq \-c
+{"items":[2]}
+.EE
+.RE
+.SH EXIT STATUS
+Exits 0 on success, or non-zero if
+.BR jq (1)
+cannot parse the input.
+.SH LIMITATIONS
+Every path is built in memory before anything is printed, so the input must fit
+in memory.
+.SH SEE ALSO
+.BR ungron.jq (1),
+.BR jq (1)
+.PP
+gron:
+.I https://github.com/tomnomnom/gron
+.SH AUTHOR
+Part of the gron-jq dotfiles package.
