@@ -14,4 +14,8 @@ def fix_key:
 def is_leaf:
   type as $t | $t != "array" and $t != "object" or length == 0;
 
-paths(is_leaf) as $key | "\($key | map(fix_key)|join("")) = \(getpath($key)|tojson);"
+# the document root has no path, so paths(is_leaf) skips it. emit it explicitly
+# with a lone "." when the whole input is itself a leaf (scalar or empty
+# container); the paths branch is empty in that case.
+( select(is_leaf) | ". = \(tojson);" ),
+( paths(is_leaf) as $key | "\($key | map(fix_key)|join("")) = \(getpath($key)|tojson);" )
