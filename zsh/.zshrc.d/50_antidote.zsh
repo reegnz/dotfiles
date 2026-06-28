@@ -1,15 +1,16 @@
 mac_antidote=/opt/homebrew/opt/antidote/share/antidote/antidote.zsh
+linux_antidote=/usr/share/zsh-antidote/antidote.zsh
 if [ -f "$mac_antidote" ]; then
   antidote=$mac_antidote
-else
-  return
+elif [ -f "$linux_antidote" ]; then
+  antidote=$linux_antidote
 fi
 
 setopt extended_glob
 
 export ANTIDOTE_HOME="${XDG_CACHE_HOME}/antidote"
 
-source $mac_antidote
+source $antidote
 source <(antidote init)
 
 antidote bundle <<EOF
