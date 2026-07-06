@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 install() {
   OS=$(uname)
-  local stow_opts=(-R -v --no-folding --target "$HOME")
+  local stow_opts=(--restow --verbose --no-folding --target "$HOME")
   [[ "${FORCE:-}" == "1" ]] && stow_opts+=(--adopt)
   for dir in */; do
     dir="${dir%/*}"
