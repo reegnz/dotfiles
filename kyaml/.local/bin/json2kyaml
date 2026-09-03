@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+jq -r -f ~/.local/share/kyaml.jq "$@"

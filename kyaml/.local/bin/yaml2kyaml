@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+gojq --yaml-input -r -f ~/.local/share/kyaml.jq "$@"
