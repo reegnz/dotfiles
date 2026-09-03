@@ -11,6 +11,6 @@ tmuxifier-tmux set-option -w -t "$session:$window" @window_root "$PWD" || true
 
 #split_h 50
 #split_v 30
-run_cmd "claude --continue" 1
+# run_cmd "claude --continue" 1
 # run_cmd 'y' 2
 # select_pane 1
