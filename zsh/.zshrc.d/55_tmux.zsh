@@ -21,5 +21,7 @@ ts() {
 
 # Ctrl+F: open the picker from the shell prompt
 _ts_zle() { ts; zle reset-prompt }
-zle -N _ts_zle
-bindkey '^F' _ts_zle
+if [[ -o interactive && -o zle ]]; then
+  zle -N _ts_zle
+  bindkey '^F' _ts_zle
+fi

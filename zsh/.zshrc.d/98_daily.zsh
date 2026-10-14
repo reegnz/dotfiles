@@ -1,12 +1,13 @@
 __daily_dir() {
-  echo $XDG_HOME/daily/$(gdate --iso-8601=date)
+  echo $XDG_HOME/daily/$(date +%F)
 }
 
 today() {
-  if [ ! -d $(__daily_dir) ]; then
-    mkdir -p $(__daily_dir)
+  local dir=$(__daily_dir)
+  if [[ ! -d "$dir" ]]; then
+    mkdir -p -- "$dir" || return
   fi
-  cd $(__daily_dir)
+  builtin cd -- "$dir"
 }
 
 alias t=today

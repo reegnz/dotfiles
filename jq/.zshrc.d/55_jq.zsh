@@ -6,6 +6,8 @@ _gojq-yaml-complete() {
   unset JQ_REPL_JQ JQ_REPL_ARGS JQ_PATHS_ARGS
 }
 
-zle -N _gojq-yaml-complete
-# bind alt + y to _gojq-yaml-complete
-bindkey '\ey' _gojq-yaml-complete
+if [[ -o interactive && -o zle ]]; then
+  zle -N _gojq-yaml-complete
+  # bind alt + y to _gojq-yaml-complete
+  bindkey '\ey' _gojq-yaml-complete
+fi

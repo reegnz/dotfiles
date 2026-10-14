@@ -6,6 +6,10 @@ elif [ -f "$linux_antidote" ]; then
   antidote=$linux_antidote
 fi
 
+if [[ -z "${antidote:-}" ]]; then
+  return
+fi
+
 setopt extended_glob
 
 export ANTIDOTE_HOME="${XDG_CACHE_HOME}/antidote"

@@ -18,17 +18,6 @@ mitmproxy_env_enable() {
     export JAVA_TOOL_OPTIONS="-Djavax.net.ssl.trustStoreType=KeychainStore"
     export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080"
     export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dhttps.proxyHost=localhost -Dhttps.proxyPort=8080"
-    # For tools not using Keychain
-    # The python requests library doesn't respect the Keychain, so
-    # you need to have it using openssl cert.pem bundle instead.
-    export REQUESTS_CA_BUNDLE="$cert_file"
-    # AWS CLI also doesn't use the keychain so have it use openssl certs.pem instead.
-    export AWS_CA_BUNDLE="$cert_file"
-
-    # force uv into using system trust store
-    export UV_NATIVE_TLS=true
-
-    echo "Using ca-certificates bundle: $cert_file"
     echo "Using proxy: $HTTP_PROXY"
 }
 

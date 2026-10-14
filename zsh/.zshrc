@@ -10,7 +10,7 @@ builtin autoload -Uz zrecompile
 if [ -d ~/.zshrc.d ]; then
   for file in ~/.zshrc.d/*.zsh(N); do
 		if [ -r $file ]; then
-      zrecompile -q $file
+      zrecompile -qp $file
 			if [ "${-#*i}" != "$-" ]; then
 				source "$file"
 			else
@@ -25,7 +25,7 @@ fi
 if [[ -f "$ZSH_COMPDUMP" ]]; then
   zrecompile -qp ~/.zshrc -- -M $ZSH_COMPDUMP
 else
-  zrecompile ~/.zshrc
+  zrecompile -p ~/.zshrc
 fi
 
 # zprof

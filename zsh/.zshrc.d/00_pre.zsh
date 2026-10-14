@@ -27,9 +27,10 @@ fi
 
 # Figure out the SHORT hostname
 if [[ $platform == "darwin" ]]; then
-  if [ ! -f $ZSH_CACHE_DIR/shorthost.sh ]; then
+  short_host_cache="$ZSH_CACHE_DIR/shorthost.cache"
+  if [[ ! -f "$short_host_cache" ]]; then
     # OS X
-    if [ -n "$+commands[scutil]" ]; then
+    if (( $+commands[scutil] )); then
       SHORT_HOST=$(scutil --get ComputerName)
       SHORT_HOST="${SHORT_HOST%% \(*\)}"
       SHORT_HOST="${SHORT_HOST// /-}"
@@ -38,9 +39,11 @@ if [[ $platform == "darwin" ]]; then
     else
       SHORT_HOST=${HOST/.*/}
     fi
-    echo "export SHORT_HOST=$SHORT_HOST"  > $ZSH_CACHE_DIR/shorthost.sh
+    printf '%s\n' "$SHORT_HOST" >| "$short_host_cache"
   fi
-source $ZSH_CACHE_DIR/shorthost.sh
+  IFS= read -r SHORT_HOST < "$short_host_cache"
+  export SHORT_HOST
+  unset short_host_cache
 fi
 
 # Save the location of the current completion dump file.
