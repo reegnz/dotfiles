@@ -15,7 +15,7 @@ ts() {
     [[ -z "$output" ]] && return 0
     dir=${output%%$'\n'*}
     [[ -n "$dir" ]] || return 0
-    cd "$dir" && unset TMUXIFIER_SESSION_ROOT && tmuxifier load-session ai
+    cd "$dir" && unset TMUXIFIER_SESSION_ROOT && tmuxifier load-session default
   fi
 }
 

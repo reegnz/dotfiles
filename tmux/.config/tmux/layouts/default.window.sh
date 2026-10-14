@@ -1,6 +1,6 @@
 wname=$(git -C "$PWD" symbolic-ref --quiet --short HEAD 2>/dev/null || true)
-wname="${wname##*/}" # branch basename
-: "${wname:=ai}"     # fallback: detached HEAD or non-repo dir
+wname="${wname##*/}"  # branch basename
+: "${wname:=default}" # fallback: detached HEAD or non-repo dir
 window_root "${PWD}"
 new_window "$wname"
 
