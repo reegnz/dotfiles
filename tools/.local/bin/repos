@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Minimal usable subset of ghq, strictly git: no other VCS.
+# list [-p]: repos under ~/repos. get: clone URLs into ~/repos/host/path.
+# update: like `ghq get -u -P`, 16 at a time.
+set -euo pipefail
+root=$HOME/repos
+export root
+usage() {
+  cat <<'EOF'
+Usage: repos [list [-p] | get URL... | update [-v] | help]
+
+  list       List repos under ~/repos, relative to it (default)
+  list -p    List repos with full paths
+  get URL... Clone recursively into ~/repos/host/path; skip existing ones
+  update     git pull --ff-only and update submodules in every repo, 16 at a time
+  update -v  Same, but show git's output
+  help       Show this help (also -h, --help)
+EOF
+}
+repos() { fd -H -I -t d '^\.git$' "$root" | sed 's|/\.git/*$||' | sort; }
+get() {
+  local src=$1 path
+  [[ $src == *://* || $src == git@* ]] || src=https://$src
+  path=${src%/}; path=${path%.git}; path=${path#*://}; path=${path#git@}; path=${path/:/\/}
+  if [[ -e $root/$path ]]; then echo "exists: $root/$path" >&2; return 0; fi
+  mkdir -p "$(dirname "$root/$path")"
+  git clone --recursive "$src" "$root/$path" && echo "$root/$path"
+}
+pull() {
+  local q=-q
+  [[ -n ${VERBOSE:-} ]] && q=
+  echo updating
+  cd "$1"
+  if git rev-parse -q --verify '@{upstream}' >/dev/null; then
+    git pull $q --ff-only || return
+    git submodule update $q --init --recursive
+  else
+    git fetch $q
+  fi
+}
+# Buffers each repo's output so its lines print together; failures in red.
+pull_one() {
+  local name=${1#"$root"/} out rc=0 c= r=
+  out=$(pull "$1" 2>&1) || rc=$?
+  if [[ -t 1 ]]; then r=$'\033[0m'; (( rc )) && c=$'\033[31m'; fi
+  while IFS= read -r line; do printf '%s%s: %s%s\n' "$c" "$name" "$line" "$r"; done <<<"$out"
+  (( rc )) && printf '%s%s: exit %d%s\n' "$c" "$name" "$rc" "$r"
+  return 0
+}
+update() {
+  [[ ${1:-} == -v ]] && export VERBOSE=1
+  repos | xargs -P16 -I{} bash -c 'pull_one "$1"' _ {}
+}
+export -f pull pull_one
+case ${1:-list} in
+  list) if [[ ${2:-} == -p ]]; then repos; else repos | sed "s|^$root/||"; fi ;;
+  update) update "${2:-}" ;;
+  get) shift; [[ $# -gt 0 ]] || { usage >&2; exit 2; }; rc=0; for u in "$@"; do get "$u" || rc=1; done; exit $rc ;;
+  help|-h|--help) usage ;;
+  *) usage >&2; exit 2 ;;
+esac
