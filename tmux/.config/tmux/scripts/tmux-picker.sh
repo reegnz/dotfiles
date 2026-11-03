@@ -28,6 +28,7 @@ else
 fi
 
 # ── Step 1: pick a directory ────────────────────────────────────────────────
+while :; do
 path=$(
   fzf --ansi --disabled --tmux 'center,90%,90%' --layout=reverse --info=inline --keep-right \
     --accept-nth 2.. \
@@ -77,9 +78,10 @@ label=" ${root} "
 #   ctrl-r  flip local <-> local+remote (branch view only)
 #   ctrl-f  fetch all remotes, then reload the active view
 #   ctrl-p  pull the highlighted branch (no-op in the PR view)
-fzf --ansi --tmux 'center,90%,90%' --layout=reverse --info=inline --keep-right \
+#   esc     back to the directory list (esc there closes the picker)
+action=$(fzf --ansi --tmux 'center,90%,90%' --layout=reverse --info=inline --keep-right \
   --prompt 'branches(local) > ' --border --border-label "$label" \
-  --header 'enter: open   alt-p: toggle PRs   alt-c: create   alt-d: delete   ctrl-f: fetch   ctrl-p: pull   ctrl-r: toggle remotes' \
+  --header 'enter: open   alt-p: toggle PRs   alt-c: create   alt-d: delete   ctrl-f: fetch   ctrl-p: pull   ctrl-r: toggle remotes   esc: back' \
   --bind "start:reload($branch_source '$root')" \
   --bind "enter:become($picker_open '$root' {2})" \
   --bind "alt-p:transform:$picker_toggle '$root'" \
@@ -89,5 +91,8 @@ fzf --ansi --tmux 'center,90%,90%' --layout=reverse --info=inline --keep-right \
   --bind "ctrl-p:execute($picker_action pull '$root' {2})+transform:$picker_reload '$root'" \
   --bind "ctrl-r:transform:$picker_toggle_remotes '$root'" \
   --bind 'tab:down,btab:up' \
-  --bind 'ctrl-d:half-page-down,ctrl-u:half-page-up'
-exit 0 # swallow fzf's abort code (130 on esc) so tmux run-shell doesn't flag it
+  --bind 'ctrl-d:half-page-down,ctrl-u:half-page-up' \
+  --bind 'esc:become(printf back)')
+[ "$action" = back ] && continue
+exit 0 # swallow fzf's abort code (130 on ctrl-c) so tmux run-shell doesn't flag it
+done

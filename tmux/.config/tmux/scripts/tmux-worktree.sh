@@ -109,8 +109,16 @@ open_pr() {
 }
 
 remove_branch() {
-  local branch="$1" existing_worktree force='' ans session window
+  local branch="$1" existing_worktree default force='' ans session window
   existing_worktree=$(git_root for-each-ref --format='%(worktreepath)' "refs/heads/$branch")
+
+  git_root show-ref --verify --quiet "refs/heads/$branch" || {
+    echo "no local branch '$branch' (remote-only branches can't be deleted here)" >&2; exit 1; }
+  # Never delete the default branch or the main checkout's branch.
+  default=$(git_root symbolic-ref --short -q refs/remotes/origin/HEAD || true)
+  if [[ "$branch" == "${default#*/}" || "$existing_worktree" == "$root" ]]; then
+    echo "refusing to delete '$branch': it is the default/main branch" >&2; exit 1
+  fi
 
   # Force needed if the worktree is dirty or the branch isn't merged into HEAD.
   if [[ -n "$existing_worktree" && -n "$(git -C "$existing_worktree" status --porcelain)" ]]; then force=1; fi
@@ -130,7 +138,8 @@ remove_branch() {
     fi
     if [[ -n "$force" ]]; then git_root worktree remove --force "$existing_worktree"; else git_root worktree remove "$existing_worktree"; fi
   fi
-  if [[ -n "$force" ]]; then git_root branch -D "$branch"; else git_root branch -d "$branch"; fi
+  # -D: -d only accepts ancestor merges, so it rejects squash-merged branches that is_merged accepted.
+  git_root branch -D "$branch"
 }
 
 case "$action" in

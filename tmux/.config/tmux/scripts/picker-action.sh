@@ -17,9 +17,11 @@ case "${FZF_PROMPT:-}" in
 esac
 
 case "$action" in
-  create) git -C "$root" branch -- "$value" ;;
+  create) git -C "$root" branch -- "$value"; exit ;;
   remove) "$here/tmux-worktree.sh" remove "$root" "$value" ;;
   fetch)  git -C "$root" fetch --all --prune ;;
   pull)   "$here/branch-pull.sh" "$root" "$value" ;;
   *)      echo "picker-action.sh: unknown action: $action" >&2; exit 2 ;;
 esac
+# Keep the output readable: fzf redraws as soon as we exit.
+read -rsn1 -p $'\n[press any key] '
