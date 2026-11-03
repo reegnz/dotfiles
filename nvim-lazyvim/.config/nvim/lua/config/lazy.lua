@@ -41,7 +41,6 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.editor.navic" },
     { import = "lazyvim.plugins.extras.editor.outline" },
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
-    { import = "lazyvim.plugins.extras.util.rest" },
     -- import/override with your plugins
     { import = "plugins" },
     { import = "plugins.extras.colorscheme" },
