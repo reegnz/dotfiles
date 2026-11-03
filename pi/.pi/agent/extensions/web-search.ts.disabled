@@ -1,0 +1,133 @@
+import { execFile } from "node:child_process";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { promisify } from "node:util";
+import { Type } from "typebox";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+
+type SearchCommand = "text" | "news";
+type SearchArguments = {
+  query: string;
+  max_results?: number;
+  timelimit?: "d" | "w" | "m" | "y";
+  backend?: string;
+};
+
+const execFileAsync = promisify(execFile);
+const DEFAULT_MAX_RESULTS = 10;
+const SEARCH_TIMEOUT_MS = 30_000;
+
+async function search(command: SearchCommand, args: SearchArguments) {
+  const outputDirectory = await mkdtemp(join(tmpdir(), "pi-ddgs-"));
+  const outputPath = join(outputDirectory, `${command}.json`);
+  const commandArgs = [
+    command,
+    "-q",
+    args.query,
+    "-m",
+    String(args.max_results ?? DEFAULT_MAX_RESULTS),
+    "-o",
+    outputPath,
+  ];
+
+  if (args.backend) commandArgs.push("-b", args.backend);
+
+  if (args.timelimit) commandArgs.push("-t", args.timelimit);
+
+  try {
+    await execFileAsync("ddgs", commandArgs, {
+      timeout: SEARCH_TIMEOUT_MS,
+      maxBuffer: 5 * 1024 * 1024,
+    });
+
+    return JSON.parse(await readFile(outputPath, "utf8"));
+  } finally {
+    await rm(outputDirectory, { recursive: true, force: true });
+  }
+}
+
+export default function (pi: ExtensionAPI) {
+  pi.registerTool({
+    name: "web_search",
+    label: "web_search",
+    description: "Search the web for web pages.",
+    parameters: Type.Object({
+      query: Type.String({ description: "Search query" }),
+      timelimit: Type.Optional(Type.Enum({
+        day: "d",
+        week: "w",
+        month: "m",
+        year: "y",
+      })),
+      max_results: Type.Optional(
+        Type.Number({
+          description: "Maximum number of results (default: 10)",
+          minimum: 1,
+          maximum: 20
+        }),
+      ),
+      backend: Type.Optional(
+        Type.Enum({
+          auto: "auto",
+          all: "all",
+          bing: "bing",
+          brave: "brave",
+          duckduckgo: "duckduckgo",
+          google: "google",
+          grokipedia: "grokipedia",
+          mojeek: "mojeek",
+          startpage: "startpage",
+          yandex: "yandex",
+          yahoo: "yahoo",
+          wikipedia: "wikipedia",
+        }),
+      ),
+    }),
+    async execute(_toolCallId, args) {
+      const results = await search("text", args as SearchArguments);
+      return {
+        content: [{ type: "text", text: JSON.stringify(results) }],
+        details: { count: results.length },
+      };
+    },
+  });
+
+  pi.registerTool({
+    name: "news_search",
+    label: "news_search",
+    description: "Search the web for news.",
+    parameters: Type.Object({
+      query: Type.String({ description: "Search query" }),
+      timelimit: Type.Optional(Type.Enum({
+        day: "d",
+        week: "w",
+        month: "m",
+        year: "y",
+      })),
+      max_results: Type.Optional(
+        Type.Number({
+          description: "Maximum number of results (default: 10)",
+          minimum: 1,
+          maximum: 20,
+        }),
+      ),
+      backend: Type.Optional(
+        Type.Enum({
+          auto: "auto",
+          all: "all",
+          bing: "bing",
+          duckduckgo: "duckduckgo",
+          yahoo: "yahoo",
+        }),
+      ),
+    }),
+    async execute(_toolCallId, args) {
+      const results = await search("news", args as SearchArguments);
+      return {
+        content: [{ type: "text", text: JSON.stringify(results) }],
+        details: { count: results.length },
+      };
+    },
+  });
+}
