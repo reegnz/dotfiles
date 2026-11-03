@@ -4,12 +4,17 @@ description: >-
   How to drive a listening Neovim over RPC. Use when the user asks something
   like 'show me', 'show me where', 'walk me through', 'where is this in neovim',
   'open in neovim', 'open in a buffer', 'jump to', 'go to line', 'what file is open',
-  'what is selected', 'show diagnostics', 'open diff', 'compare files'.
+  'what is selected', 'show diagnostics', 'open diff', 'compare files',
+  'launch neovim', 'open neovim here', 'show me this file'.
 allowed-tools:
   - Bash(scripts/*)
 ---
 
 # Control Neovim
+
+**"Show me", "open", "walk me through" means open it in Neovim.** Do not paste file contents into chat as a substitute. Chat is only for a short summary after the file is open.
+
+**Verify every open.** After opening or jumping, run `./scripts/nvim-read-current` and confirm the path and line. If it fails or shows the wrong file, say so. Do not report success otherwise.
 
 **Never try to find or resolve the Neovim server yourself.** The scripts handle server resolution automatically. Just run them.
 
@@ -22,6 +27,25 @@ allowed-tools:
 **Always quote arguments** derived from file paths or user input to prevent shell injection.
 
 ---
+
+## Open Neovim (RPC)
+
+Open a listening Neovim in a new split pane of the current window, never a new window. Use the skill's own directory so the RPC socket and cwd match.
+
+```bash
+pane=$(tmux split-window -h -P -F '#{pane_id}' -c "$HOME/.agents/skills/control-neovim" "nvim -c NvimListen")
+sleep 2
+sock=$(ls -t "$HOME"/.cache/nvim/servers/*.sock | head -1)
+tmux set-environment NVIM_ADDR "$sock"
+```
+
+Set `NVIM_ADDR` every time. The scripts cache the first address they find, so a new instance without this step talks to the old one. Then open the file:
+
+```bash
+./scripts/nvim-goto "$file" "$line" "$col"
+```
+
+If `tmux` is not running, or the socket doesn't appear, tell the user. Do not fall back to a plain `nvim` or a new window.
 
 ## Query state
 
