@@ -2,6 +2,8 @@
 [user]
   useConfigOnly = true
 [core]
+  fsmonitor = true
+  untrackedCache = true
   pager = delta
 [pager]
   blame  = delta
