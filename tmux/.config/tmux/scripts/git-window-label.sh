@@ -4,9 +4,12 @@
 # --no-optional-locks: polling must not take the index lock from your own git commands.
 set -uo pipefail
 
-status=$(git -C "$1" --no-optional-locks status --porcelain=v2 --branch 2>/dev/null) || { echo default; exit 0; }
+status=$(git -C "$1" --no-optional-locks status --porcelain=v2 --branch 2>/dev/null) || {
+  echo default
+  exit 0
+}
 
-awk -v icon=$'\xee\x82\xa0' -v up=$'\xe2\x87\xa1' -v down=$'\xe2\x87\xa3' '
+awk -v icon="" -v up="⇡" -v down="⇣" '
   /^# branch\.head/ { head = $3 }
   /^# branch\.ab/   { ahead = substr($3, 2); behind = substr($4, 2) }
   /^[12u] /         { if (substr($2, 1, 1) != ".") staged++
