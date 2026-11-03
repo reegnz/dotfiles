@@ -1,5 +1,9 @@
-wname=$(git -C "$PWD" symbolic-ref --quiet --short HEAD 2>/dev/null || true)
-: "${wname:=default}" # fallback: detached HEAD or non-repo dir
+# Branch icon only for a named branch; detached HEAD or non-repo gets a plain name.
+if wname=$(git -C "$PWD" symbolic-ref --quiet --short HEAD 2>/dev/null); then
+  wname=" $wname"
+else
+  wname=default
+fi
 window_root "${PWD}"
 new_window "$wname"
 
