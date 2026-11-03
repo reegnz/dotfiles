@@ -1,0 +1,5 @@
+command = /opt/homebrew/bin/zsh
+font-family = Hack Nerd Font Mono
+theme = Gruvbox Dark Hard
+copy-on-select = false
+mouse-hide-while-typing = true
