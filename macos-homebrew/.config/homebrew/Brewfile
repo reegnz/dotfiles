@@ -1,191 +1,209 @@
-tap "candid82/brew"
-tap "fairwindsops/tap"
-tap "homebrew/autoupdate"
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-drivers"
-tap "homebrew/cask-fonts"
-tap "homebrew/command-not-found"
-tap "homebrew/core"
-tap "homebrew/services"
-tap "jzelinskie/faq"
-tap "msoap/tools"
-tap "vmware-tanzu/carvel"
+tap "atlassian-labs/acli"
 tap "yqrashawn/goku"
-brew "antigen"
-brew "asciinema"
-brew "coreutils"
-brew "asdf"
+# Plugin manager for zsh, inspired by antigen and antibody
+brew "antidote"
+# Official Amazon AWS command-line interface
 brew "awscli"
-brew "azure-cli"
+# Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
+# Programmable completion for Bash 3.2
 brew "bash-completion"
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
-brew "brew-gem"
-brew "broot"
+# Concurrent, cache-efficient, and Dockerfile-agnostic builder toolkit
 brew "buildkit"
-brew "cfssl"
-brew "checkov"
+# Statistics utility to count lines of code
 brew "cloc"
+# Home for the Cluster Management API work, a subproject of sig-cluster-lifecycle
 brew "clusterctl"
-brew "gnutls"
-brew "qemu"
-brew "lima"
-brew "colima"
-brew "conftest"
-brew "consul"
-brew "consul-template"
-brew "cue"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
+# File comparison utilities
 brew "diffutils"
+# Load/unload environment variables based on $PWD
 brew "direnv"
+# Tool for exploring each layer in a docker image
 brew "dive"
-brew "dnsmasq"
+# Pack, ship and run any application as a lightweight container
 brew "docker"
+# Isolated development environments using Docker
 brew "docker-compose"
+# Platform keystore credential helper for Docker
+brew "docker-credential-helper"
+# Docker Credential Helper for Amazon ECR
 brew "docker-credential-helper-ecr"
-brew "efm-langserver"
-brew "eksctl"
+# Postgres C API library
 brew "libpq"
+# Run tests on an isolated, temporary Postgres database
 brew "ephemeralpg"
-brew "exa"
+# Program that can automate interactive applications
 brew "expect"
+# Simple, fast and user-friendly alternative to find
 brew "fd"
-brew "fennel"
+# Collection of GNU find, xargs, and locate
 brew "findutils"
+# Command-line fuzzy finder written in Go
 brew "fzf"
+# GNU awk utility
 brew "gawk"
+# GitHub command-line tool
 brew "gh"
+# Remote repository management made easy
 brew "ghq"
-brew "gifski"
-brew "gimme-aws-creds"
+# Distributed revision control system
 brew "git"
+# Syntax-highlighting pager for git and diff output
 brew "git-delta"
-brew "gitlint"
-brew "gnupg"
+# GNU implementation of the famous stream editor
 brew "gnu-sed"
+# GNU Transport Layer Security (TLS) Library
+brew "gnutls"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
+# Open source programming language to build simple/reliable/efficient software
 brew "go"
+# Pure Go implementation of jq
 brew "gojq"
+# Deliver Go binaries as fast and easily as possible
 brew "goreleaser"
-brew "graphviz"
+# Colorize logfiles and command output
 brew "grc"
+# GNU grep, egrep and fgrep
 brew "grep"
-brew "hadolint"
-brew "hcl2json"
+# Kubernetes package manager
 brew "helm"
+# Deploy Kubernetes Helm Charts
 brew "helmfile"
-brew "htop"
-brew "hyperfine"
-brew "imagemagick"
+# Client library for huggingface.co hub
+brew "hf"
+# Calculate various network masks, etc. from a given IP address
 brew "ipcalc"
-brew "jc"
-brew "jinja2-cli"
+# Lightweight and flexible command-line JSON processor
 brew "jq"
-brew "jsonnet"
+# Kubernetes CLI To Manage Your Clusters In Style!
 brew "k9s"
+# Run local Kubernetes cluster in Docker
 brew "kind"
-brew "kubernetes-cli"
+# Tool that can switch between kubectl contexts easily and create aliases
 brew "kubectx"
+# Kubernetes command-line interface
+brew "kubernetes-cli"
+# Template-free customization of Kubernetes YAML manifests
 brew "kustomize"
-brew "llvm"
+# Linux virtual machines
+brew "lima"
+# Securely transfers data between computers
 brew "magic-wormhole"
+# Utility for directing compilation
 brew "make"
-brew "node"
-brew "markdownlint-cli"
-brew "mitmproxy"
+# Simple tool to make locally trusted development certificates
 brew "mkcert"
-brew "mkdocs"
+# Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
-brew "neofetch"
+# Incremental parsing library
 brew "tree-sitter"
+# Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-brew "nginx"
-brew "notmuch"
-brew "notmuch-mutt"
-brew "nvm"
-brew "opa"
-brew "openjdk"
-brew "openapi-generator"
-brew "packer"
-brew "pandoc"
-brew "pgcli"
-brew "pgweb"
+# AI agent toolkit
+brew "pi-coding-agent"
+# Pinentry for GPG on Mac
 brew "pinentry-mac"
-brew "pipenv"
-brew "pipgrip"
-brew "pipx"
-brew "postgrest"
+# Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
-brew "prettier"
+# Show ps output as a tree
 brew "pstree"
+# Monitor data's progress through a pipe
 brew "pv"
+# Password generator
 brew "pwgen"
-brew "pyenv"
-brew "pyenv-virtualenv"
-brew "ranger"
+# Generic machine emulator and virtualizer
+brew "qemu"
+# Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
+# Autoformat shell script source code
 brew "shfmt"
+# Open agent skills ecosystem
+brew "skills"
+# Work with remote images registries
 brew "skopeo"
+# Editor of encrypted files
 brew "sops"
-brew "sshuttle"
-brew "step"
+# Organize software neatly under a single directory tree (e.g. /usr/local)
 brew "stow"
-brew "terraform-docs"
-brew "terraform-ls"
-brew "terragrunt"
-brew "terrascan"
-brew "tfenv"
-brew "tflint"
-brew "tfmigrate"
-brew "tfsec"
+# OpenTofu / Terraform / Terragrunt / Terramate / Atmos version manager
+brew "tenv"
+# Text interface for Git repositories
 brew "tig"
-brew "tiger-vnc"
+# Terminal multiplexer
 brew "tmux"
-brew "tmuxinator"
+# Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
+# Vi 'workalike' with many additional features
 brew "vim"
-brew "vint"
+# Executes a program periodically, showing output fullscreen
 brew "watch"
+# Execute commands when watched files change
 brew "watchexec"
+# Internet file retriever
 brew "wget"
+# Linter for YAML files
 brew "yamllint"
-brew "yarn"
+# Blazing fast terminal file manager written in Rust, based on async I/O
+brew "yazi"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
+# Shell extension to navigate your filesystem faster
 brew "zoxide"
+# UNIX shell (command interpreter)
 brew "zsh"
-brew "fairwindsops/tap/pluto"
-brew "jzelinskie/faq/faq"
-brew "msoap/tools/shell2http"
-brew "vmware-tanzu/carvel/vendir"
-brew "yqrashawn/goku/goku"
+# karabiner configurator
+brew "yqrashawn/goku/goku", trusted: true
+# Password manager that keeps all passwords secure behind one password
 cask "1password"
+# Command-line interface for 1Password
 cask "1password-cli"
-cask "authy"
+# Display management tool
 cask "betterdisplay"
+# Monitors common persistence locations
 cask "blockblock"
-cask "fanny"
-cask "firefox"
 cask "font-hack-nerd-font"
-cask "google-chrome"
-cask "google-drive"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Desktop automation application
 cask "hammerspoon"
+# Speech to text application
+cask "handy"
+# Homebrew's official GUI
+cask "homebrew-app"
+# Tool to optimise images to a smaller size
 cask "imageoptim"
-cask "iriunwebcam"
+# Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
-cask "kap"
+# Keyboard customiser
 cask "karabiner-elements"
+# Open-source keystroke visualiser
 cask "keycastr"
+# Tool to show what is persistently installed on the computer
 cask "knockknock"
-cask "logseq"
+# Menu bar app for running local LLMs
+cask "llama-app"
+# Open-source firewall to block unknown outgoing connections
 cask "lulu"
-cask "obinskit"
-cask "obs"
+# Monitors computer mic and webcam
 cask "oversight"
+# Move and resize windows using keyboard shortcuts or snap areas
 cask "rectangle"
+# Plugin for AWS CLI to start and end sessions that connect to managed instances
 cask "session-manager-plugin"
-cask "signal"
+# Team communication and collaboration software
 cask "slack"
+# Menu bar manager
+cask "thaw"
+# Open-source code editor
 cask "visual-studio-code"
-cask "yubico-yubikey-manager"
-cask "zoom"
