@@ -33,8 +33,26 @@ main() {
 
   sshd 2>/dev/null || true # already running: bind fails, harmless
   tailcat genkey --key=default >/dev/null 2>&1 || true
-  # blocks; prints this phone's tailcat address
-  tailcat serve --key=default --allow="$allow" 8022
+  # daemon: survives closing the Termux session; --json prints {"listenAddr": ...} on stdout
+  local out="$HOME/.cache/termux-ssh.out" log="$HOME/.cache/termux-ssh.log"
+  mkdir -p "$HOME/.cache"
+  : >"$out"
+  nohup tailcat --json serve --key=default --allow="$allow" 8022 >"$out" 2>"$log" &
+
+  local addr=""
+  for _ in $(seq 30); do
+    addr="$(sed -En 's/.*"listenAddr":"([^"]+)".*/\1/p' "$out")"
+    [[ -n "$addr" ]] && break
+    sleep 1
+  done
+  [[ -n "$addr" ]] || {
+    echo "tailcat did not start, see $log" >&2
+    exit 1
+  }
+
+  echo "tailcat running in background (log: $log)"
+  echo "run on your Mac:"
+  echo "ssh -o ProxyCommand=\"tailcat ${addr} 8022\" -o IdentitiesOnly=yes -i ~/.ssh/termux_agent_ed25519 $(whoami)@termux"
 }
 
 main "$@" </dev/null
