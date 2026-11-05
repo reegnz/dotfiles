@@ -2,19 +2,31 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# is package $1 excluded for OS $2 and flavor $3? rules: package-exclude.txt (OS FLAVOR EXCLUDED_PACKAGE)
+excluded() {
+  local IFS=$' \t' os flavor pkg _
+  while read -r os flavor pkg _; do
+    [[ -z "$pkg" || "$os" == \#* ]] && continue
+    [[ "$2" == "$os" && ( "$flavor" == "*" || "$flavor" == "$3" || ( "${flavor:0:1}" == "!" && "$flavor" != "!$3" ) ) && "$1" == $pkg ]] && return 0
+  done < package-exclude.txt
+  return 1
+}
+
 install() {
   OS=$(uname)
   local stow_opts=(--restow --verbose --no-folding --target "$HOME")
   [[ "${FORCE:-}" == "1" ]] && stow_opts+=(--adopt)
+  local flavor=unknown
+  if [[ -n "${TERMUX_VERSION:-}" ]]; then
+    flavor=termux
+  elif [[ -f /etc/arch-release ]]; then
+    flavor=arch
+  fi
   for dir in */; do
     dir="${dir%/*}"
     dirname="${dir##*/}"
-    # skip OS specific stuff
-    if [[ "${dirname}" =~ ^macos ]] && [[ $OS != "Darwin" ]]; then
-      echo "Skipping ${dirname}" >&2
-      continue
-    fi
-    if [[ "${dirname}" =~ ^linux ]] && [[ $OS != "Linux" ]]; then
+    # skip packages excluded for this OS and flavor
+    if excluded "${dirname}" "${OS}" "${flavor}"; then
       echo "Skipping ${dirname}" >&2
       continue
     fi

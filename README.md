@@ -23,3 +23,11 @@ You need to set up a ~/.gitconfig that's not under version control:
 [includeIf "gitdir:~/work"]
   path = ".gitconfig-work"
 ```
+
+## termux
+
+Run on the phone (Termux). Installs packages, clones this repo and runs `make`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/reegnz/dotfiles/master/linux-termuxbootstrap/.local/bin/termux-bootstrap | bash
+```

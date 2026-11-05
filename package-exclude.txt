@@ -1,0 +1,5 @@
+OS      FLAVOR   EXCLUDED_PACKAGE
+Linux   *        macos-*
+Darwin  *        linux-*
+Linux   !arch    linux-archbootstrap
+Linux   !termux  linux-termuxbootstrap
