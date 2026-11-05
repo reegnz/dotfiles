@@ -23,6 +23,7 @@ main() {
     git clone https://github.com/reegnz/dotfiles "$dotfiles"
   fi
   (cd "$dotfiles" && ./install.sh)
+  chsh -s zsh
 }
 
 # </dev/null: under `curl | bash` the script itself arrives on stdin
