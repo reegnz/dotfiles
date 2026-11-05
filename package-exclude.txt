@@ -3,3 +3,4 @@ Linux   *        macos-*
 Darwin  *        linux-*
 Linux   !arch    linux-archbootstrap
 Linux   !termux  linux-termuxbootstrap
+Linux   !termux  linux-termuxssh

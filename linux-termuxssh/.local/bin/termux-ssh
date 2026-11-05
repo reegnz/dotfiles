@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Expose this phone's sshd over tailcat. Args: <tailcat client nodekey> <ssh public key>
+set -euo pipefail
+
+TAILCAT_VERSION=0.7.0
+TAILCAT_SHA256=bbb1ab50f24f00effe1e1fd86d0501803fb80793a90785a2a16ff3428f03d8ef
+
+main() {
+  [[ -n "${TERMUX_VERSION:-}" ]] || {
+    echo "Not running in Termux" >&2
+    exit 1
+  }
+  [[ $# -eq 2 ]] || {
+    echo "usage: termux-ssh <client-nodekey> <ssh-public-key>" >&2
+    exit 1
+  }
+  local allow="$1" pubkey="$2"
+
+  pkg install -y openssh
+  if ! command -v tailcat >/dev/null; then
+    local tmp
+    tmp="$(mktemp -d)"
+    curl -fsSL -o "$tmp/tailcat.tgz" "https://github.com/tailscale/tailcat/releases/download/v${TAILCAT_VERSION}/tailcat_${TAILCAT_VERSION}_linux_arm64.tar.gz"
+    echo "${TAILCAT_SHA256}  $tmp/tailcat.tgz" | sha256sum -c -
+    tar -xzf "$tmp/tailcat.tgz" -C "$tmp" tailcat
+    install -m 755 "$tmp/tailcat" "$PREFIX/bin/tailcat"
+    rm -rf "$tmp"
+  fi
+
+  mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  grep -qxF "$pubkey" ~/.ssh/authorized_keys 2>/dev/null || echo "$pubkey" >>~/.ssh/authorized_keys
+  chmod 600 ~/.ssh/authorized_keys
+
+  pgrep -x sshd >/dev/null || sshd
+  tailcat genkey --key=default >/dev/null 2>&1 || true
+  # blocks; prints this phone's tailcat address
+  tailcat serve --key=default --allow="$allow" 8022
+}
+
+main "$@" </dev/null
