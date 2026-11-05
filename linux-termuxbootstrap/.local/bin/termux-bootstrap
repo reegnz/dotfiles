@@ -1,20 +1,28 @@
 #!/usr/bin/env bash
-# Install the CLI tools these dotfiles expect on Termux (Android).
+# Bootstrap Termux from scratch: europe mirror, packages, then these dotfiles.
 set -euo pipefail
 
-[[ -n "${TERMUX_VERSION:-}" ]] || {
-  echo "Not running in Termux" >&2
-  exit 1
+main() {
+  [[ -n "${TERMUX_VERSION:-}" ]] || {
+    echo "Not running in Termux" >&2
+    exit 1
+  }
+
+  # same symlink termux-change-repo writes for the "Mirrors in Europe" group
+  ln -sfn "$PREFIX/etc/termux/mirrors/europe" "$PREFIX/etc/termux/chosen_mirrors"
+
+  pkg update -y
+  pkg install -y zsh git stow fzf zoxide eza fd bat ripgrep jq gh git-delta neovim nodejs golang tmux direnv
+
+  local dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
+  if [[ -d "$dotfiles/.git" ]]; then
+    git -C "$dotfiles" pull --ff-only
+  else
+    mkdir -p "${dotfiles%/*}"
+    git clone https://github.com/reegnz/dotfiles "$dotfiles"
+  fi
+  make -C "$dotfiles"
 }
 
-pkg update -y
-pkg install -y zsh git stow fzf zoxide eza fd bat ripgrep jq gh git-delta neovim nodejs golang tmux direnv
-
-dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
-if [[ -d "$dotfiles/.git" ]]; then
-  git -C "$dotfiles" pull --ff-only
-else
-  mkdir -p "${dotfiles%/*}"
-  git clone https://github.com/reegnz/dotfiles "$dotfiles"
-fi
-make -C "$dotfiles"
+# </dev/null: under `curl | bash` the script itself arrives on stdin
+main "$@" </dev/null
