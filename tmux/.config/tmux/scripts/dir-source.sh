@@ -29,7 +29,7 @@ case "${1:?usage: dir-source.sh list|cycle|reload}" in
   list)
     case "${2:?usage: dir-source.sh list <source> [query]}" in
       zoxide) zoxide query --list -- ${3:-} ;;
-      dirs)   fd --follow --hidden --type d --color=always ;;
+      dirs)   fd --follow --hidden --type d --color=always . "$HOME" ;;
       repos)  ghq list -p ;;
     esac | "$annotate"
     ;;
