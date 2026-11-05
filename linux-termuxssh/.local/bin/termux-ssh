@@ -31,7 +31,7 @@ main() {
   grep -qxF "$pubkey" ~/.ssh/authorized_keys 2>/dev/null || echo "$pubkey" >>~/.ssh/authorized_keys
   chmod 600 ~/.ssh/authorized_keys
 
-  pgrep -x sshd >/dev/null || sshd
+  sshd 2>/dev/null || true # already running: bind fails, harmless
   tailcat genkey --key=default >/dev/null 2>&1 || true
   # blocks; prints this phone's tailcat address
   tailcat serve --key=default --allow="$allow" 8022
