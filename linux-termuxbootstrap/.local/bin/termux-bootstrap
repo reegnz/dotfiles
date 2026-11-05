@@ -12,7 +12,7 @@ main() {
   ln -sfn "$PREFIX/etc/termux/mirrors/europe" "$PREFIX/etc/termux/chosen_mirrors"
 
   pkg update -y
-  pkg install -y zsh git stow fzf zoxide eza fd bat ripgrep jq gh git-delta neovim nodejs golang tmux direnv
+  pkg install -y zsh git stow
 
   local dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
   if [[ -d "$dotfiles/.git" ]]; then
