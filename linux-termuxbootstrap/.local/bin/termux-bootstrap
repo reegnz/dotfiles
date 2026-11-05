@@ -22,7 +22,7 @@ main() {
     mkdir -p "${dotfiles%/*}"
     git clone https://github.com/reegnz/dotfiles "$dotfiles"
   fi
-  make -C "$dotfiles"
+  (cd "$dotfiles" && ./install.sh)
 }
 
 # </dev/null: under `curl | bash` the script itself arrives on stdin
