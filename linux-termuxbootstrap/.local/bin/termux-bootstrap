@@ -12,6 +12,7 @@ main() {
   ln -sfn "$PREFIX/etc/termux/mirrors/europe" "$PREFIX/etc/termux/chosen_mirrors"
 
   pkg update -y
+  pkg upgrade -y
   pkg install -y zsh git stow
 
   local dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
