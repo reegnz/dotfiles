@@ -65,4 +65,21 @@ Install:andUse("URLDispatcher", {
 	start = true,
 })
 
+Install.repos.QMacK = {
+	url = "https://github.com/reegnz/QMacK.spoon",
+	desc = "QMacK",
+	branch = "master",
+}
+
+-- QMacK: the keyboard config is in qmack.fnl. The Spoon loads it and starts QMacK.
+-- Homebrew installs Fennel here, and brew keeps this link up to date
+package.path = "/opt/homebrew/share/lua/5.1/?.lua;" .. package.path
+local fennel = require("fennel")
+Install:andUse("QMacK", {
+	repo = "QMacK",
+	fn = function(s)
+		s:start(s:loadFennel(fennel, hs.configdir .. "/qmack.fnl"))
+	end,
+})
+
 Install:andUse("FadeLogo", { start = true })
