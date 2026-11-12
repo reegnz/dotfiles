@@ -1,20 +1,32 @@
 #!/usr/bin/env bash
 # Bootstrap Termux from scratch: europe mirror, packages, then these dotfiles.
+# Safe to re-run: every step is idempotent and verified by smoke tests at the end.
 set -euo pipefail
 
-main() {
-  [[ -n "${TERMUX_VERSION:-}" ]] || {
-    echo "Not running in Termux" >&2
-    exit 1
-  }
+step() { echo "==> $*"; }
+trap 'echo "bootstrap FAILED at line $LINENO" >&2' ERR
 
+fetch() {
+  # fetch <url> <output-file>: curl with retries (flaky mobile networks)
+  local url=$1 out=$2 attempt
+  for attempt in 1 2 3; do
+    if curl -fsSL --retry 2 -o "$out" "$url"; then return 0; fi
+    echo "download attempt $attempt/3 failed: $url" >&2
+    sleep $((attempt * 2))
+  done
+  return 1
+}
+
+install_packages() {
   # same symlink termux-change-repo writes for the "Mirrors in Europe" group
   ln -sfn "$PREFIX/etc/termux/mirrors/europe" "$PREFIX/etc/termux/chosen_mirrors"
   export DEBIAN_FRONTEND=noninteractive
   pkg update -y
   pkg upgrade -y -o Dpkg::Options::="--force-confnew"
   pkg install -y zsh git stow neovim ripgrep fd gh nodejs
+}
 
+install_dotfiles() {
   local dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
   if [[ -d "$dotfiles/.git" ]]; then
     git -C "$dotfiles" pull --ff-only
@@ -22,19 +34,88 @@ main() {
     mkdir -p "${dotfiles%/*}"
     git clone https://github.com/reegnz/dotfiles "$dotfiles"
   fi
+
+  # fresh Termux ships a default termux.properties; remove it so stow can
+  # link ours (only if it is the untouched default template)
+  local props="$HOME/.termux/termux.properties"
+  if [[ -f "$props" && ! -L "$props" ]] && grep -q "wiki.termux.com/wiki/Terminal_Settings" "$props"; then
+    rm "$props"
+  fi
+
   (cd "$dotfiles" && ./install.sh)
+}
 
-  # pi coding agent (installs into ~/.pi, idempotent reinstall)
-  curl -fsSL https://pi.dev/install.sh | sh
+install_pi() {
+  # managed pi installs refuse to be replaced by the curl installer,
+  # so update in place when it already exists
+  if [[ -x "$HOME/.pi/agent/bin/pi" ]]; then
+    "$HOME/.pi/agent/bin/pi" update
+  else
+    curl -fsSL https://pi.dev/install.sh | sh
+  fi
+}
 
+install_font() {
   # powerlevel10k-friendly nerd font for the Termux app itself
   mkdir -p "$HOME/.termux"
-  curl -fsSL -o "$HOME/.termux/font.ttf" \
-    https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+  fetch \
+    https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf \
+    "$HOME/.termux/font.ttf"
+}
 
+install_antidote() {
+  local antidote="${ZDOTDIR:-$HOME}/.antidote"
+  if [[ -d "$antidote/.git" ]]; then
+    git -C "$antidote" pull --ff-only
+  else
+    git clone --depth=1 https://github.com/mattmc3/antidote.git "$antidote"
+  fi
+}
+
+smoke_test() {
+  local failed=0 bin
+  for bin in zsh git stow nvim rg fd gh node pi; do
+    if ! command -v "$bin" >/dev/null; then
+      echo "smoke test FAILED: $bin not found in PATH" >&2
+      failed=1
+    fi
+  done
+  if [[ ! -s "$HOME/.termux/font.ttf" ]]; then
+    echo "smoke test FAILED: ~/.termux/font.ttf missing or empty" >&2
+    failed=1
+  fi
+  if [[ ! -d "${ZDOTDIR:-$HOME}/.antidote/.git" ]]; then
+    echo "smoke test FAILED: antidote not cloned" >&2
+    failed=1
+  fi
+  [[ "$failed" -eq 0 ]] || exit 1
+  echo "==> all smoke tests passed"
+}
+
+main() {
+  [[ -n "${TERMUX_VERSION:-}" ]] || {
+    echo "Not running in Termux" >&2
+    exit 1
+  }
+
+  step "packages"
+  install_packages
+
+  step "dotfiles"
+  install_dotfiles
   chsh -s zsh
 
-  git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-$HOME}/.antidote
+  step "pi coding agent"
+  install_pi
+
+  step "MesloLGS NF font"
+  install_font
+
+  step "antidote"
+  install_antidote
+
+  step "smoke tests"
+  smoke_test
 }
 
 # </dev/null: under `curl | bash` the script itself arrives on stdin
