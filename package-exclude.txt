@@ -1,6 +1,8 @@
 OS      FLAVOR   EXCLUDED_PACKAGE
 Linux   *        macos-*
 Darwin  *        linux-*
+Darwin  *        termux
 Linux   !arch    linux-archbootstrap
 Linux   !termux  linux-termuxbootstrap
 Linux   !termux  linux-termuxssh
+Linux   !termux  termux
