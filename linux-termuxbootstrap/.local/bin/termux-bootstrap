@@ -10,9 +10,9 @@ main() {
 
   # same symlink termux-change-repo writes for the "Mirrors in Europe" group
   ln -sfn "$PREFIX/etc/termux/mirrors/europe" "$PREFIX/etc/termux/chosen_mirrors"
-
+  export DEBIAN_FRONTEND=noninteractive
   pkg update -y
-  pkg upgrade -y
+  pkg upgrade -y -o Dpkg::Options::="--force-confnew"
   pkg install -y zsh git stow
 
   local dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
