@@ -1,5 +1,5 @@
 mac_antidote=/opt/homebrew/opt/antidote/share/antidote/antidote.zsh
-linux_antidote=/usr/share/zsh-antidote/antidote.zsh
+linux_antidote=~/.antidote/antidote.zsh
 if [ -f "$mac_antidote" ]; then
   antidote=$mac_antidote
 elif [ -f "$linux_antidote" ]; then

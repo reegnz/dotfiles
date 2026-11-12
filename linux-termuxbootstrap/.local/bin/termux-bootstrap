@@ -13,7 +13,7 @@ main() {
   export DEBIAN_FRONTEND=noninteractive
   pkg update -y
   pkg upgrade -y -o Dpkg::Options::="--force-confnew"
-  pkg install -y zsh git stow neovim
+  pkg install -y zsh git stow neovim ripgrep fd gh nodejs
 
   local dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
   if [[ -d "$dotfiles/.git" ]]; then
@@ -23,6 +23,15 @@ main() {
     git clone https://github.com/reegnz/dotfiles "$dotfiles"
   fi
   (cd "$dotfiles" && ./install.sh)
+
+  # pi coding agent (installs into ~/.pi, idempotent reinstall)
+  curl -fsSL https://pi.dev/install.sh | sh
+
+  # powerlevel10k-friendly nerd font for the Termux app itself
+  mkdir -p "$HOME/.termux"
+  curl -fsSL -o "$HOME/.termux/font.ttf" \
+    https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+
   chsh -s zsh
 
   git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-$HOME}/.antidote
