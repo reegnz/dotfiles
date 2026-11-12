@@ -13,7 +13,7 @@ main() {
   export DEBIAN_FRONTEND=noninteractive
   pkg update -y
   pkg upgrade -y -o Dpkg::Options::="--force-confnew"
-  pkg install -y zsh git stow
+  pkg install -y zsh git stow neovim
 
   local dotfiles="$HOME/repos/github.com/reegnz/dotfiles"
   if [[ -d "$dotfiles/.git" ]]; then
@@ -24,6 +24,8 @@ main() {
   fi
   (cd "$dotfiles" && ./install.sh)
   chsh -s zsh
+
+  git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-$HOME}/.antidote
 }
 
 # </dev/null: under `curl | bash` the script itself arrives on stdin
