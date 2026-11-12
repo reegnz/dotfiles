@@ -31,4 +31,5 @@
 
 [{:src src
   :keyboards [91] ; built-in MacBook keyboard only (found with a 60 s key probe)
+  :holdOnOtherKey true ; Caps + any key is the sym layer at once, so a roll never sends Escape
   :layers {: default : sym}}]
